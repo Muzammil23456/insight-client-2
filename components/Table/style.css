@@ -1,0 +1,29 @@
+.form{
+    @apply flex flex-col gap-2 items-center 
+}
+.inputs{
+    @apply border-solid border-[2px] border-gray-500 p-2 rounded w-full
+}
+.btn-n{
+    @apply border-solid border-[2px] disabled:bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 bg-pink-910 hover:bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:w-20 w-16 sm:text-base text-sm text-center font-semibold text-white 
+}
+.btn-e, .btn-r{
+    @apply border-solid border-[2px] disabled:bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 bg-pink-910 hover:bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white 
+}
+.coml{
+    color: #b335ae;
+}
+.error{
+    @apply text-red-600 flex justify-start font-semibold text-sm 
+}
+.btn-remove{
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: .9rem;
+    right: 0.5rem;
+    border-radius: 50%;
+}

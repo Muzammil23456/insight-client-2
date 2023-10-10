@@ -1,0 +1,10 @@
+.steps{@apply relative flex flex-col justify-center items-center w-32}
+
+.steps:not(:first-child):after{ @apply content-[''] w-full absolute bg-gray-400 h-[3px] right-2/4 top-1/2 -translate-y-2/4}
+
+.step_img{ @apply flex items-center justify-center relative z-10 border-solid border-[3px] bg-white border-gray-400 sm:p-2 p-1 w-9 h-9 sm:w-12 sm:h-12 rounded-full text-white}
+
+.btn{
+    @apply border-solid border-[3px]  border-pink-910 bg-pink-910 hover:bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-32 w-28 sm:text-base text-sm text-center font-semibold text-white 
+}
+
