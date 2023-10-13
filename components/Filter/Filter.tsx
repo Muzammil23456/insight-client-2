@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -7,9 +7,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const Filter = (props: { ondata: (arg0: string) => void; type: any; select1: any; select2: any; select3: any; }) => {
+const Filter = ({...props}) => {
+
+    // State
+
     const [data,setData]= useState('updated')
-    props.ondata(data)
+
+    //useEffect
+
+    useEffect(()=>{
+        props.ondata2(data)
+    },[data])
+
   return (
     <>
       <Select onValueChange={(e)=>setData(e)}>

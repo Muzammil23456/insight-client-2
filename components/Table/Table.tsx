@@ -30,10 +30,9 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
 
   // States
 
-  const [filter,setFilter]= useState('updated')
+  const [filter,setFilter]= useState('Name')
   const dispatch = useDispatch();
   const isBoolean = useSelector((state:any) => state.booleanValue.isBoolean);
-  const isBoolean2 = useSelector((state) => state);
   const [data2, setData2] = useState([]);
   const [use, setUse] = useState(null);
   const [verfied, setVerified] = useState(false);
@@ -42,14 +41,13 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
   // Get Data from database
 
   const getdata = () => {
-    const q = query(collection(db, "test"), orderBy(`${filter}`,'desc'));
+    const q = query(collection(db, "test"),orderBy('Name'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
       console.log(testarr);
-      
       setData2(testarr);
       setLoading(false);
     });
@@ -116,7 +114,7 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
           </span>
         </button>
       )}
-      <Filter select1={'Name'} select2={'created'} select3={'updated'} ondata={(filter)=>{setFilter(filter)}} type={'Filter'}/>
+      <Filter select1={'Name'} select2={'created'} select3={'updated'} ondata2={(filter)=>{setFilter(filter)}} type={'Filter'}/>
       </div>
       <Table>
         <TableHeader>
