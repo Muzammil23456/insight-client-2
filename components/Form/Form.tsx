@@ -5,24 +5,24 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import "./style.css";
-import { collection, addDoc ,serverTimestamp} from "@firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
 import { setBoolean } from "../../app/GlobalRedux/Features/new/newSlice";
-
-const schema = z.object({
-  dynamicFields: z.array(
-    z.object({
-      Name: z
-        .string()
-        .min(3, { message: "Atleast 3" })
-        .max(50, { message: "Less than 50" }),
-    })
-  ),
-});
+import { auth11 } from "../../modules/fileauth";
 
 const Form = ({ ondata }) => {
+  const schema = z.object({
+    dynamicFields: z.array(
+      z.object({
+        Name: z
+          .string()
+          .min(3, { message: "Atleast 3" })
+          .max(50, { message: "Less than 50" }),
+      })
+    ),
+  });
   const {
     register,
     handleSubmit,
@@ -32,7 +32,7 @@ const Form = ({ ondata }) => {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      dynamicFields: [{ Name: "" }],
+      dynamicFields: [{ Name: "", createdBy: auth11.currentUser?.email }],
     },
   });
 
@@ -47,17 +47,18 @@ const Form = ({ ondata }) => {
 
   const onSubmit = (data: any) => {
     for (let i = 0; i < data.dynamicFields?.length; i++) {
-       addDoc(collection(db, "test"), {
+      addDoc(collection(db, "test"), {
         Name: data.dynamicFields[i].Name,
         created: serverTimestamp(),
-        updated: serverTimestamp()
+        updated: serverTimestamp(),
+        createdBy: auth11.currentUser?.email,
       });
     }
     if (isSubmitSuccessful) {
       reset();
     }
   };
-  
+
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset();

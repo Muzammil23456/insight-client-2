@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../modules/fileauth";
+import { auth11 } from "../../modules/fileauth";
 
 const schema = z.object({
   Email: z.string().nonempty("Required").email("Invalid Email"),
@@ -25,12 +25,13 @@ const schema = z.object({
 });
 const SignIn = ({ ondata }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -40,17 +41,18 @@ const SignIn = ({ ondata }) => {
   });
   const [open, setOpen] = useState(false);
 
-  //   const auth = getAuth();
   const onsubmit = (data: any) => {
-    signInWithEmailAndPassword(auth, data.Email, data.Password)
+    setLoading(true);
+    signInWithEmailAndPassword(auth11, data.Email, data.Password)
       .then((userCredential) => {
         const user = userCredential.user;
-        alert(`SignIn Successfully`)
+        alert(`SignIn Successfully`);
         setOpen(false);
         ondata(false);
         reset();
       })
       .catch((error) => {
+        setLoading(false);
         alert(error.code);
         const errorMessage = error.message;
       });
@@ -60,20 +62,8 @@ const SignIn = ({ ondata }) => {
     setOpen(true);
   }, []);
 
-  function togglePassword() {
-    let passwordInput = document.getElementById('txtPassword'),
-    icon = document.getElementById('toggler');
-    console.log(passwordInput)
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text';
-      icon.innerHTML='hide'
-    } else {
-      passwordInput.type = 'password';
-      icon.innerHTML='show'
-    }
-  }
   const togglePasswordVisibility = () => {
-    setShowPassword((pre)=>!pre);
+    setShowPassword((pre) => !pre);
   };
   return (
     <>
@@ -98,26 +88,35 @@ const SignIn = ({ ondata }) => {
                 {errors && (
                   <span className="error ">{errors?.Email?.message}</span>
                 )}
-                 <div className="relative w-full text-center">
-                <input
-                  className="input"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="off"
-                  {...register("Password")}
-                  placeholder="Password"
-                />
-                 <span 
-                    onClick={togglePasswordVisibility}
-                  className="show">
-                    {showPassword ? 'Hide' : 'Show'}
+                <div className="relative w-full text-center">
+                  <input
+                    className="input"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="off"
+                    {...register("Password")}
+                    placeholder="Password"
+                  />
+                  <span onClick={togglePasswordVisibility} className="show">
+                    {showPassword ? "Hide" : "Show"}
                   </span>
                 </div>
                 {errors && (
                   <span className="error ">{errors?.Password?.message}</span>
                 )}
-                <button type="submit" className="btn">
-                  Sign In
-                </button>
+                {loading && (
+                  <button type="submit" className="flex justify-center disabled:p-1 btn" disabled={loading}>
+                    <img
+                    className="animate-spin text-center"
+                      src="https://img.icons8.com/material-sharp/30/FFFFFF/spinner-frame-8.png"
+                      alt="spinner-frame-8"
+                    />
+                  </button>
+                )}
+                {!loading && (
+                  <button type="submit" className="btn">
+                    Sign In
+                  </button>
+                )}
               </form>
             </>
           </AlertDialogHeader>

@@ -16,8 +16,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../modules/fileauth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  sendSignInLinkToEmail,
+  getAuth,
+} from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 const schema = z
   .object({
@@ -36,15 +41,14 @@ const schema = z
 const SignUp = ({ ondata }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const {
     register,
     handleSubmit,
-    control,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -53,22 +57,29 @@ const SignUp = ({ ondata }) => {
       Confirm_Password: "",
     },
   });
-
-  //   const auth = getAuth();
+  const router = useRouter();
+  const auth = getAuth();
   const onsubmit = (data: any) => {
+    setLoading(true)
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        alert(`SignUp Successfully`);
-        setOpen(false);
-
-        ondata(false);
-        reset();
+        sendEmailVerification(auth.currentUser, actionCodeSettings).then(() => {
+          router.push("/verification");
+        });
+        // alert(`SignUp Successfully`);
+        // setOpen(false);
+        // ondata(false);
+        // reset();
       })
       .catch((error) => {
+        setLoading(false)
         alert(error.code);
         const errorMessage = error.message;
       });
+  };
+  var actionCodeSettings = {
+    url: "http://localhost:3000/",
+    handleCodeInApp: true,
   };
 
   useEffect(() => {
@@ -76,10 +87,10 @@ const SignUp = ({ ondata }) => {
   }, []);
 
   const togglePasswordVisibility = () => {
-    setShowPassword((pre)=>!pre);
+    setShowPassword((pre) => !pre);
   };
   const togglePasswordVisibility2 = () => {
-    setShowPassword2((pre)=>!pre);
+    setShowPassword2((pre) => !pre);
   };
   return (
     <>
@@ -107,16 +118,13 @@ const SignUp = ({ ondata }) => {
                 <div className="relative w-full text-center">
                   <input
                     className="input"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     autoComplete="off"
                     {...register("Password")}
                     placeholder="Password"
                   />
-                  <span
-                    onClick={togglePasswordVisibility}
-                    className="show"
-                  >
-                   {showPassword ? 'Hide' : 'Show'}
+                  <span onClick={togglePasswordVisibility} className="show">
+                    {showPassword ? "Hide" : "Show"}
                   </span>
                 </div>
                 {errors && (
@@ -125,16 +133,13 @@ const SignUp = ({ ondata }) => {
                 <div className="relative w-full text-center">
                   <input
                     className="input "
-                    type={showPassword2 ? 'text' : 'password'}
+                    type={showPassword2 ? "text" : "password"}
                     autoComplete="off"
                     {...register("Confirm_Password")}
                     placeholder="Confirm Password"
                   />
-                  <span
-                    onClick={togglePasswordVisibility2}
-                    className="show"
-                  >
-                    {showPassword2 ? 'Hide' : 'Show'}
+                  <span onClick={togglePasswordVisibility2} className="show">
+                    {showPassword2 ? "Hide" : "Show"}
                   </span>
                 </div>
                 {errors && (
@@ -142,9 +147,20 @@ const SignUp = ({ ondata }) => {
                     {errors?.Confirm_Password?.message}
                   </span>
                 )}
-                <button type="submit" className="btn">
-                  Sign Up
-                </button>
+                {loading && (
+                  <button type="submit" className="flex justify-center disabled:p-1 btn" disabled={loading}>
+                    <img
+                    className="animate-spin text-center"
+                      src="https://img.icons8.com/material-sharp/30/FFFFFF/spinner-frame-8.png"
+                      alt="spinner-frame-8"
+                    />
+                  </button>
+                )}
+                {!loading && (
+                  <button type="submit" className="btn">
+                    Sign Up
+                  </button>
+                )}
               </form>
             </>
           </AlertDialogHeader>

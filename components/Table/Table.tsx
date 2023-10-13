@@ -3,7 +3,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -24,58 +23,71 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setBoolean } from "../../app/GlobalRedux/Features/new/newSlice";
-import loading from "../../public/Dual Ring-1.4s-194px.png";
-const Tablee = ({ ondata, ondata2 }) => {
-  const dispatch = useDispatch();
-  const isBoolean = useSelector((state) => state.booleanValue.isBoolean);
-  const isBoolean2 = useSelector((state) => state);
+import { auth11 } from "../../modules/fileauth";
+import Filter from "../Filter/Filter";
 
+const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
+
+  // States
+
+  const [filter,setFilter]= useState('updated')
+  const dispatch = useDispatch();
+  const isBoolean = useSelector((state:any) => state.booleanValue.isBoolean);
+  const isBoolean2 = useSelector((state) => state);
   const [data2, setData2] = useState([]);
   const [use, setUse] = useState(null);
+  const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Get Data from database
 
   const getdata = () => {
-    const q = query(collection(db, "test"), orderBy("updated", "desc"));
+    const q = query(collection(db, "test"), orderBy(`${filter}`,'desc'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
+      console.log(testarr);
+      
       setData2(testarr);
       setLoading(false);
     });
     return unsubscribe;
   };
 
-  // console.log(user)
-
   // Delete Data From database
-  const deleteItem = async (id) => {
+
+  const deleteItem = async (id:any) => {
     await deleteDoc(doc(db, "test", id));
   };
-  useEffect(() => {
-    getdata();
-  }, []);
 
+  // useEffect
   const auth = getAuth();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
+        console.log(user.emailVerified);
         setUse(user);
+        setVerified(user.emailVerified);
       } else {
-        setUse(null)
+        setUse(null);
       }
     });
-  }, [use]);
+  }, [use, verfied]);
+
+  useEffect(() => {
+    getdata();
+    console.log(`${filter}`)
+    console.log(data2)
+  }, [filter]);
 
   return (
     <div className="my-5 ">
+      <div className="flex gap-2">
       {!isBoolean && (
         <button
-          disabled={use === null}
+          disabled={use === null || verfied == false}
           type="submit"
           onClick={() => {
             ondata2(true);
@@ -104,11 +116,14 @@ const Tablee = ({ ondata, ondata2 }) => {
           </span>
         </button>
       )}
+      <Filter select1={'Name'} select2={'created'} select3={'updated'} ondata={(filter)=>{setFilter(filter)}} type={'Filter'}/>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[100px]">ID</TableHead>
+            <TableHead className="md:w-[130px]">ID</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -116,7 +131,8 @@ const Tablee = ({ ondata, ondata2 }) => {
           {loading && (
             <TableRow>
               <TableCell />
-              <TableCell className="flex justify-center">
+              <TableCell/>
+              <TableCell className="flex justify-start">
                 <img
                   width="80"
                   height="80"
@@ -131,7 +147,8 @@ const Tablee = ({ ondata, ondata2 }) => {
           {!loading && data2.length === 0 && (
             <TableRow>
               <TableCell />
-              <TableCell className="flex justify-center">
+              <TableCell/>
+              <TableCell className="flex justify-start">
                 <p className="font-medium">No Record Found!</p>
               </TableCell>
               <TableCell />
@@ -141,12 +158,17 @@ const Tablee = ({ ondata, ondata2 }) => {
             data2?.length !== 0 &&
             data2?.map((arr, i) => (
               <TableRow key={i}>
-                <TableCell className="font-medium">{arr.id}</TableCell>
+                <TableCell className="font-medium text-ellipsis">{arr.id}</TableCell>
                 <TableCell>{arr.Name}</TableCell>
+                <TableCell className="truncate">{arr.createdBy}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <button
-                      disabled={use === null}
+                      disabled={
+                        use === null ||
+                        verfied === false ||
+                        !(auth11.currentUser?.email === arr.createdBy)
+                      }
                       onClick={() => {
                         deleteItem(arr.id);
                       }}
@@ -176,7 +198,11 @@ const Tablee = ({ ondata, ondata2 }) => {
                     </button>
                     <button
                       type="button"
-                      disabled={use === null}
+                      disabled={
+                        use === null ||
+                        verfied === false ||
+                        !(auth11.currentUser?.email === arr.createdBy)
+                      }
                       onClick={() => {
                         localStorage.setItem(
                           "edit",

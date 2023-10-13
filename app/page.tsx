@@ -5,7 +5,7 @@ import Form from "@/components/Form/Form";
 import SignIn from "@/components/Signin/SignIn";
 import SignUp from "@/components/Signup/SignUp";
 import Stepper from "@/components/Stepper/Stepper";
-import { getAuth, onAuthStateChanged ,signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Tablee from "@/components/Table/Table";
 import { useEffect, useState } from "react";
 import "./style.css";
@@ -16,37 +16,40 @@ const Home = () => {
   const [signUp, setSignUp] = useState(false);
   const [table, setTable] = useState(true);
   const [use, setUse] = useState(null);
+  const [verfied,setVerified] = useState(false)
+
+  const [userr,setUserr]= useState(null)
   const [editForm, setEditForm] = useState(false);
 
   const auth = getAuth();
-useEffect(()=>{
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log(user);
-      setUse(user);
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
-},[])
- 
-  console.log(use)
-  const signout = ()=>{
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      alert (`sign out`)
-      setUse(null)
-    }).catch((error) => {
-      // An error happened.
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user);
+        setUse(user);
+      } else {
+
+      }
     });
-  }
+  }, []);
+
+  const signout = () => {
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        alert(`sign out`);
+        setUse(null);
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   return (
     <>
       {/* <Stepper/> */}
       <div className="flex justify-end gap-2 pt-3">
-        {use === null && (
+        {(use === null ) && (
           <>
             <button onClick={() => setSignIn(true)} className="btn-in">
               <span>Sign In</span>
@@ -56,7 +59,11 @@ useEffect(()=>{
             </button>
           </>
         )}
-        {use !== null && <button onClick={signout} className="btn-out">Sign Out</button>}
+        {(use !== null) && (
+          <button onClick={signout} className="btn-out">
+            Sign Out
+          </button>
+        )}
       </div>
       {form && <Form ondata={(data: any) => setForm(data)} />}
       {table && (
