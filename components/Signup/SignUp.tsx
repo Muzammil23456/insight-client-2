@@ -12,6 +12,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setText,
+  setBoolean,
+} from "../../app/GlobalRedux/Features/alert/alertSlice";
+import loader from '@/public/loadingWhite.png'
+
+import {
+  setText2,
+  setBoolean2,
+} from "../../app/GlobalRedux/Features/alert2/alert2Slice";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +30,6 @@ import { z } from "zod";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  sendSignInLinkToEmail,
   getAuth,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -39,10 +49,23 @@ const schema = z
   });
 
 const SignUp = ({ ondata }) => {
+  // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const auth = getAuth();
+
+  const action = () => {
+    const X = window.scrollX;
+    const Y = window.scrollY;
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      dispatch(setBoolean2(false));
+      window.scrollTo(X, Y);
+    }, 3000);
+  }
 
   const {
     register,
@@ -57,14 +80,17 @@ const SignUp = ({ ondata }) => {
       Confirm_Password: "",
     },
   });
-  const router = useRouter();
-  const auth = getAuth();
+
+  //Sign Up
   const onsubmit = (data: any) => {
-    setLoading(true)
+    setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
-      .then((userCredential) => {
+      .then(() => {
         sendEmailVerification(auth.currentUser, actionCodeSettings).then(() => {
-          router.push("/verification");
+          setOpen(false);
+          ondata(false);
+          dispatch(setBoolean(true));
+          dispatch(setText("Verification Email Sent Please Check it."));
         });
         // alert(`SignUp Successfully`);
         // setOpen(false);
@@ -72,9 +98,13 @@ const SignUp = ({ ondata }) => {
         // reset();
       })
       .catch((error) => {
-        setLoading(false)
-        alert(error.code);
+        setLoading(false);
         const errorMessage = error.message;
+        setOpen(false);
+        ondata(false);
+        dispatch(setBoolean2(true));
+        dispatch(setText2(errorMessage));
+        action()
       });
   };
   var actionCodeSettings = {
@@ -82,6 +112,7 @@ const SignUp = ({ ondata }) => {
     handleCodeInApp: true,
   };
 
+  //useEffect
   useEffect(() => {
     setOpen(true);
   }, []);
@@ -148,10 +179,16 @@ const SignUp = ({ ondata }) => {
                   </span>
                 )}
                 {loading && (
-                  <button type="submit" className="flex justify-center disabled:p-1 btn" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="flex justify-center disabled:p-1 btn"
+                    disabled={loading}
+                  >
                     <img
-                    className="animate-spin text-center"
-                      src="https://img.icons8.com/material-sharp/30/FFFFFF/spinner-frame-8.png"
+                      className="animate-spin text-center"
+                      src={loader.src}
+                      width='35px'
+                      height='35px'
                       alt="spinner-frame-8"
                     />
                   </button>
@@ -166,6 +203,7 @@ const SignUp = ({ ondata }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
+            className="cancel"
               onClick={() => {
                 setOpen(false);
                 ondata(false);

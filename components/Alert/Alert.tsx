@@ -1,16 +1,23 @@
-import React from "react";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal, Waves } from "lucide-react"
-const Alertt = () => {
+import { Waves,Check, XCircle } from "lucide-react"
+import './style.css'
+
+
+const AlertSuccess = (prop) => {
   return (
-    <Alert className="">
-      <Terminal className="h-4 w-4" />
-      <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components and dependencies to your app using the cli.
-      </AlertDescription>
+    <Alert variant={"success"} className="alert">
+      <Check color="#16a34a" size={26} className="h-4 w-4" />
+      <AlertTitle>{prop.purpose}</AlertTitle>
     </Alert>
   );
 };
-
-export default Alertt;
+const AlertError = (prop) => {
+  return (
+    <Alert variant={"destructive"} className="alert">
+      <XCircle color="#ef4444" size={26} className="h-4 w-4" />
+      <AlertTitle>{prop.purpose}</AlertTitle>
+    </Alert>
+  );
+};
+export {AlertSuccess, AlertError};

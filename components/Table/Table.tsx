@@ -17,51 +17,64 @@ import {
   orderBy,
 } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
+import {
+  setText2,
+  setBoolean2,
+} from "../../app/GlobalRedux/Features/alert2/alert2Slice";
 import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBoolean } from "../../app/GlobalRedux/Features/new/newSlice";
+import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import { auth11 } from "../../modules/fileauth";
+import loader from '@/public/loading.png'
+import {
+  setText,
+  setBoolean,
+} from "../../app/GlobalRedux/Features/alert/alertSlice";
+import {
+  setText3,
+  setBoolean3,
+  setContinue,
+} from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 
-const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
-
+const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
   // States
 
-  const [filter,setFilter]= useState('Name')
+  const [filter, setFilter] = useState("updated");
   const dispatch = useDispatch();
-  const isBoolean = useSelector((state:any) => state.booleanValue.isBoolean);
+  const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
+  const { text3, booleanValue3, Continue } = useSelector(
+    (state) => state.textReducer3
+  );
+  // const {continue} = useSelector((state) => state.textReducer3);
+
   const [data2, setData2] = useState([]);
   const [use, setUse] = useState(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
+  const auth = getAuth();
 
   // Get Data from database
-
+  console.log();
   const getdata = () => {
-    const q = query(collection(db, "test"),orderBy('Name'));
+    const q = query(collection(db, "test"), orderBy(filter, "asc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
-      console.log(testarr);
       setData2(testarr);
       setLoading(false);
     });
     return unsubscribe;
   };
 
-  // Delete Data From database
-
-  const deleteItem = async (id:any) => {
-    await deleteDoc(doc(db, "test", id));
-  };
-
+  
   // useEffect
-  const auth = getAuth();
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -76,52 +89,58 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
 
   useEffect(() => {
     getdata();
-    console.log(`${filter}`)
-    console.log(data2)
   }, [filter]);
 
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
-      {!isBoolean && (
-        <button
-          disabled={use === null || verfied == false}
-          type="submit"
-          onClick={() => {
-            ondata2(true);
-            dispatch(setBoolean(true));
+        {!isBoolean && (
+          <button
+            disabled={use === null || verfied == false}
+            type="submit"
+            onClick={() => {
+              ondata2(true);
+              dispatch(setBool(true));
+            }}
+            className=" flex btn-n justify-evenly mb-2 items-center"
+          >
+            <span>New</span>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon icon-tabler icon-tabler-plus"
+                width="20"
+                height="20"
+                viewBox="0 0 20 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 5l0 14"></path>
+                <path d="M5 12l14 0"></path>
+              </svg>
+            </span>
+          </button>
+        )}
+        <Filter
+          select1={`Name`}
+          select2={`created`}
+          select3={`updated`}
+          ondata2={(filter) => {
+            setFilter(filter);
           }}
-          className=" flex btn-n justify-evenly mb-2 items-center"
-        >
-          <span>New</span>
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="icon icon-tabler icon-tabler-plus"
-              width="20"
-              height="20"
-              viewBox="0 0 20 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 5l0 14"></path>
-              <path d="M5 12l14 0"></path>
-            </svg>
-          </span>
-        </button>
-      )}
-      <Filter select1={'Name'} select2={'created'} select3={'updated'} ondata2={(filter)=>{setFilter(filter)}} type={'Filter'}/>
+          type={"Filter"}
+        />
       </div>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
+            <TableHead >Email</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -129,13 +148,13 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
           {loading && (
             <TableRow>
               <TableCell />
-              <TableCell/>
+              <TableCell />
               <TableCell className="flex justify-start">
                 <img
                   width="80"
                   height="80"
                   className="animate-spin"
-                  src="https://img.icons8.com/material-sharp/100/b335ae/spinner-frame-1.png"
+                  src={loader.src}
                   alt="spinner-frame-1"
                 />
               </TableCell>
@@ -145,7 +164,7 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
           {!loading && data2.length === 0 && (
             <TableRow>
               <TableCell />
-              <TableCell/>
+              <TableCell />
               <TableCell className="flex justify-start">
                 <p className="font-medium">No Record Found!</p>
               </TableCell>
@@ -156,9 +175,11 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
             data2?.length !== 0 &&
             data2?.map((arr, i) => (
               <TableRow key={i}>
-                <TableCell className="font-medium text-ellipsis">{arr.id}</TableCell>
+                <TableCell className="font-medium text-ellipsis">
+                  {arr.id}
+                </TableCell>
                 <TableCell>{arr.Name}</TableCell>
-                <TableCell className="truncate">{arr.createdBy}</TableCell>
+                <TableCell className="text-ellipsis overflow-hidden">{arr.createdBy}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <button
@@ -168,7 +189,9 @@ const Tablee = ({ ondata, ondata2 }:{ondata:any,ondata2:any}) => {
                         !(auth11.currentUser?.email === arr.createdBy)
                       }
                       onClick={() => {
-                        deleteItem(arr.id);
+                        dispatch(setBoolean3(true));
+                        dispatch(setText3("Are you Sure To Delete the record"));
+                        localStorage.setItem('delete',`${arr.id}`)
                       }}
                       className="btn-r"
                     >

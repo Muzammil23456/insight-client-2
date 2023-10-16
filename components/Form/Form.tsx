@@ -9,7 +9,7 @@ import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
-import { setBoolean } from "../../app/GlobalRedux/Features/new/newSlice";
+import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import { auth11 } from "../../modules/fileauth";
 
 const Form = ({ ondata }) => {
@@ -63,7 +63,7 @@ const Form = ({ ondata }) => {
     if (isSubmitSuccessful) {
       reset();
       ondata(false);
-      dispatch(setBoolean(false));
+      dispatch(setBool(false));
     }
   }, [isSubmitSuccessful]);
 

@@ -22,13 +22,13 @@ const Filter = ({...props}) => {
   return (
     <>
       <Select onValueChange={(e)=>setData(e)}>
-        <SelectTrigger className="w-[200px]">
-          <SelectValue placeholder={`${props.type}`} />
+        <SelectTrigger  className="w-[200px]">
+          <SelectValue  placeholder={`Sort By: ${data}`} />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value={`${props.select1} `}>{`${props.select1} `}</SelectItem>
-          <SelectItem value={`${props.select2} `}>{`${props.select2} `}</SelectItem>
-          <SelectItem value={`${props.select3} `}>{`${props.select3} `}</SelectItem>
+        <SelectContent defaultValue={`Sort By: ${data}`} >
+          <SelectItem value={`${props.select1}`}>{`Sort By: ${props.select1}`}</SelectItem>
+          <SelectItem value={`${props.select2}`}>{`Sort By: ${props.select2}`}</SelectItem>
+          <SelectItem value={`${props.select3}`}>{`Sort By: ${props.select3}`}</SelectItem>
         </SelectContent>
       </Select>
     </>

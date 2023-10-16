@@ -2,17 +2,24 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import "./style.css";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import {
+  setText,
+  setBoolean,
+} from "../../app/GlobalRedux/Features/alert/alertSlice";
+import loader from '@/public/loadingWhite.png'
+import {
+  setText2,
+  setBoolean2,
+} from "../../app/GlobalRedux/Features/alert2/alert2Slice";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -26,6 +33,7 @@ const schema = z.object({
 const SignIn = ({ ondata }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -41,20 +49,34 @@ const SignIn = ({ ondata }) => {
   });
   const [open, setOpen] = useState(false);
 
+  const action = () => {
+    const X = window.scrollX;
+    const Y = window.scrollY;
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      dispatch(setBoolean2(false));
+      window.scrollTo(X, Y);
+    }, 3000);
+  };
   const onsubmit = (data: any) => {
     setLoading(true);
     signInWithEmailAndPassword(auth11, data.Email, data.Password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        alert(`SignIn Successfully`);
         setOpen(false);
         ondata(false);
+        dispatch(setBoolean(true));
+        dispatch(setText("Successfully Sign In"));
         reset();
       })
       .catch((error) => {
         setLoading(false);
-        alert(error.code);
         const errorMessage = error.message;
+        setOpen(false);
+        ondata(false);
+        dispatch(setBoolean2(true));
+        dispatch(setText2(errorMessage));
+        // ondata1(true);
+        action();
       });
   };
 
@@ -104,10 +126,16 @@ const SignIn = ({ ondata }) => {
                   <span className="error ">{errors?.Password?.message}</span>
                 )}
                 {loading && (
-                  <button type="submit" className="flex justify-center disabled:p-1 btn" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="flex justify-center disabled:p-1 btn"
+                    disabled={loading}
+                  >
                     <img
-                    className="animate-spin text-center"
-                      src="https://img.icons8.com/material-sharp/30/FFFFFF/spinner-frame-8.png"
+                      className="animate-spin text-center"
+                      src={loader.src}
+                      width='35px'
+                      height='35px'
                       alt="spinner-frame-8"
                     />
                   </button>
@@ -122,6 +150,7 @@ const SignIn = ({ ondata }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
+              className="cancel"
               onClick={() => {
                 setOpen(false);
                 ondata(false);

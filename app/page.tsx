@@ -9,47 +9,75 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Tablee from "@/components/Table/Table";
 import { useEffect, useState } from "react";
 import "./style.css";
-import Alertt from "@/components/Alert/Alert";
+import { useDispatch, useSelector } from "react-redux";
+import { setText, setBoolean } from "./GlobalRedux/Features/alert/alertSlice";
+import {
+  setText2,
+  setBoolean2,
+} from "./GlobalRedux/Features/alert2/alert2Slice";
+import { AlertSuccess, AlertError } from "@/components/Alert/Alert";
+import { Confirm } from "@/components/Confirmation/Confirm";
 const Home = () => {
+
+  // delaration
   const [form, setForm] = useState(false);
   const [signIn, setSignIn] = useState(false);
   const [signUp, setSignUp] = useState(false);
   const [table, setTable] = useState(true);
   const [use, setUse] = useState(null);
-  const [verfied,setVerified] = useState(false)
-
-  const [userr,setUserr]= useState(null)
+  const auth = getAuth();
+  const { text, booleanValue } = useSelector((state) => state.textBoolean);
+  const { text2, booleanValue2 } = useSelector((state) => state.textReducer2);
+  const dispatch = useDispatch();
   const [editForm, setEditForm] = useState(false);
 
-  const auth = getAuth();
+  const action = () => {
+    const X = window.scrollX;
+    const Y = window.scrollY;
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      dispatch(setBoolean(false));
+      dispatch(setBoolean2(false));
+      window.scrollTo(X, Y);
+    }, 3000);
+  };
+
+  // useEffect
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
         setUse(user);
-      } else {
-
+        action();
+      } else if (!user) {
+        action();
       }
     });
-  }, []);
+  }, [onAuthStateChanged]);
 
+  //Sign Out
   const signout = () => {
     signOut(auth)
       .then(() => {
-        // Sign-out successful.
-        alert(`sign out`);
+        dispatch(setBoolean(true));
+        dispatch(setText("Successfully Sign Out"));
         setUse(null);
       })
       .catch((error) => {
-        // An error happened.
+        const errorMessage = error.message;
+        dispatch(setBoolean2(true));
+        dispatch(setText2(errorMessage));
+        action();
       });
   };
 
   return (
     <>
       {/* <Stepper/> */}
+      <Confirm/>
+      {booleanValue && <AlertSuccess purpose={text} />}
+      {booleanValue2 && <AlertError purpose={text2} />}
       <div className="flex justify-end gap-2 pt-3">
-        {(use === null ) && (
+        {use === null && (
           <>
             <button onClick={() => setSignIn(true)} className="btn-in">
               <span>Sign In</span>
@@ -59,7 +87,7 @@ const Home = () => {
             </button>
           </>
         )}
-        {(use !== null) && (
+        {use !== null && (
           <button onClick={signout} className="btn-out">
             Sign Out
           </button>

@@ -12,12 +12,12 @@ const booleanSlice = createSlice({
     toggleBoolean: (state) => {
       state.isBoolean = !state.isBoolean;
     },
-    setBoolean: (state, action) => {
+    setBool: (state, action) => {
       state.isBoolean = action.payload;
     },
   },
 });
 
-export const { toggleBoolean, setBoolean } = booleanSlice.actions;
+export const { toggleBoolean, setBool } = booleanSlice.actions;
 // export const selectBoolean = (state) => state.booleanState.isBoolean;
 export default booleanSlice.reducer;
