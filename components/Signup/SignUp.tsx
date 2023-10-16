@@ -69,7 +69,7 @@ const SignUp = ({ ondata }) => {
         // alert(`SignUp Successfully`);
         // setOpen(false);
         // ondata(false);
-        // reset();
+        // reset()
       })
       .catch((error) => {
         setLoading(false)
