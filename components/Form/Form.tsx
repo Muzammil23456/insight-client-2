@@ -11,8 +11,23 @@ import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import { auth11 } from "../../modules/fileauth";
+import {
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+  type UseFormRegister,
+} from "react-hook-form";
+// interface Errors  {
+//   dynamicFields: { 
+//     Name: string ;
+//     createdBy?: string | null;
+//    }[];
+// }
+type onDataType = {
+  ondata: (bool: boolean)=>void
+}
 
-const Form = ({ ondata }) => {
+const Form = ({ ondata }: onDataType) => {
   const schema = z.object({
     dynamicFields: z.array(
       z.object({
@@ -28,11 +43,13 @@ const Form = ({ ondata }) => {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm({
+    formState: { errors , isSubmitSuccessful },
+  } = useForm<any>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dynamicFields: [{ Name: "", createdBy: auth11.currentUser?.email }],
+      dynamicFields: [
+        { Name: "" , createdBy: auth11.currentUser?.email }
+      ],
     },
   });
 
@@ -67,12 +84,25 @@ const Form = ({ ondata }) => {
     }
   }, [isSubmitSuccessful]);
 
+  const showError = (id:number) => {
+    if (errors) {
+      if (errors.dynamicFields) {
+        const d:any = errors.dynamicFields
+        const a:Array<any> = d
+        if (a[id]){
+          const err = a[id].Name.message
+          return err
+        }
+      }
+    }
+  }
+
   return (
     <form
       className="flex form justify-center my-auto text-center "
       onSubmit={handleSubmit(onSubmit)}
     >
-      {fields.map((field, index) => (
+      {fields.map((field, index: number) => (
         <div key={field.id}>
           <input
             className="inputs"
@@ -97,11 +127,11 @@ const Form = ({ ondata }) => {
               </button>
             )}
           </div>
-          {errors && (
             <span className="error ">
-              {errors?.dynamicFields?.at(index)?.Name?.message}
+              {
+                showError(index)
+              }
             </span>
-          )}
         </div>
       ))}
       <div className="flex flex-row gap-2">

@@ -8,14 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  collection,
-  query,
-  onSnapshot,
-  deleteDoc,
-  doc,
-  orderBy,
-} from "@firebase/firestore";
+import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import {
   setText2,
@@ -28,7 +21,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import { auth11 } from "../../modules/fileauth";
-import loader from '@/public/loading.png'
+import loader from "@/public/loading.png";
 import {
   setText,
   setBoolean,
@@ -39,29 +32,43 @@ import {
   setContinue,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
+import { RootState } from "@/app/GlobalRedux/store";
 
-const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
+type TableData = {
+  id: string
+  email: string
+  Name: string
+  createdBy: string
+  updated: string
+}
+
+type onDataType = {
+  ondata: (bool: boolean)=>void
+  ondata2: (bool: boolean)=>void
+}
+
+
+const Tablee = ({ ondata, ondata2 } : onDataType) => {
   // States
 
   const [filter, setFilter] = useState("updated");
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
   const { text3, booleanValue3, Continue } = useSelector(
-    (state) => state.textReducer3
+    (state:RootState) => state.textReducer3
   );
-  // const {continue} = useSelector((state) => state.textReducer3);
 
   const [data2, setData2] = useState([]);
-  const [use, setUse] = useState(null);
+  const [use, setUse] = useState<Object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
   // Get Data from database
-  console.log();
-  const getdata = () => {
+
+  const getdata = (): Promise<TableData> => {
     const q = query(collection(db, "test"), orderBy(filter, "asc"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const unsub: any = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
         testarr.push({ ...doc.data(), id: doc.id });
@@ -69,10 +76,9 @@ const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
       setData2(testarr);
       setLoading(false);
     });
-    return unsubscribe;
+    return unsub;
   };
 
-  
   // useEffect
 
   useEffect(() => {
@@ -125,11 +131,24 @@ const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
             </span>
           </button>
         )}
+        {isBoolean && (
+          <button
+            disabled={use === null || verfied == false}
+            type="submit"
+            onClick={() => {
+              ondata2(false);
+              dispatch(setBool(false));
+            }}
+            className=" flex btn-n justify-evenly mb-2 items-center"
+          >
+            <span>Close</span>
+          </button>
+        )}
         <Filter
           select1={`Name`}
-          select2={`created`}
+          select2={`createdBy`}
           select3={`updated`}
-          ondata2={(filter) => {
+          ondata2={(filter: string) => {
             setFilter(filter);
           }}
           type={"Filter"}
@@ -140,7 +159,7 @@ const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead >Email</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -173,13 +192,15 @@ const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
           )}
           {!loading &&
             data2?.length !== 0 &&
-            data2?.map((arr, i) => (
+            data2?.map((arr:TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
                   {arr.id}
                 </TableCell>
                 <TableCell>{arr.Name}</TableCell>
-                <TableCell className="text-ellipsis overflow-hidden">{arr.createdBy}</TableCell>
+                <TableCell className="text-ellipsis overflow-hidden">
+                  {arr.createdBy}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <button
@@ -191,7 +212,7 @@ const Tablee = ({ ondata, ondata2 }: { ondata: any; ondata2: any }) => {
                       onClick={() => {
                         dispatch(setBoolean3(true));
                         dispatch(setText3("Are you Sure To Delete the record"));
-                        localStorage.setItem('delete',`${arr.id}`)
+                        localStorage.setItem("delete", `${arr.id}`);
                       }}
                       className="btn-r"
                     >

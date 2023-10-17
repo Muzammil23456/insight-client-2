@@ -15,21 +15,29 @@ import {
   setText2,
   setBoolean2,
 } from "./GlobalRedux/Features/alert2/alert2Slice";
+import { RootState } from "@/app/GlobalRedux/store";
 import { AlertSuccess, AlertError } from "@/components/Alert/Alert";
 import { Confirm } from "@/components/Confirmation/Confirm";
-const Home = () => {
+import { db } from "@/modules/filebase";
+import loader from "@/public/loading.png";
 
+const Home = () => {
   // delaration
   const [form, setForm] = useState(false);
   const [signIn, setSignIn] = useState(false);
   const [signUp, setSignUp] = useState(false);
+  const [firebase, setFirebase] = useState(false);
   const [table, setTable] = useState(true);
-  const [use, setUse] = useState(null);
+  const [use, setUse] = useState<Object | null>(null);
   const auth = getAuth();
-  const { text, booleanValue } = useSelector((state) => state.textBoolean);
-  const { text2, booleanValue2 } = useSelector((state) => state.textReducer2);
+  const { text, booleanValue } = useSelector(
+    (state: RootState) => state.textBoolean
+  );
+  const { text2, booleanValue2 } = useSelector(
+    (state: RootState) => state.textReducer2
+  );
   const dispatch = useDispatch();
-  const [editForm, setEditForm] = useState(false);
+  const [editForm, setEditForm] = useState<boolean>(false);
 
   const action = () => {
     const X = window.scrollX;
@@ -69,45 +77,64 @@ const Home = () => {
         action();
       });
   };
+  console.log(db.app);
+  useEffect(() => {
+    if (db) {
+      setFirebase(true);
+    }
+  }, []);
 
   return (
     <>
-      {/* <Stepper/> */}
-      <Confirm/>
-      {booleanValue && <AlertSuccess purpose={text} />}
-      {booleanValue2 && <AlertError purpose={text2} />}
-      <div className="flex justify-end gap-2 pt-3">
-        {use === null && (
-          <>
-            <button onClick={() => setSignIn(true)} className="btn-in">
-              <span>Sign In</span>
-            </button>
-            <button onClick={() => setSignUp(true)} className="btn-up">
-              <span>Sign Up</span>
-            </button>
-          </>
-        )}
-        {use !== null && (
-          <button onClick={signout} className="btn-out">
-            Sign Out
-          </button>
-        )}
-      </div>
-      {form && <Form ondata={(data: any) => setForm(data)} />}
-      {table && (
-        <Tablee
-          ondata={(data: any) => setEditForm(data)}
-          ondata2={(data: any) => setForm(data)}
-        />
+      {firebase && (
+        <div className='h-[100vh] flex justify-center'>
+          <img
+            className="animate-spin text-center"
+            src={loader.src}
+            
+            alt="spinner-frame-8"
+          />
+        </div>
       )}
-      {editForm && (
-        <EditForm
-          ondata={editForm}
-          ondata2={(data: any) => setEditForm(data)}
-        />
+      {!firebase && (
+        <>
+          <Confirm />
+          {booleanValue && <AlertSuccess purpose={text} />}
+          {booleanValue2 && <AlertError purpose={text2} />}
+          <div className="flex justify-end gap-2 py-3">
+            {use === null && (
+              <>
+                <button onClick={() => setSignIn(true)} className="btn-in">
+                  <span>Sign In</span>
+                </button>
+                <button onClick={() => setSignUp(true)} className="btn-up">
+                  <span>Sign Up</span>
+                </button>
+              </>
+            )}
+            {use !== null && (
+              <button onClick={signout} className="btn-out">
+                Sign Out
+              </button>
+            )}
+          </div>
+          {form && <Form ondata={(data: boolean) => setForm(data)} />}
+          {table && (
+            <Tablee
+              ondata={(data: boolean) => setEditForm(data)}
+              ondata2={(data: boolean) => setForm(data)}
+            />
+          )}
+          {editForm && (
+            <EditForm
+              ondata={editForm}
+              ondata2={(data: boolean) => setEditForm(data)}
+            />
+          )}
+          {signIn && <SignIn ondata={(data: boolean) => setSignIn(data)} />}
+          {signUp && <SignUp ondata={(data: boolean) => setSignUp(data)} />}
+        </>
       )}
-      {signIn && <SignIn ondata={(data) => setSignIn(data)} />}
-      {signUp && <SignUp ondata={(data) => setSignUp(data)} />}
     </>
   );
 };

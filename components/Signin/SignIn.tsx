@@ -26,11 +26,14 @@ import { z } from "zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth11 } from "../../modules/fileauth";
 
+type onDataType = {
+  ondata: (bool: boolean)=>void
+}
 const schema = z.object({
   Email: z.string().nonempty("Required").email("Invalid Email"),
   Password: z.string().nonempty("Required").min(6, { message: "Atleast 6" }),
 });
-const SignIn = ({ ondata }) => {
+const SignIn = ({ ondata } : onDataType) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();

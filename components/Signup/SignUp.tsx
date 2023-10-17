@@ -48,7 +48,10 @@ const schema = z
     path: ["Confirm_Password"],
   });
 
-const SignUp = ({ ondata }) => {
+  type onDataType = {
+    ondata: (bool: boolean)=>void
+  }
+const SignUp = ({ ondata }: onDataType) => {
   // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);

@@ -29,12 +29,15 @@ import {
 } from "../../app/GlobalRedux/Features/alert/alertSlice";
 import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
+import { RootState } from "@/app/GlobalRedux/store";
 
 export function Confirm() {
   const [open, setOpen] = useState(false);
-  const { text3, booleanValue3 } = useSelector((state) => state.textReducer3);
-  const dispatch = useDispatch();
+  const { text3, booleanValue3 } = useSelector(
+    (state: RootState) => state.textReducer3
+  );
 
+  const dispatch = useDispatch();
   const action = () => {
     const X = window.scrollX;
     const Y = window.scrollY;
