@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setText, setBoolean } from "./GlobalRedux/Features/alert/alertSlice";
+import { useSearchParams } from 'next/navigation';
 import {
   setText2,
   setBoolean2,
@@ -28,7 +29,7 @@ const Home = () => {
   const [signUp, setSignUp] = useState(false);
   const [firebase, setFirebase] = useState(false);
   const [table, setTable] = useState(true);
-  const [use, setUse] = useState<Object | null>(null);
+  const [use, setUse] = useState(null);
   const auth = getAuth();
   const { text, booleanValue } = useSelector(
     (state: RootState) => state.textBoolean
@@ -50,19 +51,27 @@ const Home = () => {
     }, 3000);
   };
 
+  const searchParams = useSearchParams(); 
+  let oobCode = searchParams?.get('oobCode')
+console.log(oobCode)
+
   // useEffect
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUse(user);
-        action();
-      } else if (!user) {
+        console.log(user)
+        action()
+      } else {
         action();
       }
     });
   }, [onAuthStateChanged]);
+  console.log(auth.currentUser)
 
-  //Sign Out
+  
+  // Sign Out
   const signout = () => {
     signOut(auth)
       .then(() => {
@@ -79,24 +88,24 @@ const Home = () => {
   };
   console.log(db.app);
   useEffect(() => {
+    console.log(use)
     if (db) {
-      setFirebase(true);
+      setTimeout(() => setFirebase(true), 1000);
     }
   }, []);
 
   return (
     <>
-      {firebase && (
-        <div className='h-[100vh] flex justify-center'>
+      {/* {!firebase && (
+        <div className="h-[100vh] flex justify-center items-center">
           <img
             className="animate-spin text-center"
             src={loader.src}
-            
             alt="spinner-frame-8"
           />
         </div>
-      )}
-      {!firebase && (
+      )} */}
+      {true && (
         <>
           <Confirm />
           {booleanValue && <AlertSuccess purpose={text} />}
@@ -113,7 +122,7 @@ const Home = () => {
               </>
             )}
             {use !== null && (
-              <button onClick={signout} className="btn-out">
+              <button onClick={signout}  className="btn-out">
                 Sign Out
               </button>
             )}

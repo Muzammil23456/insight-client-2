@@ -59,7 +59,7 @@ const Tablee = ({ ondata, ondata2 } : onDataType) => {
   );
 
   const [data2, setData2] = useState([]);
-  const [use, setUse] = useState<Object | null>(null);
+  const [use, setUse] = useState(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();

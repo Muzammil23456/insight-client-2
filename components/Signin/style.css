@@ -16,6 +16,4 @@
 .error{
     @apply text-red-600 flex !justify-start font-semibold text-sm 
 }
-.cancel{
-    @apply border-solid border-[2px]  border-pink-910  hover:bg-pink-910 hover:border-pink-910 hover:transition-all hover:duration-300 hover:text-white p-[6px] rounded sm:w-20 w-16 h-[55%] sm:h-auto sm:text-base text-sm text-center font-semibold text-gray-700 
-}
+

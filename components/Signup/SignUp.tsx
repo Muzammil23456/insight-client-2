@@ -17,13 +17,15 @@ import {
   setText,
   setBoolean,
 } from "../../app/GlobalRedux/Features/alert/alertSlice";
-import loader from '@/public/loadingWhite.png'
+import loader from "@/public/loadingWhite.png";
 
 import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
 import { useEffect, useState } from "react";
+
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -31,9 +33,13 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAuth,
+  applyActionCode,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
+type oobCode= {
+  oobCode: string
+}
 const schema = z
   .object({
     Email: z.string().nonempty("Required").email("Invalid Email"),
@@ -48,18 +54,24 @@ const schema = z
     path: ["Confirm_Password"],
   });
 
-  type onDataType = {
-    ondata: (bool: boolean)=>void
-  }
+type onDataType = {
+  ondata: (bool: boolean) => void;
+};
 const SignUp = ({ ondata }: onDataType) => {
   // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const [oobCode,setOobCode] = useState('')
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const auth = getAuth();
+  const searchParams = useSearchParams();
+  if(searchParams.get("oobCode")){
+    setOobCode(`${searchParams.get("oobCode")}`);
+  }
 
+  console.log(oobCode);
   const action = () => {
     const X = window.scrollX;
     const Y = window.scrollY;
@@ -68,7 +80,7 @@ const SignUp = ({ ondata }: onDataType) => {
       dispatch(setBoolean2(false));
       window.scrollTo(X, Y);
     }, 3000);
-  }
+  };
 
   const {
     register,
@@ -89,11 +101,14 @@ const SignUp = ({ ondata }: onDataType) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then(() => {
-        sendEmailVerification(auth.currentUser, actionCodeSettings).then(() => {
+        sendEmailVerification(auth.currentUser).then(() => {
           setOpen(false);
           ondata(false);
-          dispatch(setBoolean(true));
-          dispatch(setText("Verification Email Sent Please Check it."));
+          applyActionCode(auth, oobCode).then((resp) => {
+            console.log(resp)
+            dispatch(setBoolean(true));
+            dispatch(setText("Verification Email Sent Please Check it."));
+          }).catch((err)=>{console.log(err)})
         });
         // alert(`SignUp Successfully`);
         // setOpen(false);
@@ -107,14 +122,9 @@ const SignUp = ({ ondata }: onDataType) => {
         ondata(false);
         dispatch(setBoolean2(true));
         dispatch(setText2(errorMessage));
-        action()
+        action();
       });
   };
-  var actionCodeSettings = {
-    url: "http://localhost:3000/",
-    handleCodeInApp: true,
-  };
-
   //useEffect
   useEffect(() => {
     setOpen(true);
@@ -190,8 +200,8 @@ const SignUp = ({ ondata }: onDataType) => {
                     <img
                       className="animate-spin text-center"
                       src={loader.src}
-                      width='35px'
-                      height='35px'
+                      width="35px"
+                      height="35px"
                       alt="spinner-frame-8"
                     />
                   </button>
@@ -206,7 +216,7 @@ const SignUp = ({ ondata }: onDataType) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-            className="cancel"
+              
               onClick={() => {
                 setOpen(false);
                 ondata(false);
