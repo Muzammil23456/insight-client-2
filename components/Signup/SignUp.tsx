@@ -37,9 +37,9 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 
-type oobCode= {
-  oobCode: string
-}
+type oobCode = {
+  oobCode: string;
+};
 const schema = z
   .object({
     Email: z.string().nonempty("Required").email("Invalid Email"),
@@ -61,13 +61,13 @@ const SignUp = ({ ondata }: onDataType) => {
   // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const [oobCode,setOobCode] = useState('')
+  const [oobCode, setOobCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const auth = getAuth();
   const searchParams = useSearchParams();
-  if(searchParams.get("oobCode")){
+  if (searchParams.get("oobCode")) {
     setOobCode(`${searchParams.get("oobCode")}`);
   }
 
@@ -96,19 +96,27 @@ const SignUp = ({ ondata }: onDataType) => {
     },
   });
 
+  const actionCodeSetting = {
+    url: "http://localhost:3000/?confirm_email=true",//https://example.com/path?confirm_email=true
+    handleCodeInApp: true,
+  };
   //Sign Up
   const onsubmit = (data: any) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
-      .then(() => {
+      .then((res) => {
         sendEmailVerification(auth.currentUser).then(() => {
           setOpen(false);
           ondata(false);
-          applyActionCode(auth, oobCode).then((resp) => {
-            console.log(resp)
-            dispatch(setBoolean(true));
-            dispatch(setText("Verification Email Sent Please Check it."));
-          }).catch((err)=>{console.log(err)})
+          dispatch(setBoolean(true));
+          dispatch(setText("Verification Email Sent Please Check it."));
+          // applyActionCode(auth, oobCode)
+          //   .then((resp) => {
+          //     console.log(resp);
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
         });
         // alert(`SignUp Successfully`);
         // setOpen(false);
@@ -216,7 +224,6 @@ const SignUp = ({ ondata }: onDataType) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              
               onClick={() => {
                 setOpen(false);
                 ondata(false);

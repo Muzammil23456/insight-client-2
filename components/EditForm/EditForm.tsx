@@ -103,7 +103,6 @@ const EditForm = ({ ondata, ondata2 }) => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-          className="cancel"
             onClick={() => {
               ondata2(false);
             }}

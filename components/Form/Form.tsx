@@ -10,7 +10,7 @@ import { db } from "../../modules/filebase";
 import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
-import { auth11 } from "../../modules/fileauth";
+// import { auth11 } from "../../modules/fileauth";
 import {
   type FieldErrors,
   type FieldValues,
@@ -48,7 +48,7 @@ const Form = ({ ondata }: onDataType) => {
     resolver: zodResolver(schema),
     defaultValues: {
       dynamicFields: [
-        { Name: "" , createdBy: auth11.currentUser?.email }
+        { Name: ""  } //, createdBy: auth11.currentUser?.email
       ],
     },
   });
@@ -68,7 +68,7 @@ const Form = ({ ondata }: onDataType) => {
         Name: data.dynamicFields[i].Name,
         created: serverTimestamp(),
         updated: serverTimestamp(),
-        createdBy: auth11.currentUser?.email,
+       // createdBy: auth11.currentUser?.email,
       });
     }
     if (isSubmitSuccessful) {

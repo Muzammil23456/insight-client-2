@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setText, setBoolean } from "./GlobalRedux/Features/alert/alertSlice";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 import {
   setText2,
   setBoolean2,
@@ -51,26 +51,25 @@ const Home = () => {
     }, 3000);
   };
 
-  const searchParams = useSearchParams(); 
-  let oobCode = searchParams?.get('oobCode')
-console.log(oobCode)
+  // const searchParams = useSearchParams();
+  // let oobCode = searchParams?.get("oobCode");
+  // console.log(oobCode);
 
   // useEffect
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+   const unsub = auth.onAuthStateChanged( (user) => {
       if (user) {
         setUse(user);
-        console.log(user)
-        action()
+        action();
       } else {
         action();
       }
     });
+    return unsub;
   }, [onAuthStateChanged]);
-  console.log(auth.currentUser)
 
-  
+
   // Sign Out
   const signout = () => {
     signOut(auth)
@@ -88,7 +87,7 @@ console.log(oobCode)
   };
   console.log(db.app);
   useEffect(() => {
-    console.log(use)
+    console.log(use);
     if (db) {
       setTimeout(() => setFirebase(true), 1000);
     }
@@ -122,7 +121,7 @@ console.log(oobCode)
               </>
             )}
             {use !== null && (
-              <button onClick={signout}  className="btn-out">
+              <button onClick={signout} className="btn-out">
                 Sign Out
               </button>
             )}

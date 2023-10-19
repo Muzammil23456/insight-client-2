@@ -75,13 +75,11 @@ export function Confirm() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
-            className="cancel"
             onClick={() => dispatch(setBoolean3(false))}
           >
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className="cont"
             onClick={() => {
               const id = localStorage.getItem("delete");
               deleteItem(id);

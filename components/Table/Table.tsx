@@ -20,7 +20,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
-import { auth11 } from "../../modules/fileauth";
+// import { auth11 } from "../../modules/fileauth";
 import loader from "@/public/loading.png";
 import {
   setText,
@@ -157,9 +157,9 @@ const Tablee = ({ ondata, ondata2 } : onDataType) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
+            <TableHead className="sm:w-[130px] w-[60%]">ID</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
+            <TableHead className="w-[80px]">Email</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -195,11 +195,11 @@ const Tablee = ({ ondata, ondata2 } : onDataType) => {
             data2?.map((arr:TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  {arr.id}
+                <p className="text-ellipsis sm:text-clip overflow-hidden sm:overflow-clip w-[60%] sm:w-full ">{arr.id}</p>
                 </TableCell>
                 <TableCell>{arr.Name}</TableCell>
-                <TableCell className="text-ellipsis overflow-hidden">
-                  {arr.createdBy}
+                <TableCell className="">
+                  <p className="text-ellipsis sm:text-clip overflow-hidden sm:overflow-clip w-[60%] sm:w-full ">{arr.createdBy}</p>
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
@@ -207,7 +207,7 @@ const Tablee = ({ ondata, ondata2 } : onDataType) => {
                       disabled={
                         use === null ||
                         verfied === false ||
-                        !(auth11.currentUser?.email === arr.createdBy)
+                        !(auth.currentUser?.email === arr.createdBy)
                       }
                       onClick={() => {
                         dispatch(setBoolean3(true));
@@ -243,7 +243,7 @@ const Tablee = ({ ondata, ondata2 } : onDataType) => {
                       disabled={
                         use === null ||
                         verfied === false ||
-                        !(auth11.currentUser?.email === arr.createdBy)
+                       !(auth.currentUser?.email === arr.createdBy)
                       }
                       onClick={() => {
                         localStorage.setItem(

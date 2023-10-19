@@ -23,8 +23,8 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth11 } from "../../modules/fileauth";
+import { signInWithEmailAndPassword ,getAuth } from "firebase/auth";
+// import { auth11 } from "../../modules/fileauth";
 
 type onDataType = {
   ondata: (bool: boolean)=>void
@@ -61,10 +61,11 @@ const SignIn = ({ ondata } : onDataType) => {
       window.scrollTo(X, Y);
     }, 3000);
   };
+  const auth = getAuth()
   const onsubmit = (data: any) => {
     setLoading(true);
-    signInWithEmailAndPassword(auth11, data.Email, data.Password)
-      .then((userCredential) => {
+    signInWithEmailAndPassword(auth, data.Email, data.Password)
+      .then(() => {
         setOpen(false);
         ondata(false);
         dispatch(setBoolean(true));
