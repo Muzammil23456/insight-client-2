@@ -33,10 +33,15 @@ const schema = z.object({
   ),
 });
 
-const EditForm = ({ ondata, ondata2 }) => {
+type onDataType = {
+  ondata: boolean
+  ondata2: (bool: boolean)=>void
+}
+
+const EditForm = ({ ondata, ondata2 } : onDataType) => {
   const [editArr, setEditArr] = useState([]);
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("edit"));
+  const data = JSON.parse(localStorage.getItem("edit") || '{}');
 
   const onSubmit = async (da: any) => {
     setOpen(false);
@@ -59,6 +64,18 @@ const EditForm = ({ ondata, ondata2 }) => {
     },
   });
 
+  const showError = (id: number) => {
+    if (errors) {
+      if (errors.dynamicFields) {
+        const d: any = errors.dynamicFields;
+        const a: Array<any> = d;
+        if (a[id]) {
+          const err = a[id].Name.message;
+          return err;
+        }
+      }
+    }
+  };
   useEffect(() => {
     setOpen(ondata);
     const q = query(collection(db, "test"));
@@ -91,7 +108,8 @@ const EditForm = ({ ondata, ondata2 }) => {
                 />
                 {errors && (
                   <span className="error ">
-                    {errors?.dynamicFields?.at(0)?.Name?.message}
+                    {/* {errors?.dynamicFields?.at(0)?.Name?.message} */}
+                    {showError(0)}
                   </span>
                 )}
               </div>

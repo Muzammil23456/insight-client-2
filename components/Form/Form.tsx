@@ -10,22 +10,22 @@ import { db } from "../../modules/filebase";
 import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
-// import { auth11 } from "../../modules/fileauth";
+import { auth11 } from "../../modules/fileauth";
 import {
   type FieldErrors,
   type FieldValues,
   type Path,
   type UseFormRegister,
 } from "react-hook-form";
-// interface Errors  {
-//   dynamicFields: { 
-//     Name: string ;
-//     createdBy?: string | null;
-//    }[];
-// }
-type onDataType = {
-  ondata: (bool: boolean)=>void
+interface Errors {
+  dynamicFields: {
+    Name: string;
+    createdBy?: string | null;
+  }[];
 }
+type onDataType = {
+  ondata: (bool: boolean) => void;
+};
 
 const Form = ({ ondata }: onDataType) => {
   const schema = z.object({
@@ -43,13 +43,11 @@ const Form = ({ ondata }: onDataType) => {
     handleSubmit,
     control,
     reset,
-    formState: { errors , isSubmitSuccessful },
+    formState: { errors, isSubmitSuccessful },
   } = useForm<any>({
     resolver: zodResolver(schema),
     defaultValues: {
-      dynamicFields: [
-        { Name: ""  } //, createdBy: auth11.currentUser?.email
-      ],
+      dynamicFields: [{ Name: "", createdBy: auth11.currentUser?.email }],
     },
   });
 
@@ -68,7 +66,7 @@ const Form = ({ ondata }: onDataType) => {
         Name: data.dynamicFields[i].Name,
         created: serverTimestamp(),
         updated: serverTimestamp(),
-       // createdBy: auth11.currentUser?.email,
+        createdBy: auth11.currentUser?.email,
       });
     }
     if (isSubmitSuccessful) {
@@ -84,18 +82,18 @@ const Form = ({ ondata }: onDataType) => {
     }
   }, [isSubmitSuccessful]);
 
-  const showError = (id:number) => {
+  const showError = (id: number) => {
     if (errors) {
       if (errors.dynamicFields) {
-        const d:any = errors.dynamicFields
-        const a:Array<any> = d
-        if (a[id]){
-          const err = a[id].Name.message
-          return err
+        const d: any = errors.dynamicFields;
+        const a: Array<any> = d;
+        if (a[id]) {
+          const err = a[id].Name.message;
+          return err;
         }
       }
     }
-  }
+  };
 
   return (
     <form
@@ -127,11 +125,7 @@ const Form = ({ ondata }: onDataType) => {
               </button>
             )}
           </div>
-            <span className="error ">
-              {
-                showError(index)
-              }
-            </span>
+          <span className="error ">{showError(index)}</span>
         </div>
       ))}
       <div className="flex flex-row gap-2">

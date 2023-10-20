@@ -3,28 +3,23 @@
 import "./style.css";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setText,
   setBoolean,
 } from "../../app/GlobalRedux/Features/alert/alertSlice";
 import loader from "@/public/loadingWhite.png";
-
 import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
 import { useEffect, useState } from "react";
-
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,13 +28,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAuth,
-  applyActionCode,
 } from "firebase/auth";
-import { useRouter } from "next/navigation";
 
-type oobCode = {
-  oobCode: string;
-};
 const schema = z
   .object({
     Email: z.string().nonempty("Required").email("Invalid Email"),
@@ -58,6 +48,7 @@ type onDataType = {
   ondata: (bool: boolean) => void;
 };
 const SignUp = ({ ondata }: onDataType) => {
+
   // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -85,7 +76,6 @@ const SignUp = ({ ondata }: onDataType) => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -97,31 +87,21 @@ const SignUp = ({ ondata }: onDataType) => {
   });
 
   const actionCodeSetting = {
-    url: "http://localhost:3000/?confirm_email=true",//https://example.com/path?confirm_email=true
+    url: "http://localhost:3000",
     handleCodeInApp: true,
   };
+
   //Sign Up
   const onsubmit = (data: any) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
-        sendEmailVerification(auth.currentUser).then(() => {
+        sendEmailVerification(res.user, actionCodeSetting).then(() => {
           setOpen(false);
           ondata(false);
           dispatch(setBoolean(true));
           dispatch(setText("Verification Email Sent Please Check it."));
-          // applyActionCode(auth, oobCode)
-          //   .then((resp) => {
-          //     console.log(resp);
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
         });
-        // alert(`SignUp Successfully`);
-        // setOpen(false);
-        // ondata(false);
-        // reset()
       })
       .catch((error) => {
         setLoading(false);
@@ -133,7 +113,9 @@ const SignUp = ({ ondata }: onDataType) => {
         action();
       });
   };
+
   //useEffect
+
   useEffect(() => {
     setOpen(true);
   }, []);

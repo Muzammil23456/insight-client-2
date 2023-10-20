@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setText, setBoolean } from "./GlobalRedux/Features/alert/alertSlice";
-import { useSearchParams } from "next/navigation";
 import {
   setText2,
   setBoolean2,
@@ -29,7 +28,7 @@ const Home = () => {
   const [signUp, setSignUp] = useState(false);
   const [firebase, setFirebase] = useState(false);
   const [table, setTable] = useState(true);
-  const [use, setUse] = useState(null);
+  const [use, setUse] = useState<object|null>(null);
   const auth = getAuth();
   const { text, booleanValue } = useSelector(
     (state: RootState) => state.textBoolean
@@ -51,11 +50,6 @@ const Home = () => {
     }, 3000);
   };
 
-  // const searchParams = useSearchParams();
-  // let oobCode = searchParams?.get("oobCode");
-  // console.log(oobCode);
-
-  // useEffect
 
   useEffect(() => {
    const unsub = auth.onAuthStateChanged( (user) => {
@@ -74,9 +68,9 @@ const Home = () => {
   const signout = () => {
     signOut(auth)
       .then(() => {
+        setUse(null);
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Sign Out"));
-        setUse(null);
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -85,9 +79,8 @@ const Home = () => {
         action();
       });
   };
-  console.log(db.app);
+
   useEffect(() => {
-    console.log(use);
     if (db) {
       setTimeout(() => setFirebase(true), 1000);
     }
@@ -95,7 +88,7 @@ const Home = () => {
 
   return (
     <>
-      {/* {!firebase && (
+      {!firebase && (
         <div className="h-[100vh] flex justify-center items-center">
           <img
             className="animate-spin text-center"
@@ -103,8 +96,8 @@ const Home = () => {
             alt="spinner-frame-8"
           />
         </div>
-      )} */}
-      {true && (
+      )}
+      {firebase && (
         <>
           <Confirm />
           {booleanValue && <AlertSuccess purpose={text} />}
