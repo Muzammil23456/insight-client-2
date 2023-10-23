@@ -30,6 +30,7 @@ import {
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
 import { auth11 } from "@/modules/fileauth";
+
 type TableData = {
   id: string;
   email: string;
@@ -54,6 +55,9 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   );
 
   const [data2, setData2] = useState([]);
+  const [data3, setData3] = useState([]);
+  const [userCol, setUserCol] = useState([]);
+  const [role,setRole] = useState('')
   const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -74,6 +78,34 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
     return unsub;
   };
 
+  // Get User from database
+
+  const getuser = (): Promise<TableData> => {
+    const q = query(collection(db, "user"));
+    const unsub2: any = onSnapshot(q, (querySnapshot) => {
+      let testarr2: any = [];
+      querySnapshot.forEach((doc) => {
+        testarr2.push({ ...doc.data() });
+      });
+      setData3(testarr2[0].role);
+      setLoading(false);
+    console.log(testarr2[0].uid)
+    });
+    return unsub2;
+  };
+
+
+  const ttt = ()=>{
+    for (let index = 0; index < data3.length; index++) {
+      const element = data3[index];
+      console.log(element)
+      if(element === 'Admin'){
+        setRole('Admin')
+        return 0;
+      }
+    }
+    
+  }
   // useEffect
 
   useEffect(() => {
@@ -86,53 +118,61 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
       }
     });
   }, [use, verfied]);
-
+  
   useEffect(() => {
     getdata();
+    getuser();
+    ttt()
+    // console.log(role)
+    // console.log(data3)
+    // console.log(data2)
   }, [filter]);
-
+  
+  
+    console.log(data3)
+    console.log(role)
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
         {!isBoolean && (
-         <Tooltip>
-         <TooltipTrigger>
-         <button
-            disabled={use === null || verfied == false}
-            type="submit"
-            onClick={() => {
-              ondata2(true);
-              dispatch(setBool(true));
-            }}
-            className=" flex btn-n justify-evenly mb-2 items-center"
-          >
-            <span>New</span>
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-plus"
-                width="20"
-                height="20"
-                viewBox="0 0 20 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          <Tooltip>
+            <TooltipTrigger>
+              <button
+                disabled={use === null || verfied == false}
+                type="submit"
+                onClick={() => {
+                  ondata2(true);
+                  dispatch(setBool(true));
+                }}
+                className=" flex btn-n justify-evenly mb-2 items-center"
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M12 5l0 14"></path>
-                <path d="M5 12l14 0"></path>
-              </svg>
-            </span>
-          </button>
-         </TooltipTrigger>
-         <TooltipContent>
-           {use === null && <p>First sign Up</p>}
-           {use !== null &&  (verfied == false) && <p>Not verfied</p>}
-           {use !== null &&  !(verfied == false) && <p>Add Record</p>}
-         </TooltipContent>
-       </Tooltip>
+                <span>New</span>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-plus"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M12 5l0 14"></path>
+                    <path d="M5 12l14 0"></path>
+                  </svg>
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {use === null && <p>First sign Up</p>}
+              {use !== null && verfied == false && <p>Not verfied</p>}
+              {use !== null && !(verfied == false) && <p>Add Record</p>}
+            </TooltipContent>
+          </Tooltip>
         )}
         {isBoolean && (
           <button
@@ -210,7 +250,9 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           disabled={
                             use === null ||
                             verfied === false ||
-                            !(auth11.currentUser?.email === arr.createdBy)
+                            // !(data3[0] == 'A') &&
+                            // !(auth11.currentUser?.email === arr.createdBy  )
+                            // (data3[0] == 'A' ? false : true)
                           }
                           onClick={() => {
                             dispatch(setBoolean3(true));

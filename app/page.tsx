@@ -114,9 +114,12 @@ const Home = () => {
               </>
             )}
             {use !== null && (
+              <>
+              <p>{auth.currentUser?.email}</p>
               <button onClick={signout} className="btn-out">
                 Sign Out
               </button>
+              </>
             )}
           </div>
           {form && <Form ondata={(data: boolean) => setForm(data)} />}
