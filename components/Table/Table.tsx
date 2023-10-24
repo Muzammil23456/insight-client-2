@@ -57,7 +57,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
   const [userCol, setUserCol] = useState([]);
-  const [role,setRole] = useState('')
+  const [role, setRole] = useState("");
   const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -87,50 +87,45 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
       querySnapshot.forEach((doc) => {
         testarr2.push({ ...doc.data() });
       });
-      setData3(testarr2[0].role);
+      setData3(testarr2);
       setLoading(false);
-    console.log(testarr2[0].uid)
+      console.log(testarr2[0].uid);
     });
     return unsub2;
   };
 
-
-  const ttt = ()=>{
-    for (let index = 0; index < data3.length; index++) {
-      const element = data3[index];
-      console.log(element)
-      if(element === 'Admin'){
-        setRole('Admin')
-        return 0;
+  const ttt = () => {
+    data3.forEach((e) => {
+      console.log(e);
+      if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
+        setRole("admin");
+        console.log(e);
       }
-    }
-    
-  }
+    });
+  };
   // useEffect
 
   useEffect(() => {
+    getuser();
+    ttt();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUse(user);
+        setRole((pre) => pre);
         setVerified(user.emailVerified);
       } else {
         setUse(null);
       }
     });
-  }, [use, verfied]);
-  
+  }, [use, verfied, onAuthStateChanged]);
+
   useEffect(() => {
     getdata();
-    getuser();
-    ttt()
-    // console.log(role)
-    // console.log(data3)
-    // console.log(data2)
   }, [filter]);
-  
-  
-    console.log(data3)
-    console.log(role)
+
+  useEffect(() => {}, []);
+  //console.log(data3);
+
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
@@ -241,7 +236,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                   {arr.id}
                 </TableCell>
                 <TableCell>{arr.Name}</TableCell>
-                <TableCell className="">{arr.createdBy}</TableCell>
+                <TableCell>{arr.createdBy}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -250,9 +245,10 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           disabled={
                             use === null ||
                             verfied === false ||
-                            // !(data3[0] == 'A') &&
-                            // !(auth11.currentUser?.email === arr.createdBy  )
-                            // (data3[0] == 'A' ? false : true)
+                            !(
+                              role == "admin" ||
+                              auth11.currentUser?.email === arr.createdBy
+                            )
                           }
                           onClick={() => {
                             dispatch(setBoolean3(true));
@@ -289,11 +285,14 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                       <TooltipContent>
                         {use === null && <p>First sign In</p>}
                         {use !== null &&
-                          !(auth11.currentUser?.email === arr.createdBy) && (
-                            <p>Not Authorized</p>
-                          )}
+                          (
+                            auth11.currentUser?.email !== arr.createdBy
+                          ) && <p>Not Authorized</p>}
                         {use !== null &&
-                          auth11.currentUser?.email === arr.createdBy && (
+                          (
+                            role == "admin" 
+                            
+                          )  && (
                             <p>Delete</p>
                           )}
                       </TooltipContent>
@@ -305,7 +304,10 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           disabled={
                             use === null ||
                             verfied === false ||
-                            !(auth11.currentUser?.email === arr.createdBy)
+                            !(
+                              role == "admin" ||
+                              auth11.currentUser?.email === arr.createdBy
+                            )
                           }
                           onClick={() => {
                             localStorage.setItem(
@@ -340,11 +342,16 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                       <TooltipContent>
                         {use === null && <p>First sign In</p>}
                         {use !== null &&
-                          !(auth11.currentUser?.email === arr.createdBy) && (
+                          (
+                            auth11.currentUser?.email === arr.createdBy
+                          )  && (
                             <p>Not Authorized</p>
                           )}
                         {use !== null &&
-                          auth11.currentUser?.email === arr.createdBy && (
+                          (
+                            role == "admin" 
+                            // auth11.currentUser?.email !== arr.createdBy
+                          )  && (
                             <p>Edit</p>
                           )}
                       </TooltipContent>

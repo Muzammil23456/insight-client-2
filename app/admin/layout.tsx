@@ -1,6 +1,7 @@
-import './globals.css'
-import { Metadata } from "next"; //C:\Users\Dell\Desktop\insight-client-main\globals.css
-import { Providers } from "./GlobalRedux/provider";
+import { title } from "process";
+// import "../globals.css";
+import { Metadata } from "next";
+import { Providers } from "../GlobalRedux/provider";
 import {
   Tooltip,
   TooltipContent,
@@ -9,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
-  title: "Insight-Client",
+  title: "Insight-Client-Admin",
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

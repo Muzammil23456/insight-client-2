@@ -9,6 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
+import { db } from "../../modules/filebase";
 import { useDispatch } from "react-redux";
 import {
   setText,
@@ -19,6 +21,7 @@ import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
+import { auth11 } from "@/modules/fileauth";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -86,6 +89,15 @@ const SignUp = ({ ondata }: onDataType) => {
     },
   });
 
+  const onSubmit = (data: any) => {
+    for (let i = 0; i < data.dynamicFields?.length; i++) {
+      addDoc(collection(db, "user"), {
+       role: data.dynamicFields[i].Name,
+        uid: auth11.currentUser?.email,
+      });
+    }
+  };
+
   const actionCodeSetting = {
     url: "http://localhost:3000",
     handleCodeInApp: true,
@@ -96,6 +108,10 @@ const SignUp = ({ ondata }: onDataType) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
+        addDoc(collection(db, "user"), {
+          role: 'user',
+           uid: res.user.uid,
+        })
         sendEmailVerification(res.user, actionCodeSetting).then(() => {
           setOpen(false);
           ondata(false);
