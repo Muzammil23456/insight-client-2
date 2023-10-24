@@ -123,44 +123,39 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
     getdata();
   }, [filter]);
 
-  useEffect(() => {}, []);
-  //console.log(data3);
-
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
         {!isBoolean && (
           <Tooltip>
-            <TooltipTrigger>
-              <button
-                disabled={use === null || verfied == false}
-                type="submit"
-                onClick={() => {
-                  ondata2(true);
-                  dispatch(setBool(true));
-                }}
-                className=" flex btn-n justify-evenly mb-2 items-center"
-              >
-                <span>New</span>
-                <span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="icon icon-tabler icon-tabler-plus"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M12 5l0 14"></path>
-                    <path d="M5 12l14 0"></path>
-                  </svg>
-                </span>
-              </button>
+            <TooltipTrigger
+              disabled={use === null || verfied == false}
+              type="submit"
+              onClick={() => {
+                ondata2(true);
+                dispatch(setBool(true));
+              }}
+              className=" flex btn-n justify-evenly mb-2 items-center"
+            >
+              <span>New</span>
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-plus"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 5l0 14"></path>
+                  <path d="M5 12l14 0"></path>
+                </svg>
+              </span>
             </TooltipTrigger>
             <TooltipContent>
               {use === null && <p>First sign Up</p>}
@@ -240,118 +235,104 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
-                      <TooltipTrigger>
-                        <button
-                          disabled={
-                            use === null ||
-                            verfied === false ||
-                            !(
-                              role == "admin" ||
-                              auth11.currentUser?.email === arr.createdBy
-                            )
-                          }
-                          onClick={() => {
-                            dispatch(setBoolean3(true));
-                            dispatch(
-                              setText3("Are you Sure To Delete the record")
-                            );
-                            localStorage.setItem("delete", `${arr.id}`);
-                          }}
-                          className="btn-r"
+                      <TooltipTrigger
+                        disabled={
+                          use === null ||
+                          verfied === false ||
+                          !(
+                            role == "admin" ||
+                            auth11.currentUser?.email === arr.createdBy
+                          )
+                        }
+                        onClick={() => {
+                          dispatch(setBoolean3(true));
+                          dispatch(
+                            setText3("Are you Sure To Delete the record")
+                          );
+                          localStorage.setItem("delete", `${arr.id}`);
+                        }}
+                        className="btn-r"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="icon sm:w-6 sm:h-6 w-5 h-5 icon-tabler icon-tabler-trash"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="icon sm:w-6 sm:h-6 w-5 h-5 icon-tabler icon-tabler-trash"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
+                          <path
+                            stroke="none"
+                            d="M0 0h24v24H0z"
                             fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path
-                              stroke="none"
-                              d="M0 0h24v24H0z"
-                              fill="none"
-                            ></path>
-                            <path d="M4 7l16 0"></path>
-                            <path d="M10 11l0 6"></path>
-                            <path d="M14 11l0 6"></path>
-                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                          </svg>
-                        </button>
+                          ></path>
+                          <path d="M4 7l16 0"></path>
+                          <path d="M10 11l0 6"></path>
+                          <path d="M14 11l0 6"></path>
+                          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                        </svg>
                       </TooltipTrigger>
                       <TooltipContent>
                         {use === null && <p>First sign In</p>}
                         {use !== null &&
-                          (
-                            auth11.currentUser?.email !== arr.createdBy
-                          ) && <p>Not Authorized</p>}
-                        {use !== null &&
-                          (
-                            role == "admin" 
-                            
-                          )  && (
-                            <p>Delete</p>
+                          auth11.currentUser?.email !== arr.createdBy && (
+                            <p>Not Authorized</p>
                           )}
+                        {use !== null && role == "admin" && <p>Delete</p>}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
-                      <TooltipTrigger>
-                        <button
-                          type="button"
-                          disabled={
-                            use === null ||
-                            verfied === false ||
-                            !(
-                              role == "admin" ||
-                              auth11.currentUser?.email === arr.createdBy
-                            )
-                          }
-                          onClick={() => {
-                            localStorage.setItem(
-                              "edit",
-                              JSON.stringify([arr.id, arr.Name])
-                            );
-                            ondata(true);
-                          }}
-                          className="btn-e"
+                      <TooltipTrigger
+                        type="button"
+                        disabled={
+                          use === null ||
+                          verfied === false ||
+                          !(
+                            role == "admin" ||
+                            auth11.currentUser?.email === arr.createdBy
+                          )
+                        }
+                        onClick={() => {
+                          localStorage.setItem(
+                            "edit",
+                            JSON.stringify([arr.id, arr.Name])
+                          );
+                          ondata(true);
+                        }}
+                        className="btn-e"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="icon sm:w-6 sm:h-6 w-5 h-5 icon-tabler icon-tabler-edit"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="icon sm:w-6 sm:h-6 w-5 h-5 icon-tabler icon-tabler-edit"
-                            viewBox="0 0 24 24"
-                            strokeWidth="2"
-                            stroke="currentColor"
+                          <path
+                            stroke="none"
+                            d="M0 0h24v24H0z"
                             fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path
-                              stroke="none"
-                              d="M0 0h24v24H0z"
-                              fill="none"
-                            ></path>
-                            <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                            <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                            <path d="M16 5l3 3"></path>
-                          </svg>
-                        </button>
+                          ></path>
+                          <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                          <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                          <path d="M16 5l3 3"></path>
+                        </svg>
                       </TooltipTrigger>
                       <TooltipContent>
                         {use === null && <p>First sign In</p>}
                         {use !== null &&
-                          (
-                            auth11.currentUser?.email === arr.createdBy
-                          )  && (
+                          auth11.currentUser?.email === arr.createdBy && (
                             <p>Not Authorized</p>
                           )}
                         {use !== null &&
-                          (
-                            role == "admin" 
-                            // auth11.currentUser?.email !== arr.createdBy
-                          )  && (
+                          role == "admin" && (
+                          // auth11.currentUser?.email !== arr.createdBy
                             <p>Edit</p>
                           )}
                       </TooltipContent>
