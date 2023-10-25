@@ -58,6 +58,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   const [data3, setData3] = useState([]);
   const [userCol, setUserCol] = useState([]);
   const [role, setRole] = useState("");
+  const [re, setRe] = useState(true)
   const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -66,6 +67,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   // Get Data from database
 
   const getdata = (): Promise<TableData> => {
+
     const q = query(collection(db, "test"), orderBy(filter, "desc"));
     const unsub: any = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
@@ -80,7 +82,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
 
   // Get User from database
 
-  const getuser = (): Promise<TableData> => {
+  const getuser = () => {
     const q = query(collection(db, "user"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
@@ -95,15 +97,24 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   };
 
   const ttt = () => {
-    data3.forEach((e) => {
+   const t = data3.forEach((e) => {
       console.log(e);
       if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
         setRole("admin");
         console.log(e);
+        setRe(false)
       }
     });
+    return t;
   };
+
   // useEffect
+
+  useEffect(()=>{
+    console.log('1')
+    getuser();
+    ttt();
+  },[])
 
   useEffect(() => {
     getuser();

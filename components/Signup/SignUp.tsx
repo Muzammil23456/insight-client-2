@@ -9,6 +9,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  setSignUp,
+  setSignIn,
+} from "@/app/GlobalRedux/Features/Register/registerSlice";
 import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { useDispatch } from "react-redux";
@@ -31,10 +35,12 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAuth,
+  updateProfile,
 } from "firebase/auth";
 
 const schema = z
   .object({
+    Name: z.string().nonempty("Required").min(3, { message: "Atleast 6" }),
     Email: z.string().nonempty("Required").email("Invalid Email"),
     Password: z.string().nonempty("Required").min(6, { message: "Atleast 6" }),
     Confirm_Password: z
@@ -47,11 +53,7 @@ const schema = z
     path: ["Confirm_Password"],
   });
 
-type onDataType = {
-  ondata: (bool: boolean) => void;
-};
-const SignUp = ({ ondata }: onDataType) => {
-
+const SignUp = () => {
   // declaration
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -83,6 +85,7 @@ const SignUp = ({ ondata }: onDataType) => {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
+      Name: "",
       Email: "",
       Password: "",
       Confirm_Password: "",
@@ -92,7 +95,7 @@ const SignUp = ({ ondata }: onDataType) => {
   const onSubmit = (data: any) => {
     for (let i = 0; i < data.dynamicFields?.length; i++) {
       addDoc(collection(db, "user"), {
-       role: data.dynamicFields[i].Name,
+        role: data.dynamicFields[i].Name,
         uid: auth11.currentUser?.email,
       });
     }
@@ -108,13 +111,14 @@ const SignUp = ({ ondata }: onDataType) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
+        updateProfile(auth.currentUser, { displayName: data.Name });
         addDoc(collection(db, "user"), {
-          role: 'user',
-           uid: res.user.uid,
-        })
+          role: "user",
+          uid: res.user.uid,
+        });
         sendEmailVerification(res.user, actionCodeSetting).then(() => {
           setOpen(false);
-          ondata(false);
+          dispatch(setSignUp(false));
           dispatch(setBoolean(true));
           dispatch(setText("Verification Email Sent Please Check it."));
         });
@@ -123,7 +127,7 @@ const SignUp = ({ ondata }: onDataType) => {
         setLoading(false);
         const errorMessage = error.message;
         setOpen(false);
-        ondata(false);
+        dispatch(setSignUp(false));
         dispatch(setBoolean2(true));
         dispatch(setText2(errorMessage));
         action();
@@ -155,6 +159,16 @@ const SignUp = ({ ondata }: onDataType) => {
                 onSubmit={handleSubmit(onsubmit)}
                 className="flex form justify-center pt-6"
               >
+                <input
+                  className="input"
+                  type="text"
+                  autoComplete="off"
+                  {...register("Name")}
+                  placeholder="Username"
+                />
+                {errors && (
+                  <span className="error ">{errors?.Name?.message}</span>
+                )}
                 <input
                   className="input"
                   type="email"
@@ -224,7 +238,7 @@ const SignUp = ({ ondata }: onDataType) => {
             <AlertDialogCancel
               onClick={() => {
                 setOpen(false);
-                ondata(false);
+                dispatch(setSignUp(false));
               }}
             >
               Cancel

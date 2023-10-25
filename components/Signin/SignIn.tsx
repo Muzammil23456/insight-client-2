@@ -8,6 +8,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  setSignUp,
+  setSignIn,
+} from "@/app/GlobalRedux/Features/Register/registerSlice";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -15,7 +19,7 @@ import {
   setText,
   setBoolean,
 } from "../../app/GlobalRedux/Features/alert/alertSlice";
-import loader from '@/public/loadingWhite.png'
+import loader from "@/public/loadingWhite.png";
 import {
   setText2,
   setBoolean2,
@@ -23,17 +27,14 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { signInWithEmailAndPassword ,getAuth } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 // import { auth11 } from "../../modules/fileauth";
 
-type onDataType = {
-  ondata: (bool: boolean)=>void
-}
 const schema = z.object({
   Email: z.string().nonempty("Required").email("Invalid Email"),
   Password: z.string().nonempty("Required").min(6, { message: "Atleast 6" }),
 });
-const SignIn = ({ ondata } : onDataType) => {
+const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -61,13 +62,13 @@ const SignIn = ({ ondata } : onDataType) => {
       window.scrollTo(X, Y);
     }, 3000);
   };
-  const auth = getAuth()
+  const auth = getAuth();
   const onsubmit = (data: any) => {
     setLoading(true);
     signInWithEmailAndPassword(auth, data.Email, data.Password)
       .then(() => {
         setOpen(false);
-        ondata(false);
+        dispatch(setSignIn(false));
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Sign In"));
         reset();
@@ -76,10 +77,9 @@ const SignIn = ({ ondata } : onDataType) => {
         setLoading(false);
         const errorMessage = error.message;
         setOpen(false);
-        ondata(false);
+        dispatch(setSignIn(false));
         dispatch(setBoolean2(true));
         dispatch(setText2(errorMessage));
-        // ondata1(true);
         action();
       });
   };
@@ -138,8 +138,8 @@ const SignIn = ({ ondata } : onDataType) => {
                     <img
                       className="animate-spin text-center"
                       src={loader.src}
-                      width='35px'
-                      height='35px'
+                      width="35px"
+                      height="35px"
                       alt="spinner-frame-8"
                     />
                   </button>
@@ -157,7 +157,7 @@ const SignIn = ({ ondata } : onDataType) => {
               className="cancel"
               onClick={() => {
                 setOpen(false);
-                ondata(false);
+                dispatch(setSignIn(false));
               }}
             >
               Cancel
