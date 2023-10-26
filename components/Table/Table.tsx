@@ -56,7 +56,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
 
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  const [userCol, setUserCol] = useState([]);
+  const [userCol, setUserCol] = useState('');
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true)
   const [use, setUse] = useState<object | null>(null);
@@ -100,9 +100,12 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
    const t = data3.forEach((e) => {
       console.log(e);
       if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
+        localStorage.setItem('curUser','admin')
         setRole("admin");
         console.log(e);
         setRe(false)
+      }else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin"){
+        localStorage.setItem('curUser','user')
       }
     });
     return t;
@@ -134,6 +137,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
     getdata();
   }, [filter]);
 
+  
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
@@ -251,7 +255,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            role == "admin" ||
+                            localStorage.getItem('curUser') == 'admin' ||
                             auth11.currentUser?.email === arr.createdBy
                           )
                         }
@@ -302,7 +306,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            role == "admin" ||
+                            localStorage.getItem('curUser') == 'admin' ||
                             auth11.currentUser?.email === arr.createdBy
                           )
                         }

@@ -10,6 +10,7 @@ import {
 import Nav from "@/components/Nav/Nav";
 import { db } from "@/modules/filebase";
 import loader from "@/public/loading.png";
+import { auth11 } from "@/modules/fileauth";
 
 export const metadata: Metadata = {
   title: "Insight-Client",
@@ -19,8 +20,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [firebase, setFirebase] = useState(false);
 
   useEffect(() => {
-    if (db) {
-      setTimeout(() => setFirebase(true), 1000);
+    if (auth11) {
+      setTimeout(() => setFirebase(true), 500);
     }
   }, []);
 

@@ -2,7 +2,6 @@ import "../globals.css";
 import { Metadata } from "next";
 import { Providers } from "@/app/GlobalRedux/provider";
 
-
 export const metadata: Metadata = {
   title: "Insight-Client-Admin",
 };
