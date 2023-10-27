@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import {
   Table,
@@ -18,7 +19,7 @@ import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
@@ -29,8 +30,8 @@ import {
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
+import { Auth } from "firebase/auth";
 import { auth11 } from "@/modules/fileauth";
-import { truncate } from "fs";
 
 type TableData = {
   id: string;
@@ -44,12 +45,9 @@ type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
-
-const Tablee = ({ ondata, ondata2 }: onDataType) => {
-  // States
-
+const Table2 = ({ ondata, ondata2 }: onDataType) => {
   const [filter, setFilter] = useState("updated");
-  const [filterValid,setFilterValid] = useState(true)
+  const [filterValid, setFilterValid] = useState(true);
 
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
@@ -59,32 +57,13 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
 
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  const [userCol, setUserCol] = useState('');
+  const [userCol, setUserCol] = useState("");
   const [role, setRole] = useState("");
-  const [re, setRe] = useState(true)
+  const [re, setRe] = useState(true);
   const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
-
-  // Get Data from database
-
-  const getdata = (): Promise<TableData> => {
-
-    const q = query(collection(db, "test"), orderBy(filter, "desc"));
-    const unsub: any = onSnapshot(q, (querySnapshot) => {
-      let testarr: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr.push({ ...doc.data(), id: doc.id });
-      });
-      setData2(testarr);
-      console.log(testarr)
-      setLoading(false);
-    });
-    return unsub;
-  };
-
-  // Get User from database
 
   const getuser = () => {
     const q = query(collection(db, "user"));
@@ -94,108 +73,19 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
         testarr2.push({ ...doc.data() });
       });
       setData3(testarr2);
+      console.log(testarr2);
+
       setLoading(false);
       console.log(testarr2[0].uid);
     });
     return unsub2;
   };
-
-  const ttt = () => {
-   const t = data3.forEach((e) => {
-      console.log(e);
-      if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
-        localStorage.setItem('curUser','admin')
-        setRole("admin");
-        console.log(e);
-        setRe(false)
-      }else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin"){
-        localStorage.setItem('curUser','user')
-      }
-    });
-    return t;
-  };
-
-  // useEffect
-
-  useEffect(()=>{
-    console.log('1')
-    getuser();
-    ttt();
-  },[])
-
   useEffect(() => {
     getuser();
-    ttt();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUse(user);
-        setRole((pre) => pre);
-        setVerified(user.emailVerified);
-      } else {
-        setUse(null);
-      }
-    });
-  }, [use, verfied, onAuthStateChanged]);
-
-  useEffect(() => {
-    getdata();
   }, [filter]);
-
-  
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
-        {!isBoolean && (
-          <Tooltip>
-            <TooltipTrigger
-              disabled={use === null || verfied == false}
-              type="submit"
-              onClick={() => {
-                ondata2(true);
-                dispatch(setBool(true));
-              }}
-              className=" flex btn-n justify-evenly mb-2 items-center"
-            >
-              <span>New</span>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-plus"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 5l0 14"></path>
-                  <path d="M5 12l14 0"></path>
-                </svg>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              {use === null && <p>First sign Up</p>}
-              {use !== null && verfied == false && <p>Not verfied</p>}
-              {use !== null && !(verfied == false) && <p>Add Record</p>}
-            </TooltipContent>
-          </Tooltip>
-        )}
-        {isBoolean && (
-          <button
-            disabled={use === null || verfied == false}
-            type="submit"
-            onClick={() => {
-              ondata2(false);
-              dispatch(setBool(false));
-            }}
-            className=" flex btn-n justify-evenly mb-2 items-center"
-          >
-            <span>Close</span>
-          </button>
-        )}
         <Filter
           select1={`Name`}
           select2={`created`}
@@ -210,8 +100,8 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="">Email</TableHead>
+            <TableHead>Uid</TableHead>
+            <TableHead className="">Role</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -232,7 +122,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
               <TableCell />
             </TableRow>
           )}
-          {!loading && data2.length === 0 && (
+          {!loading && data3.length === 0 && (
             <TableRow>
               <TableCell />
               <TableCell />
@@ -243,26 +133,24 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
             </TableRow>
           )}
           {!loading &&
-            data2?.length !== 0 &&
-            data2?.map((arr: TableData, i) => (
+            data3?.length !== 0 &&
+            data3?.map((arr, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  {arr.id}
+                  {arr.uid}
                 </TableCell>
-                <TableCell>{arr.Name}</TableCell>
-                <TableCell>{arr.createdBy}</TableCell>
+                <TableCell>{arr.uid}</TableCell>
+                <TableCell>{arr.role}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
                       <TooltipTrigger
-                        disabled={
-                          use === null ||
-                          verfied === false ||
-                          !(
-                            localStorage.getItem('curUser') == 'admin' ||
-                            auth11.currentUser?.email === arr.createdBy
-                          )
-                        }
+                        // disabled={
+                        //   verfied === false ||
+                        //   !(
+                        //     localStorage.getItem('curUser') == 'admin'
+                        //   )
+                        // }
                         onClick={() => {
                           dispatch(setBoolean3(true));
                           dispatch(
@@ -306,18 +194,17 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                     <Tooltip>
                       <TooltipTrigger
                         type="button"
-                        disabled={
-                          use === null ||
-                          verfied === false ||
-                          !(
-                            localStorage.getItem('curUser') == 'admin' ||
-                            auth11.currentUser?.email === arr.createdBy
-                          )
-                        }
+                        // disabled={
+                        //   use === null ||
+                        //   verfied === false ||
+                        //   !(
+                        //     localStorage.getItem('curUser') == 'admin'
+                        //   )
+                        // }
                         onClick={() => {
                           localStorage.setItem(
                             "edit",
-                            JSON.stringify([arr.id, arr.Name])
+                            JSON.stringify([arr.uid, arr.role])
                           );
                           ondata(true);
                         }}
@@ -349,11 +236,10 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           auth11.currentUser?.email === arr.createdBy && (
                             <p>Not Authorized</p>
                           )}
-                        {use !== null &&
-                          role == "admin" && (
+                        {use !== null && role == "admin" && (
                           // auth11.currentUser?.email !== arr.createdBy
-                            <p>Edit</p>
-                          )}
+                          <p>Edit</p>
+                        )}
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -366,4 +252,4 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Tablee;
+export default Table2;

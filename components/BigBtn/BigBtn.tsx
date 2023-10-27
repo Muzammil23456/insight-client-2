@@ -1,9 +1,9 @@
 import React from 'react'
-
-const BigBtn = () => {
+import './style.css'
+const BigBtn = (props) => {
   return (
     <>
-        <button className='px-16 py-8 border-solid border-slate-600 border-2 rounded'>User</button>
+        <button className='btn-profile'>{props.title}</button>
     </>
   )
 }
