@@ -14,7 +14,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  where,
+} from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -45,10 +51,9 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 
-const Tablee = ({ ondata, ondata2 }: onDataType) => {
+const Table3 = ({ ondata, ondata2 }: onDataType) => {
   // States
 
-  const [filter, setFilter] = useState("updated");
   const [filterValid, setFilterValid] = useState(true);
 
   const dispatch = useDispatch();
@@ -68,9 +73,9 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   const auth = getAuth();
 
   // Get Data from database
-
+  const current = auth.currentUser?.email;
   const getdata = (): Promise<TableData> => {
-    const q = query(collection(db, "test"), orderBy(filter, "desc"));
+    const q = query(collection(db, "test"), where("createdBy", "==", current));
     const unsub: any = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
@@ -138,7 +143,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
 
   useEffect(() => {
     getdata();
-  }, [filter]);
+  }, []);
 
   return (
     <div className="my-5 ">
@@ -194,15 +199,6 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
             <span>Close</span>
           </button>
         )}
-        <Filter
-          select1={`Name`}
-          select2={`created`}
-          select3={`updated`}
-          ondata2={(filter: string) => {
-            setFilter(filter);
-          }}
-          type={"Filter"}
-        />
       </div>
       <Table>
         <TableHeader>
@@ -262,6 +258,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           )
                         }
                         onClick={() => {
+                            console.log('de')
                           dispatch(setBoolean3(true));
                           dispatch(
                             setText3("Are you Sure To Delete the record")
@@ -293,14 +290,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                      {use === null ? (
-                          <p>First sign In</p>
-                        ) : auth11.currentUser?.email === arr.createdBy ||
-                          localStorage.getItem("curUser") === "admin" ? (
-                          <p>Delete</p>
-                        ) : (
-                          <p>Not Authorized</p>
-                        )}
+                        <p>Delete</p>
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -344,14 +334,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {use === null ? (
-                          <p>First sign In</p>
-                        ) : auth11.currentUser?.email === arr.createdBy ||
-                          localStorage.getItem("curUser") === "admin" ? (
-                          <p>Edit</p>
-                        ) : (
-                          <p>Not Authorized</p>
-                        )}
+                        <p>Edit</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -364,4 +347,4 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Tablee;
+export default Table3;

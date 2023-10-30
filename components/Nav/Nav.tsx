@@ -66,8 +66,8 @@ const Nav = () => {
   const signout = () => {
     signOut(auth)
       .then(() => {
-        localStorage.removeItem("curUser");
         router.replace("/");
+        localStorage.removeItem("curUser");
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Sign Out"));
         setUse(null);

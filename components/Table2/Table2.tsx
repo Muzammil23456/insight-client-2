@@ -25,8 +25,8 @@ import { useDispatch } from "react-redux";
 import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText3,
-  setBoolean3,
+  setText4,
+  setBoolean4,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
@@ -35,17 +35,15 @@ import { auth11 } from "@/modules/fileauth";
 
 type TableData = {
   id: string;
+  uid: string;
   email: string;
-  Name: string;
-  createdBy: string;
-  updated: string;
+  role: string;
 };
 
 type onDataType = {
   ondata: (bool: boolean) => void;
-  ondata2: (bool: boolean) => void;
 };
-const Table2 = ({ ondata, ondata2 }: onDataType) => {
+const Table2 = ({ ondata }: onDataType) => {
   const [filter, setFilter] = useState("updated");
   const [filterValid, setFilterValid] = useState(true);
 
@@ -70,7 +68,10 @@ const Table2 = ({ ondata, ondata2 }: onDataType) => {
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
-        testarr2.push({ ...doc.data() });
+        testarr2.push({
+          id: doc.id,
+          ...doc.data(),
+        });
       });
       setData3(testarr2);
       console.log(testarr2);
@@ -86,21 +87,12 @@ const Table2 = ({ ondata, ondata2 }: onDataType) => {
   return (
     <div className="my-5 ">
       <div className="flex gap-2">
-        <Filter
-          select1={`Name`}
-          select2={`created`}
-          select3={`updated`}
-          ondata2={(filter: string) => {
-            setFilter(filter);
-          }}
-          type={"Filter"}
-        />
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Uid</TableHead>
+            <TableHead className="md:w-[130px]">U-ID</TableHead>
+            <TableHead>Email</TableHead>
             <TableHead className="">Role</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
@@ -134,29 +126,26 @@ const Table2 = ({ ondata, ondata2 }: onDataType) => {
           )}
           {!loading &&
             data3?.length !== 0 &&
-            data3?.map((arr, i) => (
+            data3?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
                   {arr.uid}
                 </TableCell>
-                <TableCell>{arr.uid}</TableCell>
+                <TableCell>{arr.email}</TableCell>
                 <TableCell>{arr.role}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
                       <TooltipTrigger
-                        // disabled={
-                        //   verfied === false ||
-                        //   !(
-                        //     localStorage.getItem('curUser') == 'admin'
-                        //   )
-                        // }
+                        disabled={
+                          verfied !== false ||
+                          localStorage.getItem("curUser") !== "admin"
+                        }
                         onClick={() => {
-                          dispatch(setBoolean3(true));
-                          dispatch(
-                            setText3("Are you Sure To Delete the record")
-                          );
-                          localStorage.setItem("delete", `${arr.id}`);
+                          dispatch(setBoolean4(true));
+                          dispatch(setText4("Are you Sure To Delete the user"));
+                          localStorage.setItem("delete2", `${arr.id}`);
+                          localStorage.setItem("delete3", `${arr.uid}`);
                         }}
                         className="btn-r"
                       >
@@ -183,28 +172,20 @@ const Table2 = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {use === null && <p>First sign In</p>}
-                        {use !== null &&
-                          auth11.currentUser?.email !== arr.createdBy && (
-                            <p>Not Authorized</p>
-                          )}
-                        {use !== null && role == "admin" && <p>Delete</p>}
+                        <p>Delete</p>
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
                       <TooltipTrigger
                         type="button"
-                        // disabled={
-                        //   use === null ||
-                        //   verfied === false ||
-                        //   !(
-                        //     localStorage.getItem('curUser') == 'admin'
-                        //   )
-                        // }
+                        disabled={
+                          verfied !== false ||
+                          localStorage.getItem("curUser") !== "admin"
+                        }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit",
-                            JSON.stringify([arr.uid, arr.role])
+                            "edit2",
+                            JSON.stringify([arr.id, arr.role])
                           );
                           ondata(true);
                         }}
@@ -231,15 +212,7 @@ const Table2 = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {use === null && <p>First sign In</p>}
-                        {use !== null &&
-                          auth11.currentUser?.email === arr.createdBy && (
-                            <p>Not Authorized</p>
-                          )}
-                        {use !== null && role == "admin" && (
-                          // auth11.currentUser?.email !== arr.createdBy
-                          <p>Edit</p>
-                        )}
+                        <p>Edit</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
