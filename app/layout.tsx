@@ -12,10 +12,6 @@ import { db } from "@/modules/filebase";
 import loader from "@/public/loading.png";
 import { auth11 } from "@/modules/fileauth";
 
-export const metadata: Metadata = {
-  title: "Insight-Client",
-};
-
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [firebase, setFirebase] = useState(false);
 
@@ -27,6 +23,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <html lang="en">
+      <title>Insight-client</title>
       <body>
         <div className="container mx-auto md:px-32 h-screen">
           <TooltipProvider>
