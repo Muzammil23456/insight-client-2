@@ -6,16 +6,14 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import "./style.css";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setText4,
   setBoolean4,
   setContinue,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
@@ -27,10 +25,9 @@ import {
   setText,
   setBoolean,
 } from "../../app/GlobalRedux/Features/alert/alertSlice";
-import { deleteDoc, doc} from "@firebase/firestore";
+import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { RootState } from "@/app/GlobalRedux/store";
-import { deleteUser } from "firebase/auth";
 
 export function Confirm2() {
   const [open, setOpen] = useState(false);
@@ -50,17 +47,17 @@ export function Confirm2() {
     }, 3000);
   };
 
-  const deleteItem = async (id: string,uid: string) => {
-    console.log(id)
-    await deleteDoc(doc(db, "user",id))
-      .then(() => {       
+  const deleteItem = async (id: string, uid: string) => {
+    console.log(id);
+    await deleteDoc(doc(db, "user", id))
+      .then(() => {
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Deleted"));
         action();
         dispatch(setContinue(false));
       })
       .catch((error) => {
-        alert('f')
+        alert("f");
         const errorMessage = error.message;
         dispatch(setBoolean2(true));
         dispatch(setText2(errorMessage));
@@ -77,16 +74,14 @@ export function Confirm2() {
           <AlertDialogTitle>{text4}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel
-            onClick={() => dispatch(setBoolean4(false))}
-          >
+          <AlertDialogCancel onClick={() => dispatch(setBoolean4(false))}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               const id = localStorage.getItem("delete2");
               const uid = localStorage.getItem("delete3");
-              deleteItem(id,uid);
+              deleteItem(id, uid);
               dispatch(setContinue(true));
               dispatch(setBoolean4(false));
             }}

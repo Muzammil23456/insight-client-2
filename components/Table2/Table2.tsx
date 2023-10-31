@@ -86,8 +86,7 @@ const Table2 = ({ ondata }: onDataType) => {
   }, [filter]);
   return (
     <div className="my-5 ">
-      <div className="flex gap-2">
-      </div>
+      <div className="flex gap-2"></div>
       <Table>
         <TableHeader>
           <TableRow>
@@ -139,7 +138,8 @@ const Table2 = ({ ondata }: onDataType) => {
                       <TooltipTrigger
                         disabled={
                           verfied !== false ||
-                          localStorage.getItem("curUser") !== "admin"
+                          localStorage.getItem("curUser") !== "admin" ||
+                          auth11.currentUser?.uid === arr.uid
                         }
                         onClick={() => {
                           dispatch(setBoolean4(true));
@@ -172,7 +172,12 @@ const Table2 = ({ ondata }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Delete</p>
+                        {(localStorage.getItem("curUser") === "admin" && auth11.currentUser?.uid !== arr.uid && (
+                            <p>Delete</p>
+                          ))}
+                        {auth11.currentUser?.uid === arr.uid && (
+                          <p>Not Allowed</p>
+                        )}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -180,7 +185,8 @@ const Table2 = ({ ondata }: onDataType) => {
                         type="button"
                         disabled={
                           verfied !== false ||
-                          localStorage.getItem("curUser") !== "admin"
+                          localStorage.getItem("curUser") !== "admin" ||
+                          auth11.currentUser?.uid === arr.uid
                         }
                         onClick={() => {
                           localStorage.setItem(
@@ -212,7 +218,13 @@ const Table2 = ({ ondata }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Edit</p>
+                        {
+                          (localStorage.getItem("curUser") === "admin" && auth11.currentUser?.uid !== arr.uid &&  (
+                            <p>Edit</p>
+                          ))}
+                        {auth11.currentUser?.uid === arr.uid && (
+                          <p>Not Allowed</p>
+                        )}
                       </TooltipContent>
                     </Tooltip>
                   </div>

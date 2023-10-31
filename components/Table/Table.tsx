@@ -102,7 +102,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   const ttt = () => {
     const t = data3.forEach((e) => {
       console.log(e);
-      if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
+      if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
         console.log(e);
