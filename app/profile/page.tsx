@@ -13,11 +13,13 @@ import { Confirm2 } from "@/components/Comfirmation2/Confirm2";
 import Table2 from "@/components/Table2/Table2";
 import EditUser from "@/components/EditUser/EditUser";
 import Table3 from "@/components/Table3/Table3";
+import Table4 from "@/components/Table4/Table4";
 
 const page = () => {
   const [user, setUser] = useState("");
   const [userDatabase, setUserDatabase] = useState(false);
   const [dataDatabase, setDataDatabase] = useState(false);
+  const [favDatabase, setFavDatabase] = useState(false);
   const [editForm, setEditForm] = useState<boolean>(false);
   const [editUser, setEditUser] = useState<boolean>(false);
   const [form, setForm] = useState(false);
@@ -47,6 +49,7 @@ const page = () => {
               onClick={() => {
                 setUserDatabase((pre) => !pre);
                 setDataDatabase(false);
+                setFavDatabase(false)
                 localStorage.setItem("Active", "Data");
               }}
             >
@@ -57,10 +60,22 @@ const page = () => {
               onClick={() => {
                 setDataDatabase((pre) => !pre);
                 setUserDatabase(false);
+                setFavDatabase(false)
                 localStorage.setItem("Active", "User");
               }}
             >
               User
+            </button>
+            <button
+              className="btn-database"
+              onClick={() => {
+                setDataDatabase(false);
+                setUserDatabase(false);
+                setFavDatabase((pre) => !pre)
+                localStorage.setItem("Active", "Fav");
+              }}
+            >
+              Fav
             </button>
           </div>
           {(userDatabase || active == "Data") && (
@@ -84,6 +99,19 @@ const page = () => {
             <>
               {table && (
                 <Table2 ondata={(data: boolean) => setEditUser(data)} />
+              )}
+              {editUser && (
+                <EditUser
+                  ondata={editUser}
+                  ondata2={(data: boolean) => setEditUser(data)}
+                />
+              )}
+            </>
+          )}
+          {(favDatabase || active == "Fav") && (
+            <>
+              {table && (
+                <Table4 ondata={(data: boolean) => setEditUser(data)} />
               )}
               {editUser && (
                 <EditUser
