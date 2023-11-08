@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isBoolean: false,
+  isBloolean2: false
 };
 
 const booleanSlice = createSlice({
@@ -15,9 +16,11 @@ const booleanSlice = createSlice({
     setBool: (state, action) => {
       state.isBoolean = action.payload;
     },
+    setBool2: (state, action) => {
+      state.isBloolean2 = action.payload;
+    }
   },
 });
 
-export const { toggleBoolean, setBool } = booleanSlice.actions;
-// export const selectBoolean = (state) => state.booleanState.isBoolean;
+export const { toggleBoolean, setBool, setBool2 } = booleanSlice.actions;
 export default booleanSlice.reducer;

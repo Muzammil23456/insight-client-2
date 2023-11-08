@@ -28,7 +28,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-// import { auth11 } from "../../modules/fileauth";
 
 const schema = z.object({
   Email: z.string().nonempty("Required").email("Invalid Email"),

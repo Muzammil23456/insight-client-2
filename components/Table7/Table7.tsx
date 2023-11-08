@@ -11,54 +11,46 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+} from "@firebase/firestore";
 import { db } from "../../modules/filebase";
-import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
+import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText3,
-  setBoolean3,
+  setText4,
+  setBoolean4,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
-import { auth11 } from "@/modules/fileauth";
-import { truncate } from "fs";
 
 type TableData = {
   id: string;
-  email: string;
+  Release: string;
   Name: string;
-  createdBy: string;
-  updated: string;
 };
 
 type onDataType = {
-  ondata: (bool: boolean) => void;
-  ondata2: (bool: boolean) => void;
-};
+    ondata: (bool: boolean) => void;
+    ondata2: (bool: boolean) => void;
+  };
+const Table7 = ({ ondata, ondata2 }: onDataType) => {
+    const [filterValid, setFilterValid] = useState(true);
 
-const Tablee = ({ ondata, ondata2 }: onDataType) => {
-  // States
-
-  const [filter, setFilter] = useState("updated");
-  const [filterValid, setFilterValid] = useState(true);
-
-  const dispatch = useDispatch();
-  const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
-  const { text3, booleanValue3, Continue } = useSelector(
-    (state: RootState) => state.textReducer3
-  );
-
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
+    const dispatch = useDispatch();
+    const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
+    const { text3, booleanValue3, Continue } = useSelector(
+      (state: RootState) => state.textReducer3
+    );
+    const [Fav, setFav] = useState([]);
   const [userCol, setUserCol] = useState("");
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
@@ -67,96 +59,56 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
-  // Get Data from database
-
-  const getdata = (): Promise<TableData> => {
-    const q = query(collection(db, "test"), orderBy(filter, "desc"));
-    const unsub: any = onSnapshot(q, (querySnapshot) => {
-      let testarr: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr.push({ ...doc.data(), id: doc.id });
-      });
-      setData2(testarr);
-      console.log(testarr);
-      setLoading(false);
-    });
-    return unsub;
-  };
-
-  // Get User from database
-
-  const getuser = () => {
-    const q = query(collection(db, "user"));
-    const unsub2: any = onSnapshot(q, (querySnapshot) => {
-      let testarr2: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr2.push({ ...doc.data() });
-      });
-      setData3(testarr2);
-      setLoading(false);
-      console.log(testarr2[0].uid);
-    });
-    return unsub2;
-  };
-
-  const ttt = () => {
-    console.log('cur')
-    const t = data3.forEach((e) => {
-      console.log(e);
-      if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
-        localStorage.setItem("curUser", "admin");
-        setRole("admin");
-        console.log(e);
-        setRe(false);
-      } else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin") {
-        localStorage.setItem("curUser", "user");
-      }
-    });
-    return t;
-  };
-
-  // useEffect
-
-  useEffect(() => {
-    console.log("1");
-    getuser();
-    ttt();
-  }, []);
-
   useEffect(() => {
     console.log('cu')
-    getuser();
-    ttt();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         ondata2(false)
-        dispatch(setBool(false));
+        dispatch(setBool2(false));
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
       } else {
         ondata2(false)
-        dispatch(setBool(false));
+        dispatch(setBool2(false));
         setUse(null);
       }
     });
   }, [use, verfied, onAuthStateChanged]);
 
+  const getFav = () => {
+    const q = query(collection(db, "Series"));
+    const unsub2: any = onSnapshot(q, (querySnapshot) => {
+      let testarr2: any = [];
+      querySnapshot.forEach((doc) => {
+        testarr2.push(
+          {  
+            id: doc.id, 
+            ...doc.data(),
+            Release: doc.data()["Release"].toMillis() 
+          });
+      });
+      console.log(testarr2)
+      setFav(testarr2);
+      setLoading(false);
+    });
+    return unsub2;
+  };
   useEffect(() => {
-    getdata();
-  }, [filter]);
-
+    getFav();
+  }, [])
+  // const date =  new Date(arr.Release.seconds*1000)
   return (
-    <div className="my-5 ">
-      <div className="flex gap-2">
-        {!isBoolean && (
+    <>
+    <div className="flex mt-4"></div>
+    {!isBoolean && (
           <Tooltip>
             <TooltipTrigger
               disabled={use === null || verfied == false}
               type="submit"
               onClick={() => {
                 ondata2(true);
-                dispatch(setBool(true));
+                dispatch(setBool2(true));
               }}
               className=" flex btn-n justify-evenly mb-2 items-center"
             >
@@ -193,29 +145,19 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
             type="submit"
             onClick={() => {
               ondata2(false);
-              dispatch(setBool(false));
+              dispatch(setBool2(false));
             }}
             className=" flex btn-n justify-evenly mb-2 items-center"
           >
             <span>Close</span>
           </button>
         )}
-        <Filter
-          select1={`Name`}
-          select2={`created`}
-          select3={`updated`}
-          ondata2={(filter: string) => {
-            setFilter(filter);
-          }}
-          type={"Filter"}
-        />
-      </div>
-      <Table>
+    <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="">Email</TableHead>
+            <TableHead>Series</TableHead>
+            <TableHead>Release Date</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -236,7 +178,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
               <TableCell />
             </TableRow>
           )}
-          {!loading && data2.length === 0 && (
+          {!loading && Fav.length === 0 && (
             <TableRow>
               <TableCell />
               <TableCell />
@@ -247,14 +189,20 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
             </TableRow>
           )}
           {!loading &&
-            data2?.length !== 0 &&
-            data2?.map((arr: TableData, i) => (
+            Fav?.length !== 0 &&
+            Fav?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
+                  <p className="truncate w-[120px]">
                   {arr.id}
+                  </p>
                 </TableCell>
-                <TableCell>{arr.Name}</TableCell>
-                <TableCell>{arr.createdBy}</TableCell>
+                <TableCell className="text-ellipsis">
+                  <p className=" whitespace-pre-wrap w-[130px]">
+                  {arr.Name}
+                  </p>
+                </TableCell>
+                <TableCell>{new Date(arr.Release).toLocaleDateString('en-US')}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -263,16 +211,16 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") == "admin" ||
-                            auth11.currentUser?.email === arr.createdBy
+                            localStorage.getItem("curUser") == "admin"
                           )
                         }
                         onClick={() => {
-                          dispatch(setBoolean3(true));
+                          console.log("de");
+                          dispatch(setBoolean4(true));
                           dispatch(
-                            setText3("Are you Sure To Delete the record")
+                            setText4("Are you Sure To Delete the record")
                           );
-                          localStorage.setItem("delete", `${arr.id}`);
+                          localStorage.setItem("delete4", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -299,14 +247,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                      {use === null ? (
-                          <p>First sign In</p>
-                        ) : auth11.currentUser?.email === arr.createdBy ||
-                          localStorage.getItem("curUser") === "admin" ? (
-                          <p>Delete</p>
-                        ) : (
-                          <p>Not Authorized</p>
-                        )}
+                        <p>Delete</p>
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -316,14 +257,13 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") === "admin" ||
-                            auth11.currentUser?.email === arr.createdBy
+                            localStorage.getItem("curUser") == "admin"
                           )
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit",
-                            JSON.stringify([arr.id, arr.Name])
+                            "edit4",
+                            JSON.stringify([arr.Name,arr.Release])
                           );
                           ondata(true);
                         }}
@@ -350,14 +290,7 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {use === null ? (
-                          <p>First sign In</p>
-                        ) : auth11.currentUser?.email === arr.createdBy ||
-                          localStorage.getItem("curUser") === "admin" ? (
-                          <p>Edit</p>
-                        ) : (
-                          <p>Not Authorized</p>
-                        )}
+                        <p>Edit</p>
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -365,9 +298,8 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
               </TableRow>
             ))}
         </TableBody>
-      </Table>
-    </div>
-  );
-};
+      </Table></>
+  )
+}
 
-export default Tablee;
+export default Table7

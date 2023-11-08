@@ -11,32 +11,26 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
   collection,
   query,
   onSnapshot,
-  orderBy,
-  where,
 } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
-import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
+import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText3,
-  setBoolean3,
+  setText4,
+  setBoolean4,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
-import { auth11 } from "@/modules/fileauth";
-import { truncate } from "fs";
 
 type TableData = {
   id: string;
@@ -54,7 +48,7 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
     const [filterValid, setFilterValid] = useState(true);
 
     const dispatch = useDispatch();
-    const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
+    const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
     const { text3, booleanValue3, Continue } = useSelector(
       (state: RootState) => state.textReducer3
     );
@@ -67,16 +61,32 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
+  useEffect(() => {
+    console.log('cu')
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        ondata2(false)
+        dispatch(setBool2(false));
+        setUse(user);
+        setRole((pre) => pre);
+        setVerified(user.emailVerified);
+      } else {
+        ondata2(false)
+        dispatch(setBool2(false));
+        setUse(null);
+      }
+    });
+  }, [use, verfied, onAuthStateChanged]);
+
   const getFav = () => {
     const q = query(collection(db, "Favourite-Movies"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
-        testarr2.push({ ...doc.data() });
+        testarr2.push({  id: doc.id, ...doc.data() });
       });
       setFav(testarr2);
       setLoading(false);
-      console.log(testarr2);
     });
     return unsub2;
   };
@@ -85,11 +95,64 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
   }, [])
   return (
     <>
+    <div className="flex mt-4"></div>
+    {!isBoolean && (
+          <Tooltip>
+            <TooltipTrigger
+              disabled={use === null || verfied == false}
+              type="submit"
+              onClick={() => {
+                ondata2(true);
+                dispatch(setBool2(true));
+              }}
+              className=" flex btn-n justify-evenly mb-2 items-center"
+            >
+              <span>New</span>
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-plus"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 5l0 14"></path>
+                  <path d="M5 12l14 0"></path>
+                </svg>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {use === null && <p>First sign Up</p>}
+              {use !== null && verfied == false && <p>Not verfied</p>}
+              {use !== null && !(verfied == false) && <p>Add Record</p>}
+            </TooltipContent>
+          </Tooltip>
+        )}
+        {isBoolean && (
+          <button
+            disabled={use === null || verfied == false}
+            type="submit"
+            onClick={() => {
+              ondata2(false);
+              dispatch(setBool2(false));
+            }}
+            className=" flex btn-n justify-evenly mb-2 items-center"
+          >
+            <span>Close</span>
+          </button>
+        )}
     <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Movies</TableHead>
+            <TableHead className="md:w-[130px]">UID</TableHead>
+            <TableHead>UserName</TableHead>
+            <TableHead>Movie</TableHead>
             <TableHead className="">Series</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
@@ -130,8 +193,9 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
                   {arr.uid}
                   </p>
                 </TableCell>
-                <TableCell>{arr.Movies.map((a,i1) => a.Name + ", ")}</TableCell>
-                <TableCell>{arr.Series.map((a,i2) => a.Name + ", ")}</TableCell>
+                <TableCell>{ arr.userName }</TableCell>
+                <TableCell>{arr.Movies.map((a,i1) => a.Name)}</TableCell>
+                <TableCell>{arr.Series.map((a,i2) => a.Name)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -140,17 +204,16 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") == "admin" ||
-                            auth11.currentUser?.email === arr.createdBy
+                            localStorage.getItem("curUser") == "admin"
                           )
                         }
                         onClick={() => {
                           console.log("de");
-                          dispatch(setBoolean3(true));
+                          dispatch(setBoolean4(true));
                           dispatch(
-                            setText3("Are you Sure To Delete the record")
+                            setText4("Are you Sure To Delete the record")
                           );
-                          localStorage.setItem("delete", `${arr.id}`);
+                          localStorage.setItem("delete3", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -187,16 +250,13 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") == "admin" ||
-                            auth11.currentUser?.email === arr.createdBy
+                            localStorage.getItem("curUser") == "admin"
                           )
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit",
-                            JSON.stringify([arr.Movies.forEach(element => (element) ), arr.Series.forEach(element => {
-                              element.Name
-                            }) ])
+                            "edit2",
+                            JSON.stringify([arr.Movies.map((a,i1) => a.Name), arr.Series.map((a,i1) => a.Name),arr.id])
                           );
                           ondata(true);
                         }}

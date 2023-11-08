@@ -14,11 +14,13 @@ import {
   setText2,
   setBoolean2,
 } from "@/app/GlobalRedux/Features/alert2/alert2Slice";
+import { db } from "../../modules/filebase";
 import {
   setSignUp,
   setSignIn,
 } from "@/app/GlobalRedux/Features/Register/registerSlice";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { auth11 } from "@/modules/fileauth";
 import React from "react";
 import {
@@ -35,7 +37,11 @@ const Nav = () => {
   const [use, setUse] = useState<object | null>(null);
   const [url, setUrl] = useState("");
   const auth = getAuth();
+  const [role, setRole] = useState("");
+  const [re, setRe] = useState(true);
   const dispatch = useDispatch();
+  const [data3, setData3] = useState([]);
+  const [verfied, setVerified] = useState(false);
   const [editForm, setEditForm] = useState<boolean>(false);
 
   const router = useRouter();
@@ -61,7 +67,53 @@ const Nav = () => {
     });
   }, [onAuthStateChanged]);
 
-  useEffect(() => {}, [localStorage]);
+  const getuser = () => {
+    const q = query(collection(db, "user"));
+    const unsub2: any = onSnapshot(q, (querySnapshot) => {
+      let testarr2: any = [];
+      querySnapshot.forEach((doc) => {
+        testarr2.push({ ...doc.data() });
+      });
+      setData3(testarr2);
+      // setLoading(false);
+      console.log(testarr2[0].uid);
+    });
+    return unsub2;
+  };
+  const ttt = () => {
+    console.log('cur')
+    const t = data3.forEach((e) => {
+      console.log(e);
+      if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
+        localStorage.setItem("curUser", "admin");
+        setRole("admin");
+        console.log(e);
+        setRe(false);
+      } else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin") {
+        localStorage.setItem("curUser", "user");
+      }
+    });
+    return t;
+  };
+
+  // useEffect
+
+
+  useEffect(() => {
+    console.log('cu')
+    getuser();
+    ttt();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUse(user);
+        setRole((pre) => pre);
+        setVerified(user.emailVerified);
+      } else {
+        setUse(null);
+      }
+    });
+  }, [use, verfied, onAuthStateChanged]);
+
   // Sign Out
   const signout = () => {
     signOut(auth)

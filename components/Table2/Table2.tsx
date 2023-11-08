@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/tooltip";
 import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
-import "./style.css";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
