@@ -42,6 +42,7 @@ type onDataType = {
     ondata: (bool: boolean) => void;
     ondata2: (bool: boolean) => void;
   };
+  
 const Table6 = ({ ondata, ondata2 }: onDataType) => {
     const [filterValid, setFilterValid] = useState(true);
 
@@ -85,7 +86,7 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
           {  
             id: doc.id, 
             ...doc.data(),
-            Release: doc.data()["Release"].toMillis() 
+            // Release: doc.data()["Release"].toMillis() 
           });
       });
       console.log(testarr2)
@@ -202,7 +203,7 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
                   {arr.Name}
                   </p>
                 </TableCell>
-                <TableCell>{new Date(arr.Release).toLocaleDateString('en-US')}</TableCell>
+                <TableCell>{new Date(arr.Release.seconds*1000).toLocaleDateString('en-US')}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>

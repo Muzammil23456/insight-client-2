@@ -48,7 +48,7 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 
-const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
+const EditForm3 = ({ ondata, ondata2 }: onDataType) => {
   const schema = z.object({
     dynamicFields: z.array(
       z.object({
@@ -56,20 +56,20 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
           .string()
           .min(3, { message: "Atleast 3" })
           .max(50, { message: "Less than 50" }),
-        Release: z.any(),
+        Release: z.date(),
       })
     ),
   });
 
   const [date, setDate] = React.useState<Date>();
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("edit3") || "{}");
+  const data = JSON.parse(localStorage.getItem("edit4") || "{}");
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
   } = useForm<any>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -94,18 +94,17 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   const onSubmit = async (da: any) => {
     setOpen(false);
     ondata2(false);
-    console.log(da)
     const docRef = doc(db, "Movies", `${data[2]}`);
     await updateDoc(docRef, {
-      Name: da.dynamicFields[0].Name,
-      Release: da.dynamicFields[0].Release,
+      Name: data.dynamicFields[0].Name,
+      Release: date,
       updated: serverTimestamp(),
     });
   };
 
   useEffect(() => {
     console.log(data)
-    setDate(data[1].seconds*1000)
+    setDate(data[1])
     setOpen(ondata);
     const q = query(collection(db, "Movies"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -211,4 +210,4 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default EditForm2;
+export default EditForm3;

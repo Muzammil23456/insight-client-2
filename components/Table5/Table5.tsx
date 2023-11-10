@@ -46,18 +46,18 @@ type TableData = {
 };
 
 type onDataType = {
-    ondata: (bool: boolean) => void;
-    ondata2: (bool: boolean) => void;
-  };
+  ondata: (bool: boolean) => void;
+  ondata2: (bool: boolean) => void;
+};
 const Table5 = ({ ondata, ondata2 }: onDataType) => {
-    const [filterValid, setFilterValid] = useState(true);
+  const [filterValid, setFilterValid] = useState(true);
 
-    const dispatch = useDispatch();
-    const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
-    const { text3, booleanValue3, Continue } = useSelector(
-      (state: RootState) => state.textReducer3
-    );
-    const [Fav, setFav] = useState([]);
+  const dispatch = useDispatch();
+  const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
+  const { text3, booleanValue3, Continue } = useSelector(
+    (state: RootState) => state.textReducer3
+  );
+  const [Fav, setFav] = useState([]);
   const [userCol, setUserCol] = useState("");
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
@@ -67,16 +67,16 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
   const auth = getAuth();
 
   useEffect(() => {
-    console.log('cu')
+    console.log("cu");
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool2(false));
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
       } else {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool2(false));
         setUse(null);
       }
@@ -85,11 +85,14 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
   const current = auth.currentUser?.uid;
 
   const getFav = () => {
-    const q = query(collection(db, "Favourite-Movies"), where("uid", "==", current || ''));
+    const q = query(
+      collection(db, "Favourites"),
+      where("uid", "==", current || "")
+    );
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
-        testarr2.push({  id: doc.id, ...doc.data() });
+        testarr2.push({ id: doc.id, ...doc.data() });
       });
       setFav(testarr2);
       setLoading(false);
@@ -98,62 +101,62 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
   };
   useEffect(() => {
     getFav();
-  }, [])
+  }, []);
   return (
     <>
-    <div className="flex mt-4"></div>
-    {!isBoolean && (
-          <Tooltip>
-            <TooltipTrigger
-              disabled={use === null || verfied == false}
-              type="submit"
-              onClick={() => {
-                ondata2(true);
-                dispatch(setBool2(true));
-              }}
-              className=" flex btn-n justify-evenly mb-2 items-center"
-            >
-              <span>New</span>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-plus"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 5l0 14"></path>
-                  <path d="M5 12l14 0"></path>
-                </svg>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              {use === null && <p>First sign Up</p>}
-              {use !== null && verfied == false && <p>Not verfied</p>}
-              {use !== null && !(verfied == false) && <p>Add Record</p>}
-            </TooltipContent>
-          </Tooltip>
-        )}
-        {isBoolean && (
-          <button
+      <div className="flex mt-4"></div>
+      {!isBoolean && (
+        <Tooltip>
+          <TooltipTrigger
             disabled={use === null || verfied == false}
             type="submit"
             onClick={() => {
-              ondata2(false);
-              dispatch(setBool2(false));
+              ondata2(true);
+              dispatch(setBool2(true));
             }}
             className=" flex btn-n justify-evenly mb-2 items-center"
           >
-            <span>Close</span>
-          </button>
-        )}
-    <Table>
+            <span>New</span>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon icon-tabler icon-tabler-plus"
+                width="20"
+                height="20"
+                viewBox="0 0 20 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 5l0 14"></path>
+                <path d="M5 12l14 0"></path>
+              </svg>
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            {use === null && <p>First sign Up</p>}
+            {use !== null && verfied == false && <p>Not verfied</p>}
+            {use !== null && !(verfied == false) && <p>Add Record</p>}
+          </TooltipContent>
+        </Tooltip>
+      )}
+      {isBoolean && (
+        <button
+          disabled={use === null || verfied == false}
+          type="submit"
+          onClick={() => {
+            ondata2(false);
+            dispatch(setBool2(false));
+          }}
+          className=" flex btn-n justify-evenly mb-2 items-center"
+        >
+          <span>Close</span>
+        </button>
+      )}
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">UID</TableHead>
@@ -195,13 +198,11 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
             Fav?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  <p className="truncate w-[120px]">
-                  {arr.uid}
-                  </p>
+                  <p className="truncate w-[120px]">{arr.uid}</p>
                 </TableCell>
-                <TableCell>{ arr.userName }</TableCell>
-                <TableCell>{arr.Movies.map((a,i1) => a.Name)}</TableCell>
-                <TableCell>{arr.Series.map((a,i2) => a.Name)}</TableCell>
+                <TableCell>{arr.username}</TableCell>
+                <TableCell>{arr.Movie.Name}</TableCell>
+                <TableCell>{arr.Series.Name}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -210,7 +211,8 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") == "admin"
+                            localStorage.getItem("curUser") == "admin" ||
+                            auth11.currentUser?.uid == arr.uid
                           )
                         }
                         onClick={() => {
@@ -246,7 +248,14 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Delete</p>
+                        {use === null ? (
+                          <p>First sign In</p>
+                        ) : auth11.currentUser?.uid === arr.uid ||
+                          localStorage.getItem("curUser") === "admin" ? (
+                          <p>Delete</p>
+                        ) : (
+                          <p>Not Authorized</p>
+                        )}
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip>
@@ -256,13 +265,18 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                           use === null ||
                           verfied === false ||
                           !(
-                            localStorage.getItem("curUser") == "admin"
+                            localStorage.getItem("curUser") == "admin" ||
+                            auth11.currentUser?.uid == arr.uid
                           )
                         }
                         onClick={() => {
                           localStorage.setItem(
                             "edit2",
-                            JSON.stringify([arr.Movies.map((a,i1) => a.Name), arr.Series.map((a,i1) => a.Name),arr.id])
+                            JSON.stringify([
+                              arr.Movies.map((a, i1) => a.Name),
+                              arr.Series.map((a, i1) => a.Name),
+                              arr.id,
+                            ])
                           );
                           ondata(true);
                         }}
@@ -289,7 +303,14 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Edit</p>
+                        {use === null ? (
+                          <p>First sign In</p>
+                        ) : auth11.currentUser?.uid === arr.uid ||
+                          localStorage.getItem("curUser") === "admin" ? (
+                          <p>Edit</p>
+                        ) : (
+                          <p>Not Authorized</p>
+                        )}
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -297,8 +318,9 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
               </TableRow>
             ))}
         </TableBody>
-      </Table></>
-  )
-}
+      </Table>
+    </>
+  );
+};
 
-export default Table5
+export default Table5;

@@ -22,13 +22,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-import {
-  type FieldErrors,
-  type FieldValues,
-  type Path,
-  type UseFormRegister,
-} from "react-hook-form";
 interface Errors {
   dynamicFields: {
     Name: string;

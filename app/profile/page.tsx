@@ -21,6 +21,8 @@ import Table5 from "@/components/Table5/Table5";
 import Table6 from "@/components/Table6/Table6";
 import Table7 from "@/components/Table7/Table7";
 import Form3 from "@/components/Form3/Form3";
+import EditForm3 from "@/components/EditForm3/EditForm3";
+import SelectFav from "@/components/SelectFav/SelectFav";
 
 const page = () => {
   const [user, setUser] = useState("");
@@ -129,7 +131,7 @@ const page = () => {
                 ondata2={(data: boolean) => setForm3(data)}
               />
               {editForm3 && (
-                <EditForm2
+                <EditForm3
                   ondata={editForm3}
                   ondata2={(data: boolean) => setEditForm3(data)}
                 />
@@ -162,7 +164,7 @@ const page = () => {
               )}
             </TabsContent>
             <TabsContent value="Fav">
-              {form2 && <Form2 ondata={(data: boolean) => setForm2(data)} />}
+              {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
               <Table5
                 ondata={(data: boolean) => setEditForm2(data)}
                 ondata2={(data: boolean) => setForm2(data)}

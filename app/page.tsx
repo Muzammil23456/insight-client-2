@@ -17,6 +17,7 @@ import Table4 from "@/components/Table4/Table4";
 import Form2 from "@/components/Form2/Form2";
 import EditForm2 from "@/components/EditForm2/EditForm2";
 import { Confirm3 } from "@/components/Confirmation3/Confirm3";
+import SelectFav from "@/components/SelectFav/SelectFav";
 
 const Home = () => {
   // delaration
@@ -58,7 +59,7 @@ const Home = () => {
           )}
         </TabsContent>
         <TabsContent value="Fav">
-          {form2 && <Form2 ondata={(data: boolean) => setForm2(data)} />}
+          {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
           <Table4
             ondata={(data: boolean) => setEditForm2(data)}
             ondata2={(data: boolean) => setForm2(data)}
