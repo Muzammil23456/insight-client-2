@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
 
+import React from "react";
 import {
   Table,
   TableBody,
@@ -12,24 +12,19 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
+import { collection, query, onSnapshot } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { setBool } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
   setText4,
   setBoolean4,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
-import Filter from "../Filter/Filter";
-import { RootState } from "@/app/GlobalRedux/store";
-import { Auth } from "firebase/auth";
 import { auth11 } from "@/modules/fileauth";
 
 type TableData = {
@@ -43,24 +38,13 @@ type onDataType = {
   ondata: (bool: boolean) => void;
 };
 const Table2 = ({ ondata }: onDataType) => {
-  const [filter, setFilter] = useState("updated");
-  const [filterValid, setFilterValid] = useState(true);
 
+  const [filter, setFilter] = useState("updated");
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
-  const { text3, booleanValue3, Continue } = useSelector(
-    (state: RootState) => state.textReducer3
-  );
-
-  const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  const [userCol, setUserCol] = useState("");
-  const [role, setRole] = useState("");
-  const [re, setRe] = useState(true);
-  const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
-  const auth = getAuth();
 
   const getuser = () => {
     const q = query(collection(db, "user"));
@@ -73,10 +57,8 @@ const Table2 = ({ ondata }: onDataType) => {
         });
       });
       setData3(testarr2);
-      console.log(testarr2);
 
       setLoading(false);
-      console.log(testarr2[0].uid);
     });
     return unsub2;
   };

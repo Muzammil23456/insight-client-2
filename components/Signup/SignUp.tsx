@@ -67,7 +67,6 @@ const SignUp = () => {
     setOobCode(`${searchParams.get("oobCode")}`);
   }
 
-  console.log(oobCode);
   const action = () => {
     const X = window.scrollX;
     const Y = window.scrollY;
@@ -213,18 +212,16 @@ const SignUp = () => {
                 )}
                 {loading && (
                   <button
-                    type="submit"
-                    className="flex justify-center disabled:p-1 btn"
-                    disabled={loading}
-                  >
-                    <img
-                      className="animate-spin text-center"
-                      src={loader.src}
-                      width="35px"
-                      height="35px"
-                      alt="spinner-frame-8"
-                    />
-                  </button>
+                  type="submit"
+                  className="flex justify-center disabled:p-1 btn"
+                  disabled={loading}
+                >
+                  <img
+                    className="animate-spin w-[22px] sm:w-[35px] text-center"
+                    src={loader.src}
+                    alt="spinner-frame-8"
+                  />
+                </button>
                 )}
                 {!loading && (
                   <button type="submit" className="btn">

@@ -74,7 +74,6 @@ const Form2 = ({ ondata }: onDataType) => {
   // Add Data into database
 
   const onSubmit = (data: any) => {
-    console.log(data.dynamicFields);
     for (let i = 0; i < data.dynamicFields?.length; i++) {
       addDoc(collection(db, "Movies"), {
         Name: data.dynamicFields[i].Name,
@@ -94,8 +93,6 @@ const Form2 = ({ ondata }: onDataType) => {
     }
   }, [isSubmitSuccessful]);
 
-  console.log(errors);
-  
   const showError = (id: number) => {
     if (errors) {
       if (errors.dynamicFields) {

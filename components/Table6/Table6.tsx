@@ -13,11 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  collection,
-  query,
-  onSnapshot,
-} from "@firebase/firestore";
+import { collection, query, onSnapshot } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
@@ -34,43 +30,36 @@ import { RootState } from "@/app/GlobalRedux/store";
 
 type TableData = {
   id: string;
-  Release: string;
+  Release: { seconds: number };
   Name: string;
 };
 
 type onDataType = {
-    ondata: (bool: boolean) => void;
-    ondata2: (bool: boolean) => void;
-  };
-  
-const Table6 = ({ ondata, ondata2 }: onDataType) => {
-    const [filterValid, setFilterValid] = useState(true);
+  ondata: (bool: boolean) => void;
+  ondata2: (bool: boolean) => void;
+};
 
-    const dispatch = useDispatch();
-    const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
-    const { text3, booleanValue3, Continue } = useSelector(
-      (state: RootState) => state.textReducer3
-    );
-    const [Fav, setFav] = useState([]);
-  const [userCol, setUserCol] = useState("");
+const Table6 = ({ ondata, ondata2 }: onDataType) => {
+  const dispatch = useDispatch();
+  const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
+
+  const [Fav, setFav] = useState([]);
   const [role, setRole] = useState("");
-  const [re, setRe] = useState(true);
   const [use, setUse] = useState<object | null>(null);
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
   useEffect(() => {
-    console.log('cu')
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool2(false));
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
       } else {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool2(false));
         setUse(null);
       }
@@ -82,14 +71,12 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
-        testarr2.push(
-          {  
-            id: doc.id, 
-            ...doc.data(),
-            // Release: doc.data()["Release"].toMillis() 
-          });
+        testarr2.push({
+          id: doc.id,
+          ...doc.data(),
+          // Release: doc.data()["Release"].toMillis()
+        });
       });
-      console.log(testarr2)
       setFav(testarr2);
       setLoading(false);
     });
@@ -97,63 +84,63 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
   };
   useEffect(() => {
     getFav();
-  }, [])
+  }, []);
   // const date =  new Date(arr.Release.seconds*1000)
   return (
     <>
-    <div className="flex mt-4"></div>
-    {!isBoolean && (
-          <Tooltip>
-            <TooltipTrigger
-              disabled={use === null || verfied == false}
-              type="submit"
-              onClick={() => {
-                ondata2(true);
-                dispatch(setBool2(true));
-              }}
-              className=" flex btn-n justify-evenly mb-2 items-center"
-            >
-              <span>New</span>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-plus"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 5l0 14"></path>
-                  <path d="M5 12l14 0"></path>
-                </svg>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              {use === null && <p>First sign Up</p>}
-              {use !== null && verfied == false && <p>Not verfied</p>}
-              {use !== null && !(verfied == false) && <p>Add Record</p>}
-            </TooltipContent>
-          </Tooltip>
-        )}
-        {isBoolean && (
-          <button
+      <div className="flex mt-4"></div>
+      {!isBoolean && (
+        <Tooltip>
+          <TooltipTrigger
             disabled={use === null || verfied == false}
             type="submit"
             onClick={() => {
-              ondata2(false);
-              dispatch(setBool2(false));
+              ondata2(true);
+              dispatch(setBool2(true));
             }}
             className=" flex btn-n justify-evenly mb-2 items-center"
           >
-            <span>Close</span>
-          </button>
-        )}
-    <Table>
+            <span>New</span>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon icon-tabler icon-tabler-plus"
+                width="20"
+                height="20"
+                viewBox="0 0 20 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M12 5l0 14"></path>
+                <path d="M5 12l14 0"></path>
+              </svg>
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            {use === null && <p>First sign Up</p>}
+            {use !== null && verfied == false && <p>Not verfied</p>}
+            {use !== null && !(verfied == false) && <p>Add Record</p>}
+          </TooltipContent>
+        </Tooltip>
+      )}
+      {isBoolean && (
+        <button
+          disabled={use === null || verfied == false}
+          type="submit"
+          onClick={() => {
+            ondata2(false);
+            dispatch(setBool2(false));
+          }}
+          className=" flex btn-n justify-evenly mb-2 items-center"
+        >
+          <span>Close</span>
+        </button>
+      )}
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
@@ -194,16 +181,16 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
             Fav?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  <p className="truncate w-[120px]">
-                  {arr.id}
-                  </p>
+                  <p className="truncate w-[120px]">{arr.id}</p>
                 </TableCell>
                 <TableCell className="text-ellipsis">
-                  <p className=" whitespace-pre-wrap w-[130px]">
-                  {arr.Name}
-                  </p>
+                  <p className=" whitespace-pre-wrap w-[130px]">{arr.Name}</p>
                 </TableCell>
-                <TableCell>{new Date(arr.Release.seconds*1000).toLocaleDateString('en-US')}</TableCell>
+                <TableCell>
+                  {new Date(arr.Release.seconds * 1000).toLocaleDateString(
+                    "en-US"
+                  )}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -211,12 +198,9 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
                         disabled={
                           use === null ||
                           verfied === false ||
-                          !(
-                            localStorage.getItem("curUser") == "admin"
-                          )
+                          !(localStorage.getItem("curUser") == "admin")
                         }
                         onClick={() => {
-                          console.log("de");
                           dispatch(setBoolean4(true));
                           dispatch(
                             setText4("Are you Sure To Delete the record")
@@ -257,14 +241,12 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
                         disabled={
                           use === null ||
                           verfied === false ||
-                          !(
-                            localStorage.getItem("curUser") == "admin"
-                          )
+                          !(localStorage.getItem("curUser") == "admin")
                         }
                         onClick={() => {
                           localStorage.setItem(
                             "edit3",
-                            JSON.stringify([arr.Name,arr.Release,arr.id])
+                            JSON.stringify([arr.Name, arr.Release, arr.id])
                           );
                           ondata(true);
                         }}
@@ -299,8 +281,9 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
               </TableRow>
             ))}
         </TableBody>
-      </Table></>
-  )
-}
+      </Table>
+    </>
+  );
+};
 
-export default Table6
+export default Table6;

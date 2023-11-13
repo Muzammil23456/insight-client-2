@@ -1,11 +1,10 @@
 "use client";
 
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import Tablee from "@/components/Table/Table";
 import { useEffect, useState } from "react";
 import "./style.css";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch  } from "react-redux";
 import {
   setText,
   setBoolean,
@@ -33,16 +32,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 
+type user={
+  uid:string;
+  role:string
+}
+
 const Nav = () => {
   const [use, setUse] = useState<object | null>(null);
-  const [url, setUrl] = useState("");
   const auth = getAuth();
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
   const dispatch = useDispatch();
   const [data3, setData3] = useState([]);
   const [verfied, setVerified] = useState(false);
-  const [editForm, setEditForm] = useState<boolean>(false);
 
   const router = useRouter();
   const action = () => {
@@ -76,18 +78,14 @@ const Nav = () => {
       });
       setData3(testarr2);
       // setLoading(false);
-      console.log(testarr2[0].uid);
     });
     return unsub2;
   };
   const ttt = () => {
-    console.log('cur')
-    const t = data3.forEach((e) => {
-      console.log(e);
+    const t = data3.forEach((e:user) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
-        console.log(e);
         setRe(false);
       } else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin") {
         localStorage.setItem("curUser", "user");
@@ -100,7 +98,6 @@ const Nav = () => {
 
 
   useEffect(() => {
-    console.log('cu')
     getuser();
     ttt();
     onAuthStateChanged(auth, (user) => {

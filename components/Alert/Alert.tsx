@@ -1,6 +1,6 @@
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Waves,Check, XCircle } from "lucide-react"
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Check, XCircle } from "lucide-react"
 import './style.css'
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, PromiseLikeOfReactNode } from "react";
 

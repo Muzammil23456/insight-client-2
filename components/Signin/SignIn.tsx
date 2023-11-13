@@ -135,10 +135,8 @@ const SignIn = () => {
                     disabled={loading}
                   >
                     <img
-                      className="animate-spin text-center"
+                      className="animate-spin w-[22px] sm:w-[35px] text-center"
                       src={loader.src}
-                      width="35px"
-                      height="35px"
                       alt="spinner-frame-8"
                     />
                   </button>

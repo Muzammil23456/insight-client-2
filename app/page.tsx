@@ -18,6 +18,8 @@ import Form2 from "@/components/Form2/Form2";
 import EditForm2 from "@/components/EditForm2/EditForm2";
 import { Confirm3 } from "@/components/Confirmation3/Confirm3";
 import SelectFav from "@/components/SelectFav/SelectFav";
+import { Confirm4 } from "@/components/Comfirmation4/Confirm4";
+import EditForm4 from "@/components/EditForm4/EditForm4";
 
 const Home = () => {
   // delaration
@@ -32,11 +34,13 @@ const Home = () => {
   );
   const { signIn, signUp } = useSelector((state: RootState) => state.register);
   const [editForm, setEditForm] = useState<boolean>(false);
+  const [editForm4, setEditForm4] = useState<boolean>(false);
 
   return (
     <>
       <Confirm />
       <Confirm3 />
+      <Confirm4/>
       {booleanValue && <AlertSuccess purpose={text} />}
       {booleanValue2 && <AlertError purpose={text2} />}
       <Tabs defaultValue="Data">
@@ -61,13 +65,13 @@ const Home = () => {
         <TabsContent value="Fav">
           {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
           <Table4
-            ondata={(data: boolean) => setEditForm2(data)}
+            ondata={(data: boolean) => setEditForm4(data)}
             ondata2={(data: boolean) => setForm2(data)}
           />
-          {editForm2 && (
-            <EditForm2
-              ondata={editForm2}
-              ondata2={(data: boolean) => setEditForm2(data)}
+          {editForm4 && (
+            <EditForm4
+              ondata={editForm4}
+              ondata2={(data: boolean) => setEditForm4(data)}
             />
           )}
         </TabsContent>

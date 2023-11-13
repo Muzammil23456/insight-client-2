@@ -5,11 +5,6 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import "./style.css";
-import { addDoc } from "@firebase/firestore";
-import removepng from "../../public/remove.png";
-import { useDispatch } from "react-redux";
-import { setBool, setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
-import { auth11 } from "../../modules/fileauth";
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -82,9 +77,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
     },
   });
 
-  const dispatch = useDispatch();
-
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "dynamicFields",
   });
@@ -94,7 +87,6 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   const onSubmit = async (da: any) => {
     setOpen(false);
     ondata2(false);
-    console.log(da)
     const docRef = doc(db, "Movies", `${data[2]}`);
     await updateDoc(docRef, {
       Name: da.dynamicFields[0].Name,
@@ -104,7 +96,6 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   };
 
   useEffect(() => {
-    console.log(data)
     setDate(data[1].seconds*1000)
     setOpen(ondata);
     const q = query(collection(db, "Movies"));
@@ -118,8 +109,6 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
     });
     return unsubscribe;
   }, []);
-
-  console.log(errors);
 
   const showError = (id: number) => {
     if (errors) {

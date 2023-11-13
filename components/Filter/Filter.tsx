@@ -21,7 +21,7 @@ const Filter = ({...props}) => {
 
   return (
     <>
-      <Select onValueChange={(e)=>setData(e)}>
+      <Select onValueChange={(e)=>setData(e)} defaultValue={data}>
         <SelectTrigger  className="w-[200px]">
           <SelectValue  placeholder={`Sort By: ${data}`} />
         </SelectTrigger>

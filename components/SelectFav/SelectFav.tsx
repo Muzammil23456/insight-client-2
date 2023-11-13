@@ -7,14 +7,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
+import { collection, addDoc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { query, onSnapshot } from "@firebase/firestore";
 import { setBool2 } from "@/app/GlobalRedux/Features/new/newSlice";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { auth11 } from "@/modules/fileauth";
 import { useDispatch } from "react-redux";
+
+
+type TableData = {
+  Name: string
+};
 
 type onDataType = {
   ondata: (bool: boolean) => void;
@@ -35,7 +39,6 @@ const SelectFav = ({ ondata }: onDataType) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
       setData2(testarr);
-      console.log(testarr);
     });
     return unsub;
   };
@@ -48,7 +51,6 @@ const SelectFav = ({ ondata }: onDataType) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
       setData3(testarr);
-      console.log(testarr);
     });
     return unsub;
   };
@@ -86,7 +88,7 @@ const SelectFav = ({ ondata }: onDataType) => {
             <SelectValue placeholder="Movies" />
           </SelectTrigger>
           <SelectContent>
-            {data2.map((movie, i) => (
+            {data2.map((movie: TableData, i) => (
               <SelectItem key={i} value={movie.Name}>
                 {movie.Name}
               </SelectItem>
@@ -102,9 +104,9 @@ const SelectFav = ({ ondata }: onDataType) => {
             <SelectValue placeholder="Series" />
           </SelectTrigger>
           <SelectContent>
-            {data3.map((movie, i) => (
-              <SelectItem key={i} value={movie.Name}>
-                <p className="overflow-hidden">{movie.Name}</p>
+            {data3.map((series: TableData, i) => (
+              <SelectItem key={i} value={series.Name}>
+                <p className="overflow-hidden">{series.Name}</p>
               </SelectItem>
             ))}
           </SelectContent>

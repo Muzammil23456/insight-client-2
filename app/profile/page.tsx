@@ -1,6 +1,5 @@
 "use client";
 
-import BigBtn from "@/components/BigBtn/BigBtn";
 import React, { useEffect, useState } from "react";
 import EditForm from "@/components/EditForm/EditForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,26 +22,24 @@ import Table7 from "@/components/Table7/Table7";
 import Form3 from "@/components/Form3/Form3";
 import EditForm3 from "@/components/EditForm3/EditForm3";
 import SelectFav from "@/components/SelectFav/SelectFav";
+import EditForm4 from "@/components/EditForm4/EditForm4";
+import { Confirm3 } from "@/components/Confirmation3/Confirm3";
+import { Confirm4 } from "@/components/Comfirmation4/Confirm4";
 
 const page = () => {
   const [user, setUser] = useState("");
-  const [userDatabase, setUserDatabase] = useState(false);
-  const [dataDatabase, setDataDatabase] = useState(false);
-  const [favDatabase, setFavDatabase] = useState(false);
   const [editForm, setEditForm] = useState<boolean>(false);
   const [editUser, setEditUser] = useState<boolean>(false);
   const [form2, setForm2] = useState(false);
   const [editForm2, setEditForm2] = useState<boolean>(false);
   const [form3, setForm3] = useState(false);
   const [editForm3, setEditForm3] = useState<boolean>(false);
+  const [editForm4, setEditForm4] = useState<boolean>(false);
   const [form, setForm] = useState(false);
   const [table, setTable] = useState(true);
-
   const curUser = localStorage.getItem("curUser");
-  const active = localStorage.getItem("Active");
 
   useEffect(() => {
-    console.log("1");
     setUser(`${curUser}`);
     if (!curUser) {
       redirect("/");
@@ -57,20 +54,20 @@ const page = () => {
           <h1 className="text-3xl mb-7 font-bold ">Admin Panel</h1>
           <Profile />
           <Tabs className="mt-5" defaultValue="User">
-            <TabsList className="w-[300px]">
-              <TabsTrigger className="w-[40px] sm:w-1/2" value="User">
+            <TabsList className="w-full sm:w-[300px] ">
+              <TabsTrigger className="w-[20%] sm:w-1/2" value="User">
                 User
               </TabsTrigger>
-              <TabsTrigger className="w-[50px] sm:w-1/2" value="Data">
+              <TabsTrigger className="w-[20%] sm:w-1/2" value="Data">
                 Data
               </TabsTrigger>
-              <TabsTrigger className="w-[50px] sm:w-1/2" value="Fav">
+              <TabsTrigger className="w-[20%] sm:w-1/2" value="Fav">
                 Fav
               </TabsTrigger>
-              <TabsTrigger className="w-[50px] sm:w-1/2" value="Movies">
+              <TabsTrigger className="w-[20%] sm:w-1/2" value="Movies">
                 Movies
               </TabsTrigger>
-              <TabsTrigger className="w-[50px] sm:w-1/2" value="Series">
+              <TabsTrigger className="w-[20%] sm:w-1/2" value="Series">
                 Series
               </TabsTrigger>
             </TabsList>
@@ -101,13 +98,13 @@ const page = () => {
             </TabsContent>
             <TabsContent value="Fav">
               <Table4
-                ondata={(data: boolean) => setEditForm2(data)}
+                ondata={(data: boolean) => setEditForm4(data)}
                 ondata2={(data: boolean) => setForm2(data)}
               />
-              {editForm2 && (
-                <EditForm2
-                  ondata={editForm2}
-                  ondata2={(data: boolean) => setEditForm2(data)}
+              {editForm4 && (
+                <EditForm4
+                  ondata={editForm4}
+                  ondata2={(data: boolean) => setEditForm4(data)}
                 />
               )}
             </TabsContent>
@@ -143,6 +140,7 @@ const page = () => {
       {user == "user" && (
         <>
           <Confirm />
+          <Confirm4/>
           <h1 className="text-3xl  font-bold mb-5">User's Profile</h1>
           <Profile />
           <Tabs className="mt-5" defaultValue="Data">
@@ -166,13 +164,13 @@ const page = () => {
             <TabsContent value="Fav">
               {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
               <Table5
-                ondata={(data: boolean) => setEditForm2(data)}
+                ondata={(data: boolean) => setEditForm4(data)}
                 ondata2={(data: boolean) => setForm2(data)}
               />
-              {editForm2 && (
-                <EditForm2
-                  ondata={editForm2}
-                  ondata2={(data: boolean) => setEditForm2(data)}
+              {editForm4 && (
+                <EditForm4
+                  ondata={editForm4}
+                  ondata2={(data: boolean) => setEditForm4(data)}
                 />
               )}
             </TabsContent>

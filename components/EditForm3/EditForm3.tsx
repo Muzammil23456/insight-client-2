@@ -103,7 +103,6 @@ const EditForm3 = ({ ondata, ondata2 }: onDataType) => {
   };
 
   useEffect(() => {
-    console.log(data)
     setDate(data[1])
     setOpen(ondata);
     const q = query(collection(db, "Movies"));
@@ -117,8 +116,6 @@ const EditForm3 = ({ ondata, ondata2 }: onDataType) => {
     });
     return unsubscribe;
   }, []);
-
-  console.log(errors);
 
   const showError = (id: number) => {
     if (errors) {

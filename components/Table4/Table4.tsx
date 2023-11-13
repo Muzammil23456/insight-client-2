@@ -22,8 +22,8 @@ import { useDispatch } from "react-redux";
 import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText4,
-  setBoolean4,
+  setText5,
+  setBoolean5,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
@@ -32,7 +32,9 @@ import { auth11 } from "@/modules/fileauth";
 type TableData = {
   uid: string;
   username: string;
-  
+  id: string;
+  Movie: {Name:string};
+  Series: {Name:string};
 };
 
 type onDataType = {
@@ -40,15 +42,10 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 const Table4 = ({ ondata, ondata2 }: onDataType) => {
-  const [filterValid, setFilterValid] = useState(true);
 
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
-  const { text3, booleanValue3, Continue } = useSelector(
-    (state: RootState) => state.textReducer3
-  );
   const [Fav, setFav] = useState([]);
-  const [userCol, setUserCol] = useState("");
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
   const [use, setUse] = useState<object | null>(null);
@@ -57,7 +54,6 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
   const auth = getAuth();
 
   useEffect(() => {
-    console.log("cu");
     onAuthStateChanged(auth, (user) => {
       if (user) {
         ondata2(false);
@@ -87,8 +83,6 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
   };
   useEffect(() => {
     getFav();
-    console.log(Fav);
-    console.log(isBoolean);
   }, []);
   return (
     <>
@@ -204,12 +198,11 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
                           )
                         }
                         onClick={() => {
-                          console.log("de");
-                          dispatch(setBoolean4(true));
+                          dispatch(setBoolean5(true));
                           dispatch(
-                            setText4("Are you Sure To Delete the record")
+                            setText5("Are you Sure To Delete the record")
                           );
-                          localStorage.setItem("delete3", `${arr.id}`);
+                          localStorage.setItem("delete5", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -260,7 +253,7 @@ const Table4 = ({ ondata, ondata2 }: onDataType) => {
                         onClick={() => {
                           localStorage.setItem(
                             "edit5",
-                            JSON.stringify([arr.Movies.Name, arr.Series.Name])
+                            JSON.stringify([arr.Movie.Name, arr.Series.Name,arr.id])
                           );
                           ondata(true);
                         }}

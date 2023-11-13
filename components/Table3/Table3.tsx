@@ -32,10 +32,8 @@ import {
   setText3,
   setBoolean3,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
-import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
 import { auth11 } from "@/modules/fileauth";
-import { truncate } from "fs";
 
 type TableData = {
   id: string;
@@ -45,26 +43,25 @@ type TableData = {
   updated: string;
 };
 
+type edit = {
+  uid: string;
+  role: string;
+};
+
 type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
 
 const Table3 = ({ ondata, ondata2 }: onDataType) => {
-  // States
 
-  const [filterValid, setFilterValid] = useState(true);
+  // States
 
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
-  const { text3, booleanValue3, Continue } = useSelector(
-    (state: RootState) => state.textReducer3
-  );
-
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
 
-  const [userCol, setUserCol] = useState("");
   const [Fav, setFav] = useState([]);
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
@@ -83,7 +80,6 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
       setData2(testarr);
-      console.log(testarr);
       setLoading(false);
     });
     return unsub;
@@ -100,7 +96,6 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
       });
       setData3(testarr2);
       setLoading(false);
-      console.log(testarr2[0].uid);
     });
     return unsub2;
   };
@@ -114,18 +109,15 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
       });
       setFav(testarr2);
       setLoading(false);
-      console.log(testarr2);
     });
     return unsub2;
   };
 
   const ttt = () => {
-    const t = data3.forEach((e) => {
-      console.log(e);
+    const t = data3.forEach((e:edit) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
-        console.log(e);
         setRe(false);
       } else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin") {
         localStorage.setItem("curUser", "user");
@@ -137,7 +129,6 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
   // useEffect
 
   useEffect(() => {
-    console.log("1");
     getuser();
     ttt();
   }, []);
@@ -276,7 +267,6 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
                           )
                         }
                         onClick={() => {
-                            console.log('de')
                           dispatch(setBoolean3(true));
                           dispatch(
                             setText3("Are you Sure To Delete the record")

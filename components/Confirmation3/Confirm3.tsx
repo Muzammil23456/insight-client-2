@@ -6,24 +6,20 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setText3,
-  setBoolean3,
   setContinue,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
-import { setText4,setBoolean4 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
+import { setBoolean4 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import {
   setText,
   setBoolean,
@@ -33,7 +29,6 @@ import { db } from "../../modules/filebase";
 import { RootState } from "@/app/GlobalRedux/store";
 
 export function Confirm3() {
-  const [open, setOpen] = useState(false);
   const { text4, booleanValue4 } = useSelector(
     (state: RootState) => state.textReducer3
   );

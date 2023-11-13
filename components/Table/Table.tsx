@@ -11,7 +11,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { collection, query, onSnapshot, orderBy } from "@firebase/firestore";
@@ -28,9 +27,7 @@ import {
   setBoolean3,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
-import { RootState } from "@/app/GlobalRedux/store";
 import { auth11 } from "@/modules/fileauth";
-import { truncate } from "fs";
 
 type TableData = {
   id: string;
@@ -40,26 +37,25 @@ type TableData = {
   updated: string;
 };
 
+type edit = {
+  uid: string;
+  role: string;
+};
+
 type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
 
 const Tablee = ({ ondata, ondata2 }: onDataType) => {
+
   // States
 
   const [filter, setFilter] = useState("updated");
-  const [filterValid, setFilterValid] = useState(true);
-
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
-  const { text3, booleanValue3, Continue } = useSelector(
-    (state: RootState) => state.textReducer3
-  );
-
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  const [userCol, setUserCol] = useState("");
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
   const [use, setUse] = useState<object | null>(null);
@@ -77,7 +73,6 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
         testarr.push({ ...doc.data(), id: doc.id });
       });
       setData2(testarr);
-      console.log(testarr);
       setLoading(false);
     });
     return unsub;
@@ -94,19 +89,15 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
       });
       setData3(testarr2);
       setLoading(false);
-      console.log(testarr2[0].uid);
     });
     return unsub2;
   };
 
   const ttt = () => {
-    console.log('cur')
-    const t = data3.forEach((e) => {
-      console.log(e);
+    const t = data3.forEach((e:edit) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
-        console.log(e);
         setRe(false);
       } else if (auth11.currentUser?.uid == e?.uid && e?.role !== "Admin") {
         localStorage.setItem("curUser", "user");
@@ -118,13 +109,11 @@ const Tablee = ({ ondata, ondata2 }: onDataType) => {
   // useEffect
 
   useEffect(() => {
-    console.log("1");
     getuser();
     ttt();
   }, []);
 
   useEffect(() => {
-    console.log('cu')
     getuser();
     ttt();
     onAuthStateChanged(auth, (user) => {

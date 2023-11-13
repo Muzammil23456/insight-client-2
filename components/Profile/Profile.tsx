@@ -1,6 +1,7 @@
-import React from "react";
-import { auth } from "@/modules/fileauth";
+import React, { useEffect } from "react";
+import { auth, auth11 } from "@/modules/fileauth";
 const Profile = () => {
+
   return (
     <>
       <div className="flex gap-2">
