@@ -88,7 +88,6 @@ const page = () => {
             </TabsContent>
             <TabsContent value="User">
               <Table2 ondata={(data: boolean) => setEditUser(data)} />
-
               {editUser && (
                 <EditUser
                   ondata={editUser}

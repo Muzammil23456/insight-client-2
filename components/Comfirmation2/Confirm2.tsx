@@ -47,7 +47,7 @@ export function Confirm2() {
     }, 3000);
   };
 
-  const deleteItem = async (id: string, uid: string) => {
+  const deleteItem = async (id: any) => {
     console.log(id);
     await deleteDoc(doc(db, "user", id))
       .then(() => {
@@ -80,8 +80,7 @@ export function Confirm2() {
           <AlertDialogAction
             onClick={() => {
               const id = localStorage.getItem("delete2");
-              const uid = localStorage.getItem("delete3");
-              deleteItem(id, uid);
+              deleteItem(id);
               dispatch(setContinue(true));
               dispatch(setBoolean4(false));
             }}
