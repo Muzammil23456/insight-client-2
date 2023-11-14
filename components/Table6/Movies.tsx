@@ -22,15 +22,15 @@ import { useDispatch } from "react-redux";
 import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText4,
-  setBoolean4,
+  setText6,
+  setBoolean6,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
 
 type TableData = {
   id: string;
-  Release: string;
+  Release: { seconds: number };
   Name: string;
 };
 
@@ -38,7 +38,8 @@ type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
-const Table7 = ({ ondata, ondata2 }: onDataType) => {
+
+const Table6 = ({ ondata, ondata2 }: onDataType) => {
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
 
@@ -66,14 +67,14 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
   }, [use, verfied, onAuthStateChanged]);
 
   const getFav = () => {
-    const q = query(collection(db, "Series"));
+    const q = query(collection(db, "Movies"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
         testarr2.push({
           id: doc.id,
           ...doc.data(),
-          Release: doc.data()["Release"].toMillis(),
+          // Release: doc.data()["Release"].toMillis()
         });
       });
       setFav(testarr2);
@@ -143,7 +144,7 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Series</TableHead>
+            <TableHead>Movie</TableHead>
             <TableHead>Release Date</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
@@ -186,7 +187,9 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
                   <p className=" whitespace-pre-wrap w-[130px]">{arr.Name}</p>
                 </TableCell>
                 <TableCell>
-                  {new Date(arr.Release).toLocaleDateString("en-US")}
+                  {new Date(arr.Release.seconds * 1000).toLocaleDateString(
+                    "en-US"
+                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
@@ -198,11 +201,11 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
                           !(localStorage.getItem("curUser") == "admin")
                         }
                         onClick={() => {
-                          dispatch(setBoolean4(true));
+                          dispatch(setBoolean6(true));
                           dispatch(
-                            setText4("Are you Sure To Delete the record")
+                            setText6("Are you Sure To Delete this movie")
                           );
-                          localStorage.setItem("delete4", `${arr.id}`);
+                          localStorage.setItem("deleteMovies", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -242,8 +245,8 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit4",
-                            JSON.stringify([arr.Name, arr.Release])
+                            "editMovies",
+                            JSON.stringify([arr.Name, arr.Release.seconds * 1000, arr.id])
                           );
                           ondata(true);
                         }}
@@ -283,4 +286,4 @@ const Table7 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Table7;
+export default Table6;

@@ -17,14 +17,17 @@ import EditUser from "@/components/EditUser/EditUser";
 import Table3 from "@/components/Table3/Table3";
 import Table4 from "@/components/Table4/Table4";
 import Table5 from "@/components/Table5/Table5";
-import Table6 from "@/components/Table6/Table6";
-import Table7 from "@/components/Table7/Table7";
+import Table6 from "@/components/Table6/Movies";
+import Table7 from "@/components/Table7/Series";
 import Form3 from "@/components/Form3/Form3";
 import EditForm3 from "@/components/EditForm3/EditForm3";
 import SelectFav from "@/components/SelectFav/SelectFav";
 import EditForm4 from "@/components/EditForm4/EditForm4";
 import { Confirm3 } from "@/components/Confirmation3/Confirm3";
 import { Confirm4 } from "@/components/Comfirmation4/Confirm4";
+import { Confirm6 } from "@/components/Confirmation6/Confirm6";
+import { Confirm7 } from "@/components/Confirmation7/Confirm7";
+import EditSeries from "@/components/EditSeries/EditSeries";
 
 const page = () => {
   const [user, setUser] = useState("");
@@ -34,6 +37,7 @@ const page = () => {
   const [editForm2, setEditForm2] = useState<boolean>(false);
   const [form3, setForm3] = useState(false);
   const [editForm3, setEditForm3] = useState<boolean>(false);
+  const [editSeries,setEditSeries] = useState<boolean>(false);
   const [editForm4, setEditForm4] = useState<boolean>(false);
   const [form, setForm] = useState(false);
   const [table, setTable] = useState(true);
@@ -51,6 +55,9 @@ const page = () => {
         <>
           <Confirm />
           <Confirm2 />
+          <Confirm4/>
+          <Confirm6 />
+          <Confirm7/>
           <h1 className="text-3xl mb-7 font-bold ">Admin Panel</h1>
           <Profile />
           <Tabs className="mt-5" defaultValue="User">
@@ -96,6 +103,7 @@ const page = () => {
               )}
             </TabsContent>
             <TabsContent value="Fav">
+            {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
               <Table4
                 ondata={(data: boolean) => setEditForm4(data)}
                 ondata2={(data: boolean) => setForm2(data)}
@@ -123,13 +131,13 @@ const page = () => {
             <TabsContent value="Series">
               {form3 && <Form3 ondata={(data: boolean) => setForm3(data)} />}
               <Table7
-                ondata={(data: boolean) => setEditForm3(data)}
+                ondata={(data: boolean) => setEditSeries(data)}
                 ondata2={(data: boolean) => setForm3(data)}
               />
-              {editForm3 && (
-                <EditForm3
-                  ondata={editForm3}
-                  ondata2={(data: boolean) => setEditForm3(data)}
+              {editSeries && (
+                <EditSeries
+                  ondata={editSeries}
+                  ondata2={(data: boolean) => setEditSeries(data)}
                 />
               )}
             </TabsContent>

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import "./style.css";
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -44,7 +43,7 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 
-const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
+const EditSeries = ({ ondata, ondata2 }: onDataType) => {
   const schema = z.object({
     dynamicFields: z.array(
       z.object({
@@ -58,7 +57,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   });
 
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("editMovies") || "{}");
+  const data = JSON.parse(localStorage.getItem("editSeries") || "{}");
   const [date, setDate] = useState<Date>();
   const {
     register,
@@ -89,7 +88,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
     setOpen(false);
     ondata2(false);
     if (date) {
-      const docRef = doc(db, "Movies", `${data[2]}`);
+      const docRef = doc(db, "Series", `${data[2]}`);
       console.log(date);
       await updateDoc(docRef, {
         Name: da.dynamicFields[0].Name,
@@ -198,4 +197,4 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default EditForm2;
+export default EditSeries;

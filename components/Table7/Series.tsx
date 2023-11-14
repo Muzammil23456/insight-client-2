@@ -22,8 +22,8 @@ import { useDispatch } from "react-redux";
 import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import loader from "@/public/loading.png";
 import {
-  setText4,
-  setBoolean4,
+  setText7,
+  setBoolean7,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
@@ -38,8 +38,7 @@ type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
-
-const Table6 = ({ ondata, ondata2 }: onDataType) => {
+const Table7 = ({ ondata, ondata2 }: onDataType) => {
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
 
@@ -67,14 +66,13 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
   }, [use, verfied, onAuthStateChanged]);
 
   const getFav = () => {
-    const q = query(collection(db, "Movies"));
+    const q = query(collection(db, "Series"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
         testarr2.push({
           id: doc.id,
           ...doc.data(),
-          // Release: doc.data()["Release"].toMillis()
         });
       });
       setFav(testarr2);
@@ -144,7 +142,7 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Movie</TableHead>
+            <TableHead>Series</TableHead>
             <TableHead>Release Date</TableHead>
             <TableHead className="text-right md:w-[150px]">Actions</TableHead>
           </TableRow>
@@ -201,11 +199,11 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
                           !(localStorage.getItem("curUser") == "admin")
                         }
                         onClick={() => {
-                          dispatch(setBoolean4(true));
+                          dispatch(setBoolean7(true));
                           dispatch(
-                            setText4("Are you Sure To Delete the record")
+                            setText7("Are you Sure To Delete this Series")
                           );
-                          localStorage.setItem("delete3", `${arr.id}`);
+                          localStorage.setItem("deleteSeries", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -245,8 +243,8 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit3",
-                            JSON.stringify([arr.Name, arr.Release, arr.id])
+                            "editSeries",
+                            JSON.stringify([arr.Name, arr.Release.seconds * 1000, arr.id])
                           );
                           ondata(true);
                         }}
@@ -286,4 +284,4 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Table6;
+export default Table7;

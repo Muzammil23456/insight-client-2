@@ -11,6 +11,10 @@ const textBooleanSlice = createSlice({
     booleanValue4: false,
     text5: '',
     booleanValue5: false,
+    text6: '',
+    booleanValue6: false,
+    text7: '',
+    booleanValue7: false,
     Continue:false
   },
   reducers: {
@@ -36,6 +40,20 @@ const textBooleanSlice = createSlice({
         setBoolean5: (state, action) => {
             state.booleanValue5 = action.payload;
           },
+          setText6: (state, action) => {
+            state.text6 = action.payload;
+          },
+          // Reducer to toggle the boolean value
+          setBoolean6: (state, action) => {
+              state.booleanValue6 = action.payload;
+            },
+            setText7: (state, action) => {
+              state.text7 = action.payload;
+            },
+            // Reducer to toggle the boolean value
+            setBoolean7: (state, action) => {
+                state.booleanValue7 = action.payload;
+              },
       setContinue: (state, action) => {
         state.Continue = action.payload;
       },
@@ -43,5 +61,5 @@ const textBooleanSlice = createSlice({
 });
 
 // Export the actions and reducer
-export const { setText3, setBoolean3,setText4, setBoolean4,setText5, setBoolean5,setContinue } = textBooleanSlice.actions;
+export const { setText3, setBoolean3,setText4, setBoolean4,setText5, setBoolean5,setText6, setBoolean6,setText7, setBoolean7,setContinue } = textBooleanSlice.actions;
 export default textBooleanSlice.reducer;
