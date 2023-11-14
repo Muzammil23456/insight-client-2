@@ -30,14 +30,18 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { any, z } from "zod";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   getAuth,
   updateProfile,
+  User,
 } from "firebase/auth";
 
+type Uuuser={
+  auth: User
+}
 const schema = z
   .object({
     Name: z.string().nonempty("Required").min(3, { message: "Atleast 6" }),
@@ -105,12 +109,13 @@ const SignUp = () => {
     handleCodeInApp: true,
   };
 
+  const u = auth?.currentUser 
   //Sign Up
   const onsubmit = (data: any) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
-        updateProfile(auth.currentUser, { displayName: data.Name });
+        // updateProfile(u, { displayName: data.Name });
         addDoc(collection(db, "user"), {
           role: "user",
           uid: res.user.uid,

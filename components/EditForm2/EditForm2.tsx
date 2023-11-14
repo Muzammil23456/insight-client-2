@@ -96,7 +96,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
   };
 
   useEffect(() => {
-    setDate(data[1].seconds*1000)
+    // setDate(data[1].seconds*1000)
     setOpen(ondata);
     const q = query(collection(db, "Movies"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
