@@ -27,7 +27,7 @@ import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { RootState } from "@/app/GlobalRedux/store";
 
-export function Confirm6() {
+export function DeleteMovies() {
   const { text6, booleanValue6 } = useSelector(
     (state: RootState) => state.textReducer3
   );

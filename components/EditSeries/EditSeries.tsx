@@ -16,6 +16,7 @@ import {
   doc,
   serverTimestamp,
   Timestamp,
+  arrayRemove,
 } from "@firebase/firestore";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,7 @@ const EditSeries = ({ ondata, ondata2 }: onDataType) => {
   const [open, setOpen] = useState(false);
   const data = JSON.parse(localStorage.getItem("editSeries") || "{}");
   const [date, setDate] = useState<Date>();
+  const [date2, setDate2] = useState<Date>();
   const {
     register,
     handleSubmit,
@@ -99,7 +101,8 @@ const EditSeries = ({ ondata, ondata2 }: onDataType) => {
   };
 
   useEffect(() => {
-    setDate(data[1]);
+    const d = new Date(data[1]);
+    setDate(d);
     setOpen(ondata);
     const q = query(collection(db, "Movies"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
