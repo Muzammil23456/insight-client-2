@@ -4,13 +4,10 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import "./style.css";
-import { collection, addDoc, serverTimestamp } from "@firebase/firestore";
+import { collection, addDoc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
-import removepng from "../../public/remove.png";
 import { useDispatch } from "react-redux";
-import { setBool, setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
-import { auth11 } from "../../modules/fileauth";
+import { setBool2 } from "../../app/GlobalRedux/Features/new/newSlice";
 import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -45,7 +42,7 @@ const Form2 = ({ ondata }: onDataType) => {
     ),
   });
 
-  const [date, setDate] = React.useState<Date>();
+  const [date, setDate] = useState<Date>();
   const {
     register,
     handleSubmit,
@@ -66,7 +63,7 @@ const Form2 = ({ ondata }: onDataType) => {
 
   const dispatch = useDispatch();
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: "dynamicFields",
   });
@@ -138,7 +135,6 @@ const Form2 = ({ ondata }: onDataType) => {
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
-
                   {...register(`dynamicFields.${index}.Release`)}
                   mode="single"
                   selected={date}
@@ -153,7 +149,7 @@ const Form2 = ({ ondata }: onDataType) => {
           </div>
         </>
       ))}
-      <div >
+      <div>
         <button type="submit" className="btn">
           Submit
         </button>

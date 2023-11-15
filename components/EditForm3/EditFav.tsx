@@ -37,7 +37,7 @@ type onDataType = {
 };
 
 const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
-  const da = JSON.parse(localStorage.getItem("edit5") || "{}");
+  const da = JSON.parse(localStorage.getItem("editFav") || "{}");
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
   const [selectMovie, setSelectMovie] = useState(da[0]);

@@ -10,16 +10,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import "./style.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setBoolean3,
-  setContinue,
-} from "../../app/GlobalRedux/Features/confirm/confirmSlice";
+import { setContinue } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
+import { setBoolean5 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import {
   setText,
   setBoolean,
@@ -28,8 +25,8 @@ import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { RootState } from "@/app/GlobalRedux/store";
 
-export function Confirm() {
-  const { text3, booleanValue3 } = useSelector(
+export function DeleteFav() {
+  const { text5, booleanValue5 } = useSelector(
     (state: RootState) => state.textReducer3
   );
 
@@ -46,7 +43,7 @@ export function Confirm() {
   };
 
   const deleteItem = async (id: any) => {
-    await deleteDoc(doc(db, "test", id))
+    await deleteDoc(doc(db, "Favourites", id))
       .then(() => {
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Deleted"));
@@ -64,23 +61,21 @@ export function Confirm() {
 
   useEffect(() => {}, []);
   return (
-    <AlertDialog open={booleanValue3} onOpenChange={setBoolean3}>
+    <AlertDialog open={booleanValue5} onOpenChange={setBoolean5}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{text3}</AlertDialogTitle>
+          <AlertDialogTitle>{text5}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel
-            onClick={() => dispatch(setBoolean3(false))}
-          >
+          <AlertDialogCancel onClick={() => dispatch(setBoolean5(false))}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              const id = localStorage.getItem("delete");
+              const id = localStorage.getItem("deleteFav");
               deleteItem(id);
               dispatch(setContinue(true));
-              dispatch(setBoolean3(false));
+              dispatch(setBoolean5(false));
             }}
           >
             Continue

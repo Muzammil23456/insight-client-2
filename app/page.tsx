@@ -1,31 +1,29 @@
 "use client";
 
-import EditForm from "@/components/EditForm/EditForm";
-import Form from "@/components/Form/Form";
+import EditForm from "@/components/EditForm1/EditData";
+import Form from "@/components/Form1/DataForm";
 import SignIn from "@/components/Signin/SignIn";
 import SignUp from "@/components/Signup/SignUp";
 import Stepper from "@/components/Stepper/Stepper";
-import Tablee from "@/components/Table/Data";
+import Data from "@/components/Table1/Data";
 import { useState } from "react";
 import "./style.css";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/GlobalRedux/store";
 import { AlertSuccess, AlertError } from "@/components/Alert/Alert";
-import { Confirm } from "@/components/Confirmation/Confirm";
-import Table4 from "@/components/Table4/Fav";
-import Form2 from "@/components/Form2/Form2";
-import EditForm2 from "@/components/EditForm2/EditForm2";
-import { Confirm3 } from "@/components/Confirmation3/Confirm3";
+import { DataDelete } from "@/components/Confirmation1/DataDelete";
+import Fav from "@/components/Table4/Fav";
+import Form2 from "@/components/Form2/MoviesForm";
+import EditForm2 from "@/components/EditForm2/EditMovies";
 import SelectFav from "@/components/SelectFav/SelectFav";
-import { Confirm4 } from "@/components/Comfirmation4/Confirm4";
-import EditForm4 from "@/components/EditForm4/EditForm4";
+import { DeleteFav } from "@/components/Confirmation3/DeleteFav";
+import EditForm4 from "@/components/EditForm3/EditFav";
 
 const Home = () => {
   // delaration
   const [form, setForm] = useState(false);
   const [form2, setForm2] = useState(false);
-  const [editForm2, setEditForm2] = useState<boolean>(false);
   const { text, booleanValue } = useSelector(
     (state: RootState) => state.textBoolean
   );
@@ -38,9 +36,8 @@ const Home = () => {
 
   return (
     <>
-      <Confirm />
-      <Confirm3 />
-      <Confirm4/>
+      <DataDelete />
+      <DeleteFav />
       {booleanValue && <AlertSuccess purpose={text} />}
       {booleanValue2 && <AlertError purpose={text2} />}
       <Tabs defaultValue="Data">
@@ -51,7 +48,7 @@ const Home = () => {
         <TabsContent value="Data">
           {form && <Form ondata={(data: boolean) => setForm(data)} />}
 
-          <Tablee
+          <Data
             ondata={(data: boolean) => setEditForm(data)}
             ondata2={(data: boolean) => setForm(data)}
           />
@@ -64,7 +61,7 @@ const Home = () => {
         </TabsContent>
         <TabsContent value="Fav">
           {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
-          <Table4
+          <Fav
             ondata={(data: boolean) => setEditForm4(data)}
             ondata2={(data: boolean) => setForm2(data)}
           />

@@ -53,7 +53,7 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 
-const Table3 = ({ ondata, ondata2 }: onDataType) => {
+const DividedData = ({ ondata, ondata2 }: onDataType) => {
 
   // States
 
@@ -271,7 +271,7 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
                           dispatch(
                             setText3("Are you Sure To Delete the record")
                           );
-                          localStorage.setItem("delete", `${arr.id}`);
+                          localStorage.setItem("deleteData", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -314,7 +314,7 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit",
+                            "editData",
                             JSON.stringify([arr.id, arr.Name])
                           );
                           ondata(true);
@@ -355,4 +355,4 @@ const Table3 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Table3;
+export default DividedData;

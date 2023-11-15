@@ -1,4 +1,3 @@
-
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Check, XCircle } from "lucide-react"
 import './style.css'

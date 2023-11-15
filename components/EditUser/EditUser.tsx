@@ -38,7 +38,7 @@ type onDataType = {
 const EditUser = ({ ondata, ondata2 }: onDataType) => {
   const [editArr, setEditArr] = useState([]);
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("edit2") || "{}");
+  const data = JSON.parse(localStorage.getItem("editUsers") || "{}");
   const [select, setSelect] = useState(data[1]);
 
   const onSubmit = async (da: any) => {

@@ -39,7 +39,7 @@ type onDataType = {
   ondata2: (bool: boolean) => void;
 };
 
-const Table6 = ({ ondata, ondata2 }: onDataType) => {
+const Movies = ({ ondata, ondata2 }: onDataType) => {
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
 
@@ -286,4 +286,4 @@ const Table6 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Table6;
+export default Movies;

@@ -41,7 +41,7 @@ type onDataType = {
 const EditForm = ({ ondata, ondata2 } : onDataType) => {
   const [editArr, setEditArr] = useState([]);
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("edit") || '{}');
+  const data = JSON.parse(localStorage.getItem("editData") || '{}');
 
   const onSubmit = async (da: any) => {
     setOpen(false);

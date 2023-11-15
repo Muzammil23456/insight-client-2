@@ -45,7 +45,7 @@ type onDataType = {
   ondata: (bool: boolean) => void;
   ondata2: (bool: boolean) => void;
 };
-const Table5 = ({ ondata, ondata2 }: onDataType) => {
+const DividedFav = ({ ondata, ondata2 }: onDataType) => {
 
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
@@ -209,7 +209,7 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                           dispatch(
                             setText5("Are you Sure To Delete the record")
                           );
-                          localStorage.setItem("delete5", `${arr.id}`);
+                          localStorage.setItem("deleteFav", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -259,7 +259,7 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit5",
+                            "editFav",
                             JSON.stringify([arr.Movie.Name, arr.Series.Name,arr.id])
                           );
                           ondata(true);
@@ -307,4 +307,4 @@ const Table5 = ({ ondata, ondata2 }: onDataType) => {
   );
 };
 
-export default Table5;
+export default DividedFav;

@@ -37,7 +37,7 @@ type TableData = {
 type onDataType = {
   ondata: (bool: boolean) => void;
 };
-const Table2 = ({ ondata }: onDataType) => {
+const Users = ({ ondata }: onDataType) => {
 
   const [filter, setFilter] = useState("updated");
   const dispatch = useDispatch();
@@ -125,8 +125,7 @@ const Table2 = ({ ondata }: onDataType) => {
                         onClick={() => {
                           dispatch(setBoolean4(true));
                           dispatch(setText4("Are you Sure To Delete the user"));
-                          localStorage.setItem("delete2", `${arr.id}`);
-                          localStorage.setItem("delete3", `${arr.uid}`);
+                          localStorage.setItem("deleteUsers", `${arr.id}`);
                         }}
                         className="btn-r"
                       >
@@ -171,7 +170,7 @@ const Table2 = ({ ondata }: onDataType) => {
                         }
                         onClick={() => {
                           localStorage.setItem(
-                            "edit2",
+                            "editUsers",
                             JSON.stringify([arr.id, arr.role])
                           );
                           ondata(true);
@@ -218,4 +217,4 @@ const Table2 = ({ ondata }: onDataType) => {
   );
 };
 
-export default Table2;
+export default Users;

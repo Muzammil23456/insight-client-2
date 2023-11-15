@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,10 +11,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import "./style.css";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setBoolean4,
+  setBoolean3,
   setContinue,
 } from "../../app/GlobalRedux/Features/confirm/confirmSlice";
 import {
@@ -29,9 +28,8 @@ import { deleteDoc, doc } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { RootState } from "@/app/GlobalRedux/store";
 
-export function Confirm2() {
-  const [open, setOpen] = useState(false);
-  const { text4, booleanValue4 } = useSelector(
+export function DataDelete() {
+  const { text3, booleanValue3 } = useSelector(
     (state: RootState) => state.textReducer3
   );
 
@@ -48,8 +46,7 @@ export function Confirm2() {
   };
 
   const deleteItem = async (id: any) => {
-    console.log(id);
-    await deleteDoc(doc(db, "user", id))
+    await deleteDoc(doc(db, "test", id))
       .then(() => {
         dispatch(setBoolean(true));
         dispatch(setText("Successfully Deleted"));
@@ -57,7 +54,6 @@ export function Confirm2() {
         dispatch(setContinue(false));
       })
       .catch((error) => {
-        alert("f");
         const errorMessage = error.message;
         dispatch(setBoolean2(true));
         dispatch(setText2(errorMessage));
@@ -68,21 +64,21 @@ export function Confirm2() {
 
   useEffect(() => {}, []);
   return (
-    <AlertDialog open={booleanValue4} onOpenChange={setBoolean4}>
+    <AlertDialog open={booleanValue3} onOpenChange={setBoolean3}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{text4}</AlertDialogTitle>
+          <AlertDialogTitle>{text3}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => dispatch(setBoolean4(false))}>
+          <AlertDialogCancel onClick={() => dispatch(setBoolean3(false))}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              const id = localStorage.getItem("delete2");
+              const id = localStorage.getItem("deleteData");
               deleteItem(id);
               dispatch(setContinue(true));
-              dispatch(setBoolean4(false));
+              dispatch(setBoolean3(false));
             }}
           >
             Continue
