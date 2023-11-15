@@ -142,7 +142,7 @@ const SignIn = () => {
                   </button>
                 )}
                 {!loading && (
-                  <button type="submit" className="btn">
+                  <button type="submit" className="signIn">
                     Sign In
                   </button>
                 )}
