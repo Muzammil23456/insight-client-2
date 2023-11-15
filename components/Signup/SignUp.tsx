@@ -218,7 +218,7 @@ const SignUp = () => {
                 {loading && (
                   <button
                   type="submit"
-                  className="flex justify-center disabled:p-1 btn"
+                  className="flex justify-center disabled:p-1 signUp"
                   disabled={loading}
                 >
                   <img
