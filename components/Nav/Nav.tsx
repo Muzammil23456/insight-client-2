@@ -136,7 +136,7 @@ const Nav = () => {
           <>
             <button
               onClick={() => dispatch(setSignIn(true))}
-              className="btn-in"
+              className="btn-signIn"
             >
               <span>Sign In</span>
             </button>
