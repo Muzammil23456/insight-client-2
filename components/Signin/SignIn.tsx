@@ -106,7 +106,6 @@ const SignIn = () => {
                 <input
                   className="input"
                   type="email"
-                  autoComplete="off"
                   {...register("Email")}
                   placeholder="Email"
                 />

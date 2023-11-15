@@ -202,7 +202,6 @@ const SignUp = () => {
                   <input
                     className="input "
                     type={showPassword2 ? "text" : "password"}
-                    autoComplete="off"
                     {...register("Confirm_Password")}
                     placeholder="Confirm Password"
                   />
