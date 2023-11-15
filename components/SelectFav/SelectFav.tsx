@@ -111,7 +111,7 @@ const SelectFav = ({ ondata }: onDataType) => {
             ))}
           </SelectContent>
         </Select>
-        <button type="submit" className="btn">
+        <button type="submit" className="Btn">
           Submit
         </button>
       </form>

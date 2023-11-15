@@ -87,12 +87,12 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
     });
   };
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
+    <AlertDialog  open={open} onOpenChange={setOpen}>
+      <AlertDialogContent className="gap-0">
         <AlertDialogHeader>
           <div className="my-10 sm:my-5">
             <form
-              className="flex form  gap-3 flex-col items-center"
+              className="flex editform gap-2 flex-col items-center"
               onSubmit={onSubmit}
             >
               <Select
@@ -101,7 +101,7 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
                 }}
                 defaultValue={selectMovie}
               >
-                <SelectTrigger className="w-[230px]">
+                <SelectTrigger className="sm:w-[230px] w-full">
                   <SelectValue placeholder="Movies" />
                 </SelectTrigger>
                 <SelectContent>
@@ -118,7 +118,7 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
                 }}
                 defaultValue={selectSeries}
               >
-                <SelectTrigger className="w-[230px]">
+                <SelectTrigger className="sm:w-[230px] w-full">
                   <SelectValue placeholder="Series" />
                 </SelectTrigger>
                 <SelectContent>
@@ -129,7 +129,7 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
                   ))}
                 </SelectContent>
               </Select>
-              <button type="submit" className="btn">
+              <button type="submit" className="EditBtn">
                 Submit
               </button>
             </form>

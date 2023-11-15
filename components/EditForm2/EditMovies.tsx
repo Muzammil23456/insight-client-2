@@ -133,11 +133,11 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
         <AlertDialogHeader>
           <>
             <form
-              className="flex form justify-center my-5 text-center "
+              className="flex editform justify-center my-auto text-center "
               onSubmit={handleSubmit(onSubmit)}
             >
               {fields.map((field, index: number) => (
-                <div key={field.id}>
+                <div key={field.id} className="w-full">
                   <div className="mb-2">
                     <input
                       className="inputs "
@@ -147,12 +147,12 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
                     />
                     {/* <span className="error ">{showError(index)}</span> */}
                   </div>
-                  <Popover>
+                  <Popover >
                     <PopoverTrigger asChild>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[280px] justify-start text-left font-normal",
+                          "sm:w-[280px] w-full justify-start text-left font-normal",
                           !date && "text-muted-foreground"
                         )}
                       >
@@ -176,11 +176,9 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
                   </Popover>
                 </div>
               ))}
-              <div>
-                <button type="submit" className="btn">
-                  Submit
-                </button>
-              </div>
+              <button type="submit" className="EditBtn">
+                Submit
+              </button>
             </form>
           </>
         </AlertDialogHeader>

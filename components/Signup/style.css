@@ -1,5 +1,5 @@
-.form{
-    @apply flex flex-col gap-2 items-center 
+.formSignUp{
+    @apply flex flex-col gap-1 items-center 
 }
 .input{
     @apply border-solid border-[2px] border-gray-500 p-2 rounded sm:w-[55%] w-full 

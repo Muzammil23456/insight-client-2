@@ -131,12 +131,12 @@ const Form = ({ ondata }: onDataType) => {
       <div className="flex flex-row gap-2">
         <button
           type="button"
-          className="btn"
+          className="Btn"
           onClick={() => append({ Name: "" })}
         >
           Add
         </button>
-        <button type="submit" className="btn">
+        <button type="submit" className="Btn">
           Submit
         </button>
       </div>

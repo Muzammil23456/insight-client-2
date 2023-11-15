@@ -1,10 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import "./style.css";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { db } from "../../modules/filebase";
 import {
   collection,
@@ -29,7 +25,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
 type onDataType = {
   ondata: boolean;
   ondata2: (bool: boolean) => void;
@@ -49,7 +44,6 @@ const EditUser = ({ ondata, ondata2 }: onDataType) => {
       role: select,
     });
   };
-
 
   useEffect(() => {
     setOpen(ondata);
@@ -71,22 +65,24 @@ const EditUser = ({ ondata, ondata2 }: onDataType) => {
         <AlertDialogHeader>
           <>
             <form
-              className="flex form justify-center my-auto text-center"
+              className="flex editform justify-center my-auto text-center"
               onSubmit={onSubmit}
             >
-              <div>
-                <Select onValueChange={(e)=>{setSelect(e)}} defaultValue={select}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Theme" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="user">User</SelectItem>
-                  </SelectContent>
-                </Select>
-               
-              </div>
-              <button type="submit" className="btn">
+              <Select
+                onValueChange={(e) => {
+                  setSelect(e);
+                }}
+                defaultValue={select}
+              >
+                <SelectTrigger className="sm:w-[180px] w-full">
+                  <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Admin">Admin</SelectItem>
+                  <SelectItem value="user">User</SelectItem>
+                </SelectContent>
+              </Select>
+              <button type="submit" className="EditBtn">
                 Update
               </button>
             </form>

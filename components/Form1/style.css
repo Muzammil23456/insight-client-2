@@ -2,10 +2,10 @@
     @apply flex flex-col gap-2 items-center 
 }
 .inputs{
-    @apply border-solid border-[2px] border-gray-500 p-2 rounded w-full
+    @apply border-solid border-[2px] border-gray-500 p-2 rounded sm:w-[200px] w-full 
 }
-.btn{
-    @apply border-solid border-[3px]  border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-32 w-28 sm:text-base text-sm text-center font-semibold text-white 
+.Btn{
+    @apply border-solid border-[3px]  border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 w-24 sm:text-base text-sm text-center font-semibold text-white 
 }
 .coml{
     color: #b335ae;

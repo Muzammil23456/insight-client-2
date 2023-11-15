@@ -101,7 +101,7 @@ const SignIn = () => {
             <>
               <form
                 onSubmit={handleSubmit(onsubmit)}
-                className="flex form justify-center pt-6"
+                className="flex formSignIn justify-center pt-6"
               >
                 <input
                   className="input"

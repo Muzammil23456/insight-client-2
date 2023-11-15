@@ -34,14 +34,14 @@ const schema = z.object({
 });
 
 type onDataType = {
-  ondata: boolean
-  ondata2: (bool: boolean)=>void
-}
+  ondata: boolean;
+  ondata2: (bool: boolean) => void;
+};
 
-const EditForm = ({ ondata, ondata2 } : onDataType) => {
+const EditForm = ({ ondata, ondata2 }: onDataType) => {
   const [editArr, setEditArr] = useState([]);
   const [open, setOpen] = useState(false);
-  const data = JSON.parse(localStorage.getItem("editData") || '{}');
+  const data = JSON.parse(localStorage.getItem("editData") || "{}");
 
   const onSubmit = async (da: any) => {
     setOpen(false);
@@ -96,24 +96,22 @@ const EditForm = ({ ondata, ondata2 } : onDataType) => {
         <AlertDialogHeader>
           <>
             <form
-              className="flex form justify-center my-auto text-center"
+              className="flex editform justify-center my-auto text-center"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <div>
-                <input
-                  className="inputs-edit"
-                  type="text"
-                  placeholder="Name"
-                  {...register(`dynamicFields.0.Name`)}
-                />
-                {errors && (
-                  <span className="error ">
-                    {/* {errors?.dynamicFields?.at(0)?.Name?.message} */}
-                    {showError(0)}
-                  </span>
-                )}
-              </div>
-              <button type="submit" className="btn">
+              <input
+                className="inputs-edit"
+                type="text"
+                placeholder="Name"
+                {...register(`dynamicFields.0.Name`)}
+              />
+              {errors && (
+                <span className="error ">
+                  {/* {errors?.dynamicFields?.at(0)?.Name?.message} */}
+                  {showError(0)}
+                </span>
+              )}
+              <button type="submit" className="EditBtn">
                 Edit
               </button>
             </form>

@@ -137,7 +137,7 @@ const Form3 = ({ ondata }: onDataType) => {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-[280px] justify-start text-left font-normal",
+                    "sm:w-[200px] w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -163,7 +163,7 @@ const Form3 = ({ ondata }: onDataType) => {
         </>
       ))}
       <div >
-        <button type="submit" className="btn">
+        <button type="submit" className="Btn">
           Submit
         </button>
       </div>
