@@ -57,7 +57,7 @@ const page = () => {
           <DeleteSeries />
           <h1 className="text-3xl mb-7 font-bold ">Admin Panel</h1>
           <Profile />
-          <Tabs className="mt-5" defaultValue="User">
+          <Tabs className="mt-5" defaultValue="Data">
             <TabsList className="w-full sm:w-[300px] ">
               <TabsTrigger className="w-[20%] sm:w-1/2" value="User">
                 User

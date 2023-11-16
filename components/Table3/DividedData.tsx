@@ -54,7 +54,6 @@ type onDataType = {
 };
 
 const DividedData = ({ ondata, ondata2 }: onDataType) => {
-
   // States
 
   const dispatch = useDispatch();
@@ -73,7 +72,10 @@ const DividedData = ({ ondata, ondata2 }: onDataType) => {
   // Get Data from database
   const current = auth.currentUser?.email;
   const getdata = (): Promise<TableData> => {
-    const q = query(collection(db, "test"), where("createdBy", "==", current || ''));
+    const q = query(
+      collection(db, "test"),
+      where("createdBy", "==", current || "")
+    );
     const unsub: any = onSnapshot(q, (querySnapshot) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
@@ -114,7 +116,7 @@ const DividedData = ({ ondata, ondata2 }: onDataType) => {
   };
 
   const ttt = () => {
-    const t = data3.forEach((e:edit) => {
+    const t = data3.forEach((e: edit) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role === "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
@@ -248,9 +250,7 @@ const DividedData = ({ ondata, ondata2 }: onDataType) => {
             data2?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                <p className="truncate w-[120px]">
-                  {arr.id}
-                  </p>
+                  <p className="truncate w-[120px]">{arr.id}</p>
                 </TableCell>
                 <TableCell>{arr.Name}</TableCell>
                 <TableCell>{arr.createdBy}</TableCell>

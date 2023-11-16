@@ -66,6 +66,7 @@ const SignIn = () => {
     setLoading(true);
     signInWithEmailAndPassword(auth, data.Email, data.Password)
       .then(() => {
+        localStorage.setItem('profile',JSON.stringify([auth.currentUser?.displayName,auth.currentUser?.email]));
         setOpen(false);
         dispatch(setSignIn(false));
         dispatch(setBoolean(true));
