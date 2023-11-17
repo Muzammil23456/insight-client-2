@@ -25,7 +25,7 @@ import {
   setText2,
   setBoolean2,
 } from "../../app/GlobalRedux/Features/alert2/alert2Slice";
-import { auth11 } from "@/modules/fileauth";
+import { auth, auth11 } from "@/modules/fileauth";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -65,7 +65,7 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const auth = getAuth();
+  // const auth = getAuth();
   const searchParams = useSearchParams();
   if (searchParams.get("oobCode")) {
     setOobCode(`${searchParams.get("oobCode")}`);
@@ -109,15 +109,15 @@ const SignUp = () => {
     handleCodeInApp: true,
   };
 
-  const u = auth?.currentUser 
   //Sign Up
   const onsubmit = (data: any) => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
-        // updateProfile(u, { displayName: data.Name });
+        updateProfile(auth?.currentUser, { displayName: data.Name });
         addDoc(collection(db, "user"), {
           role: "user",
+          email:res.user.email,
           uid: res.user.uid,
         });
         sendEmailVerification(res.user, actionCodeSetting).then(() => {

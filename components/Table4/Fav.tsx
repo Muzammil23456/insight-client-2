@@ -30,18 +30,12 @@ import Filter from "../Filter/Filter";
 import { RootState } from "@/app/GlobalRedux/store";
 import { auth11 } from "@/modules/fileauth";
 
-type movies = [{ Name: string }];
-
-type series = [{ Name: string }];
-
-type fav = [{ id: string; Movie: { Name: string }; Series: { Name: string } }];
-
 type TableData = {
   uid: string;
   username: string;
   id: string;
-  Movie: { Name: string };
-  Series: { Name: string };
+  Movie: [];
+  Series: [];
 };
 
 type onDataType = {
@@ -52,9 +46,6 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBloolean2);
   const [Fav, setFav] = useState([]);
-  const [fav2, setFav2] = useState<fav>();
-  const [movies, setMovies] = useState<movies>();
-  const [series, setSeries] = useState<series>();
   const [count, setCount] = useState(0);
   const [role, setRole] = useState("");
   const [re, setRe] = useState(true);
@@ -87,68 +78,14 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
         testarr2.push({ id: doc.id, ...doc.data() });
       });
       setFav(testarr2);
-      setFav2(testarr2);
       setLoading(false);
     });
     return unsub2;
   };
-  const getSeries = () => {
-    const q = query(collection(db, "Series"));
-    const unsub2: any = onSnapshot(q, (querySnapshot) => {
-      let testarr2: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr2.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
-      setSeries(testarr2);
-      setLoading(false);
-    });
-    return unsub2;
-  };
-  const getMovies = () => {
-    const q = query(collection(db, "Movies"));
-    const unsub2: any = onSnapshot(q, (querySnapshot) => {
-      let testarr2: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr2.push({
-          id: doc.id,
-          ...doc.data(),
-          // Release: doc.data()["Release"].toMillis()
-        });
-      });
-      setMovies(testarr2);
-      setLoading(false);
-    });
-    return unsub2;
-  };
-
-  const compare = async () => {
-    // console.log("movies", movies?.at(0)?.Name);
-    // console.log("series", series?.at(0)?.Name);
-    // console.log("fav", fav2?.at(0));
-    for (let i = 0; i < fav2?.length; i++) {
-      for (let index = 0; index < series?.length; index++) {
-        if ((series?.at(index)?.Name != fav2?.at(i)?.Series?.Name)) {
-          // const docRef = doc(db, "Favourites", `${fav2?.at(i)?.id}`);
-          // await updateDoc(docRef, {
-          //   Series: { Name: "N/A" },
-          //   updated: serverTimestamp(),
-          // });
-          console.log(i, "not found");
-          continue;
-        }
-      }
-    }
-  };
-
+ 
   useEffect(() => {
     getFav();
-    getMovies();
-    getSeries();
   }, []);
-  compare();
 
   return (
     <>
@@ -249,10 +186,12 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
                   <p className="truncate w-[120px]">{arr.uid}</p>
                 </TableCell>
                 <TableCell>{arr.username}</TableCell>
-                <TableCell>{arr.Movie.Name ? arr.Movie.Name : "N/A"}</TableCell>
-                <TableCell>
-                  {arr.Series.Name ? arr.Series.Name : "N/A"}
-                </TableCell>
+                {arr.Movie.map((a, i) => (
+                  <TableCell key={i}>{a ? a : "N/A"}</TableCell>
+                ))}
+                {arr.Series.map((a, i) => (
+                  <TableCell key={i}>{a ? a : "N/A"}</TableCell>
+                ))}
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -322,8 +261,8 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
                           localStorage.setItem(
                             "editFav",
                             JSON.stringify([
-                              arr.Movie.Name,
-                              arr.Series.Name,
+                              arr.Movie,
+                              arr.Series,
                               arr.id,
                             ])
                           );

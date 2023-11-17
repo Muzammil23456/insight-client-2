@@ -205,7 +205,7 @@ const Movies = ({ ondata, ondata2 }: onDataType) => {
                           dispatch(
                             setText6("Are you Sure To Delete this movie")
                           );
-                          localStorage.setItem("deleteMovies", `${arr.id}`);
+                          localStorage.setItem("deleteMovies", JSON.stringify([arr.id,arr.Name]));
                         }}
                         className="btn-r"
                       >

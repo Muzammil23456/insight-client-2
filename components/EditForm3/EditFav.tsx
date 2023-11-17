@@ -11,6 +11,7 @@ import {
   updateDoc,
   doc,
   serverTimestamp,
+  arrayUnion
 } from "@firebase/firestore";
 import {
   Select,
@@ -40,8 +41,8 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
   const da = JSON.parse(localStorage.getItem("editFav") || "{}");
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
-  const [selectMovie, setSelectMovie] = useState(da[0]);
-  const [selectSeries, setSelectSeries] = useState(da[1]);
+  const [selectMovie, setSelectMovie] = useState(da[0][0]);
+  const [selectSeries, setSelectSeries] = useState(da[1][0]);
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -81,8 +82,8 @@ const EditForm4 = ({ ondata, ondata2 }: onDataType) => {
     ondata2(false);
     const docRef = doc(db, "Favourites", `${da[2]}`);
     await updateDoc(docRef, {
-      Movie: { Name: selectMovie },
-      Series: { Name: selectSeries },
+      Movie:  arrayUnion(selectMovie) ,
+      Series: arrayUnion(selectSeries),
       updated: serverTimestamp(),
     });
   };

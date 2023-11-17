@@ -35,8 +35,8 @@ import { auth11 } from "@/modules/fileauth";
 type TableData = {
   id: string;
   uid: string;
-  Movie: {Name: string}
-  Series: {Name: string}
+  Movie: [];
+  Series: [];
   username: string;
 
 };
@@ -190,8 +190,12 @@ const DividedFav = ({ ondata, ondata2 }: onDataType) => {
                   <p className="truncate w-[120px]">{arr.uid}</p>
                 </TableCell>
                 <TableCell>{arr.username}</TableCell>
-                <TableCell>{arr.Movie.Name}</TableCell>
-                <TableCell>{arr.Series.Name}</TableCell>
+                {arr.Movie.map((a, i) => (
+                  <TableCell key={i}>{a}</TableCell>
+                ))}
+                {arr.Series.map((a, i) => (
+                  <TableCell key={i}>{a }</TableCell>
+                ))}
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -260,7 +264,7 @@ const DividedFav = ({ ondata, ondata2 }: onDataType) => {
                         onClick={() => {
                           localStorage.setItem(
                             "editFav",
-                            JSON.stringify([arr.Movie.Name, arr.Series.Name,arr.id])
+                            JSON.stringify([arr.Movie, arr.Series,arr.id])
                           );
                           ondata(true);
                         }}

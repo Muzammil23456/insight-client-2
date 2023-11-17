@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { collection, addDoc } from "@firebase/firestore";
+import { collection, addDoc, serverTimestamp,arrayUnion } from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { query, onSnapshot } from "@firebase/firestore";
 import { setBool2 } from "@/app/GlobalRedux/Features/new/newSlice";
@@ -15,9 +15,9 @@ import React, { useEffect, useState } from "react";
 import { auth11 } from "@/modules/fileauth";
 import { useDispatch } from "react-redux";
 
-
 type TableData = {
-  Name: string
+  Name: string;
+  id: string
 };
 
 type onDataType = {
@@ -58,11 +58,13 @@ const SelectFav = ({ ondata }: onDataType) => {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     addDoc(collection(db, "Favourites"), {
-      Movie: { Name: selectMovie },
-      Series: { Name: selectSeries },
+      Movie:  arrayUnion(selectMovie) ,
+      Series: arrayUnion(selectSeries),
       uid: auth11.currentUser?.uid,
       username: auth11.currentUser?.displayName,
+      created: serverTimestamp()
     }).then(() => {
+      console.log(selectSeries)
       dispatch(setBool2(false));
       ondata(false);
     });
@@ -105,7 +107,7 @@ const SelectFav = ({ ondata }: onDataType) => {
           </SelectTrigger>
           <SelectContent>
             {data3.map((series: TableData, i) => (
-              <SelectItem key={i} value={series.Name}>
+              <SelectItem key={i} value={series.Name} >
                 <p className="overflow-hidden">{series.Name}</p>
               </SelectItem>
             ))}

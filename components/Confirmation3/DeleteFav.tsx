@@ -57,6 +57,7 @@ export function DeleteFav() {
         action();
         dispatch(setContinue(false));
       });
+      
   };
 
   useEffect(() => {}, []);

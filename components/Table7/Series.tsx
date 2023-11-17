@@ -203,7 +203,7 @@ const Series = ({ ondata, ondata2 }: onDataType) => {
                           dispatch(
                             setText7("Are you Sure To Delete this Series")
                           );
-                          localStorage.setItem("deleteSeries", `${arr.id}`);
+                          localStorage.setItem("deleteSeries", JSON.stringify([arr.id,arr.Name]));
                         }}
                         className="btn-r"
                       >
