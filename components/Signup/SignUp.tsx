@@ -114,7 +114,7 @@ const SignUp = () => {
     setLoading(true);
     createUserWithEmailAndPassword(auth, data.Email, data.Password)
       .then((res) => {
-        updateProfile(auth?.currentUser, { displayName: data.Name });
+        updateProfile((auth?.currentUser as any), { displayName: data.Name });
         addDoc(collection(db, "user"), {
           role: "user",
           email:res.user.email,

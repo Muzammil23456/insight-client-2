@@ -41,6 +41,8 @@ const Nav = () => {
   const [use, setUse] = useState<object | null>(null);
   const auth = getAuth();
   const [role, setRole] = useState("");
+  const [avatar, setAvatar] = useState("");
+
   const [re, setRe] = useState(true);
   const dispatch = useDispatch();
   const [data3, setData3] = useState([]);
@@ -102,6 +104,8 @@ const Nav = () => {
     ttt();
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        const name = auth11.currentUser?.displayName?.substring(0, 3)
+        setAvatar(name as any)
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
@@ -129,6 +133,7 @@ const Nav = () => {
       });
   };
 
+ 
   return (
     <>
       <div className="flex justify-end gap-2 py-3">
@@ -154,7 +159,7 @@ const Nav = () => {
               <DropdownMenuTrigger>
                 <Avatar>
                   <AvatarFallback className="uppercase text-sm">
-                    {auth11.currentUser?.displayName?.substring(0, 3)}
+                    {avatar}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>

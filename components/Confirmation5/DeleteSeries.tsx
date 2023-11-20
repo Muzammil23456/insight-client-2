@@ -64,7 +64,6 @@ export function DeleteSeries() {
   };
 
   const deleteItem = async (id: any) => {
-    // Get a new write batch
     const batch = writeBatch(db);
     const i = Fav.filter((e:any) => e.Series[0] == id[1]);
     await deleteDoc(doc(db, "Series", id[0]))

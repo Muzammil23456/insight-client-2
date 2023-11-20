@@ -16,6 +16,7 @@ import {
   doc,
   serverTimestamp,
   Timestamp,
+  writeBatch,
 } from "@firebase/firestore";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -58,6 +59,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
 
   const [open, setOpen] = useState(false);
   const data = JSON.parse(localStorage.getItem("editMovies") || "{}");
+  const [Fav, setFav] = useState([]);
   const [date, setDate] = useState<Date>();
   const {
     register,
@@ -82,9 +84,22 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
     name: "dynamicFields",
   });
 
+  const getFav = () => {
+    const q = query(collection(db, "Favourites"));
+    const unsub2: any = onSnapshot(q, (querySnapshot) => {
+      let testarr2: any = [];
+      querySnapshot.forEach((doc) => {
+        testarr2.push({ id: doc.id, ...doc.data() });
+      });
+      setFav(testarr2);
+    });
+    return unsub2;
+  };
   // Add Data into database
 
   const onSubmit = async (da: any) => {
+    const batch = writeBatch(db);
+    const i = Fav.filter((e: any) => e.Movie[0] == data[0]);
     setOpen(false);
     ondata2(false);
     if (date) {
@@ -94,11 +109,21 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
         Name: da.dynamicFields[0].Name,
         Release: Timestamp.fromDate(date),
         updated: serverTimestamp(),
-      });
+      }).then(()=>{
+        console.log(i)
+        i.forEach((e: any, i) => {
+          const docRef = doc(db, "Favourites", e.id);
+          batch.update(docRef, {
+            Movie: [da.dynamicFields[0].Name],
+            updated: serverTimestamp(),
+          })});
+          batch.commit();
+      })
     }
   };
 
   useEffect(() => {
+    getFav()
     const d = new Date(data[1]);
     setDate(d);
     setOpen(ondata);
@@ -107,7 +132,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
       let testarr: any = [];
       querySnapshot.forEach((doc) => {
         testarr.push({ ...doc.data(), id: doc.id });
-      });
+      })
       const d = testarr.filter((item: any) => item.id == data);
       // setEditArr(d);
     });
