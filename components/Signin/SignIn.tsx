@@ -105,25 +105,30 @@ const SignIn = () => {
                 className="flex formSignIn justify-center pt-6"
               >
                 <input
-                  className="input"
+                  className="input disabled:opacity-50"
                   type="email"
                   {...register("Email")}
                   placeholder="Email"
+                  disabled={loading}
                 />
                 {errors && (
                   <span className="error ">{errors?.Email?.message}</span>
                 )}
                 <div className="relative w-full text-center">
                   <input
-                    className="input"
+                    className="input disabled:opacity-50"
                     type={showPassword ? "text" : "password"}
                     autoComplete="off"
                     {...register("Password")}
                     placeholder="Password"
+                    disabled={loading}
                   />
-                  <span onClick={togglePasswordVisibility} className="show">
+                  {loading && <span onClick={togglePasswordVisibility} className="show opacity-50">
                     {showPassword ? "Hide" : "Show"}
-                  </span>
+                  </span>}
+                  {!loading && <span onClick={togglePasswordVisibility} className="show ">
+                    {showPassword ? "Hide" : "Show"}
+                  </span>}
                 </div>
                 {errors && (
                   <span className="error ">{errors?.Password?.message}</span>
@@ -134,8 +139,8 @@ const SignIn = () => {
                     className="flex justify-center disabled:p-1 signIn"
                     disabled={loading}
                   >
-                    <img
-                      className="animate-spin w-[22px] sm:w-[35px] text-center"
+                  <img
+                      className="animate-spin w-[22px] sm:w-[35px]  opacity-50 text-center"
                       src={loader.src}
                       alt="spinner-frame-8"
                     />

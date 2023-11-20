@@ -164,7 +164,8 @@ const SignUp = () => {
                 className="flex formSignUp justify-center pt-6"
               >
                 <input
-                  className="input"
+                  className="input disabled:opacity-50"
+                  disabled={loading}
                   type="text"
                   autoComplete="off"
                   {...register("Name")}
@@ -174,8 +175,9 @@ const SignUp = () => {
                   <span className="error ">{errors?.Name?.message}</span>
                 )}
                 <input
-                  className="input"
+                  className="input disabled:opacity-50"
                   type="email"
+                  disabled={loading}
                   autoComplete="off"
                   {...register("Email")}
                   placeholder="Email"
@@ -185,29 +187,37 @@ const SignUp = () => {
                 )}
                 <div className="relative w-full text-center">
                   <input
-                    className="input"
+                    className="input disabled:opacity-50"
                     type={showPassword ? "text" : "password"}
+                    disabled={loading}
                     autoComplete="off"
                     {...register("Password")}
                     placeholder="Password"
                   />
-                  <span onClick={togglePasswordVisibility} className="show">
+                  {loading && <span onClick={togglePasswordVisibility} className="show opacity-50">
                     {showPassword ? "Hide" : "Show"}
-                  </span>
+                  </span>}
+                  {!loading && <span onClick={togglePasswordVisibility} className="show ">
+                    {showPassword ? "Hide" : "Show"}
+                  </span>}
                 </div>
                 {errors && (
                   <span className="error ">{errors?.Password?.message}</span>
                 )}
                 <div className="relative w-full text-center">
                   <input
-                    className="input "
+                    className="disabled:opacity-50 input "
+                    disabled={loading}
                     type={showPassword2 ? "text" : "password"}
                     {...register("Confirm_Password")}
                     placeholder="Confirm Password"
                   />
-                  <span onClick={togglePasswordVisibility2} className="show">
-                    {showPassword2 ? "Hide" : "Show"}
-                  </span>
+                  {loading && <span onClick={togglePasswordVisibility} className="show opacity-50">
+                    {showPassword ? "Hide" : "Show"}
+                  </span>}
+                  {!loading && <span onClick={togglePasswordVisibility} className="show ">
+                    {showPassword ? "Hide" : "Show"}
+                  </span>}
                 </div>
                 {errors && (
                   <span className="error ">
