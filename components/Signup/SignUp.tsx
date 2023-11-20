@@ -105,7 +105,7 @@ const SignUp = () => {
   };
 
   const actionCodeSetting = {
-    url: "http://localhost:3000",
+    url: "https://insight-client-2.vercel.app",
     handleCodeInApp: true,
   };
 
