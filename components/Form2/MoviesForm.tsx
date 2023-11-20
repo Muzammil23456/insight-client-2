@@ -125,7 +125,7 @@ const Form2 = ({ ondata }: onDataType) => {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "sm:w-[200px] w-full justify-start text-left font-normal",
+                    "sm:w-[280px] w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
