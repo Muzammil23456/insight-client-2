@@ -103,7 +103,7 @@ const Form = ({ ondata }: onDataType) => {
       {fields.map((field, index: number) => (
         <div key={field.id}>
           <input
-            className="inputs"
+            className="input"
             type="text"
             placeholder="Name"
             {...register(`dynamicFields.${index}.Name`)}
