@@ -48,7 +48,6 @@ type onDataType = {
 };
 
 const Data = ({ ondata, ondata2 }: onDataType) => {
-
   // States
 
   const [filter, setFilter] = useState("updated");
@@ -94,7 +93,7 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
   };
 
   const ttt = () => {
-    const t = data3.forEach((e:edit) => {
+    const t = data3.forEach((e: edit) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
@@ -118,13 +117,13 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
     ttt();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool(false));
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
       } else {
-        ondata2(false)
+        ondata2(false);
         dispatch(setBool(false));
         setUse(null);
       }
@@ -199,13 +198,13 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
           type={"Filter"}
         />
       </div>
-      <Table >
+      <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="">Email</TableHead>
-            <TableHead className="text-right md:w-[150px]">Actions</TableHead>
+            <TableHead className="md:w-[25%]">ID</TableHead>
+            <TableHead className="md:w-[25%]">Name</TableHead>
+            <TableHead className="md:w-[25%]">Email</TableHead>
+            <TableHead className="text-right md:w-[25%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -240,10 +239,20 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
             data2?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  {arr.id}
+                  <p className="truncate w-[140px]" title={arr.id}>
+                    {arr.id}
+                  </p>
                 </TableCell>
-                <TableCell>{arr.Name}</TableCell>
-                <TableCell>{arr.createdBy}</TableCell>
+                <TableCell>
+                  <p className="truncate w-[150px]" title={arr.Name}>
+                    {arr.Name}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p className="truncate w-[150px]" title={arr.createdBy}>
+                    {arr.createdBy}
+                  </p>
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -288,7 +297,7 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                      {use === null ? (
+                        {use === null ? (
                           <p>First sign In</p>
                         ) : auth11.currentUser?.email === arr.createdBy ||
                           localStorage.getItem("curUser") === "admin" ? (

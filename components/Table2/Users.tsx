@@ -38,7 +38,6 @@ type onDataType = {
   ondata: (bool: boolean) => void;
 };
 const Users = ({ ondata }: onDataType) => {
-
   const [filter, setFilter] = useState("updated");
   const dispatch = useDispatch();
   const isBoolean = useSelector((state: any) => state.booleanValue.isBoolean);
@@ -71,10 +70,10 @@ const Users = ({ ondata }: onDataType) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">U-ID</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="">Role</TableHead>
-            <TableHead className="text-right md:w-[150px]">Actions</TableHead>
+            <TableHead className="md:w-[25%]">U-ID</TableHead>
+            <TableHead className="md:w-[25%]">Email</TableHead>
+            <TableHead className="md:w-[25%]">Role</TableHead>
+            <TableHead className="text-right md:w-[25%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -108,11 +107,16 @@ const Users = ({ ondata }: onDataType) => {
             data3?.length !== 0 &&
             data3?.map((arr: TableData, i) => (
               <TableRow key={i}>
-                <TableCell className="font-medium text-ellipsis">
-                  {arr.uid}
+                <TableCell
+                  className="font-medium text-ellipsis"
+                  title={arr.uid}
+                >
+                  <p className="truncate w-[140px]">{arr.uid}</p>
                 </TableCell>
-                <TableCell>{arr.email}</TableCell>
-                <TableCell>{arr.role}</TableCell>
+                <TableCell title={arr.email}>
+                  <p className="truncate w-[140px]">{arr.email}</p>
+                </TableCell>
+                <TableCell title={arr.role}>{arr.role}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>
@@ -152,9 +156,8 @@ const Users = ({ ondata }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {(localStorage.getItem("curUser") === "admin" && auth11.currentUser?.uid !== arr.uid && (
-                            <p>Delete</p>
-                          ))}
+                        {localStorage.getItem("curUser") === "admin" &&
+                          auth11.currentUser?.uid !== arr.uid && <p>Delete</p>}
                         {auth11.currentUser?.uid === arr.uid && (
                           <p>Not Allowed</p>
                         )}
@@ -198,10 +201,8 @@ const Users = ({ ondata }: onDataType) => {
                         </svg>
                       </TooltipTrigger>
                       <TooltipContent>
-                        {
-                          (localStorage.getItem("curUser") === "admin" && auth11.currentUser?.uid !== arr.uid &&  (
-                            <p>Edit</p>
-                          ))}
+                        {localStorage.getItem("curUser") === "admin" &&
+                          auth11.currentUser?.uid !== arr.uid && <p>Edit</p>}
                         {auth11.currentUser?.uid === arr.uid && (
                           <p>Not Allowed</p>
                         )}

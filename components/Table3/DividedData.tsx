@@ -212,10 +212,10 @@ const DividedData = ({ ondata, ondata2 }: onDataType) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead className="">Email</TableHead>
-            <TableHead className="text-right md:w-[150px]">Actions</TableHead>
+            <TableHead className="md:w-[25%]">ID</TableHead>
+            <TableHead className="md:w-[25%]">Name</TableHead>
+            <TableHead className="md:w-[25%]">Email</TableHead>
+            <TableHead className="text-right md:w-[25%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -250,10 +250,20 @@ const DividedData = ({ ondata, ondata2 }: onDataType) => {
             data2?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  <p className="truncate w-[120px]">{arr.id}</p>
+                  <p className="truncate w-[140px]" title={arr.id}>
+                    {arr.id}
+                  </p>
                 </TableCell>
-                <TableCell>{arr.Name}</TableCell>
-                <TableCell>{arr.createdBy}</TableCell>
+                <TableCell>
+                  <p className="truncate w-[150px]" title={arr.Name}>
+                    {arr.Name}
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p className="truncate w-[150px]" title={arr.createdBy}>
+                    {arr.createdBy}
+                  </p>
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">
                     <Tooltip>

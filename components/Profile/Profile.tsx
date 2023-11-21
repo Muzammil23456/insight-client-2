@@ -1,7 +1,7 @@
 import { auth } from "@/modules/fileauth";
 import React, { useEffect, useState } from "react";
 const Profile = () => {
-console.log(auth)  
+
   return (
     <>
       <div className="flex gap-2">

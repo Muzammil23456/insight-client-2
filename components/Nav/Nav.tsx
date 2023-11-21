@@ -105,7 +105,7 @@ const Nav = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const name = auth11.currentUser?.displayName?.substring(0, 3)
-        setAvatar(name as any)
+        setAvatar(name as string)
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
@@ -113,7 +113,7 @@ const Nav = () => {
         setUse(null);
       }
     });
-  }, [use, verfied, onAuthStateChanged]);
+  }, [use,onAuthStateChanged]);
 
   // Sign Out
   const signout = () => {

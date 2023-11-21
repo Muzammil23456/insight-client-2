@@ -148,11 +148,11 @@ const DividedFav = ({ ondata, ondata2 }: onDataType) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">UID</TableHead>
-            <TableHead>UserName</TableHead>
-            <TableHead>Movie</TableHead>
-            <TableHead className="">Series</TableHead>
-            <TableHead className="text-right md:w-[150px]">Actions</TableHead>
+          <TableHead className="md:w-[20%]">UID</TableHead>
+            <TableHead className="md:w-[20%]">UserName</TableHead>
+            <TableHead className="md:w-[20%]">Movie</TableHead>
+            <TableHead className="md:w-[20%]">Series</TableHead>
+            <TableHead className="text-right md:w-[20%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -187,14 +187,30 @@ const DividedFav = ({ ondata, ondata2 }: onDataType) => {
             Fav?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  <p className="truncate w-[120px]">{arr.uid}</p>
+                  <p className="truncate w-[140px]" title={arr.uid}>
+                    {arr.uid}
+                  </p>
                 </TableCell>
-                <TableCell>{arr.username}</TableCell>
+                <TableCell>
+                  {" "}
+                  <p className="truncate w-[140px]" title={arr.username}>
+                    {arr.username}
+                  </p>
+                </TableCell>
                 {arr.Movie.map((a, i) => (
-                  <TableCell key={i}>{a}</TableCell>
+                  <TableCell key={i}>
+                    {" "}
+                    <p className="truncate w-[140px]" title={a ? a : "N/A"}>
+                      {a ? a : "N/A"}
+                    </p>
+                  </TableCell>
                 ))}
                 {arr.Series.map((a, i) => (
-                  <TableCell key={i}>{a }</TableCell>
+                  <TableCell key={i}>
+                    <p className="truncate w-[140px]" title={a ? a : "N/A"}>
+                      {a ? a : "N/A"}
+                    </p>
+                  </TableCell>
                 ))}
                 <TableCell className="text-right">
                   <div className="flex flex-row gap-2 justify-end">

@@ -143,10 +143,10 @@ const Movies = ({ ondata, ondata2 }: onDataType) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="md:w-[130px]">ID</TableHead>
-            <TableHead>Movie</TableHead>
-            <TableHead>Release Date</TableHead>
-            <TableHead className="text-right md:w-[150px]">Actions</TableHead>
+            <TableHead className="md:w-[25%]">ID</TableHead>
+            <TableHead className="md:w-[25%]">Movie</TableHead>
+            <TableHead className="md:w-[25%]">Release Date</TableHead>
+            <TableHead className="text-right md:w-[25%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -181,10 +181,10 @@ const Movies = ({ ondata, ondata2 }: onDataType) => {
             Fav?.map((arr: TableData, i) => (
               <TableRow key={i}>
                 <TableCell className="font-medium text-ellipsis">
-                  <p className="truncate w-[120px]">{arr.id}</p>
+                  <p className="truncate w-[120px]" title={arr.id} >{arr.id}</p>
                 </TableCell>
                 <TableCell className="text-ellipsis">
-                  <p className=" whitespace-pre-wrap w-[130px]">{arr.Name}</p>
+                  <p className="truncate w-[120px]" title={arr.Name}>{arr.Name}</p>
                 </TableCell>
                 <TableCell>
                   {new Date(arr.Release.seconds * 1000).toLocaleDateString(
