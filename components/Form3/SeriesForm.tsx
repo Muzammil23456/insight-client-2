@@ -123,7 +123,7 @@ const Form3 = ({ ondata }: onDataType) => {
           <div key={field.id}>
             <div className="mb-2">
               <input
-                className="inputs "
+                className="input"
                 type="text"
                 placeholder="Series"
                 {...register(`dynamicFields.${index}.Name`)}
@@ -135,7 +135,7 @@ const Form3 = ({ ondata }: onDataType) => {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "sm:w-[200px] w-full justify-start text-left font-normal",
+                    "sm:w-[280px] w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
