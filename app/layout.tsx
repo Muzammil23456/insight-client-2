@@ -24,7 +24,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <title>Insight-client</title>
-      <body>
+      <body className="body">
         <Providers2>
           <div className="container mx-auto md:px-32 h-screen">
             <TooltipProvider>

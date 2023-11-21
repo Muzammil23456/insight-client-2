@@ -26,6 +26,9 @@ import { DeleteFav } from "@/components/Confirmation3/DeleteFav";
 import { DeleteMovies } from "@/components/Confirmation4/DeleteMovies";
 import { DeleteSeries } from "@/components/Confirmation5/DeleteSeries";
 import EditSeries from "@/components/EditForm4/EditSeries";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/GlobalRedux/store";
+import { AlertSuccess, AlertError } from "@/components/Alert/Alert";
 
 const page = () => {
   const [user, setUser] = useState("");
@@ -38,6 +41,12 @@ const page = () => {
   const [editForm4, setEditForm4] = useState<boolean>(false);
   const [form, setForm] = useState(false);
   const [table, setTable] = useState(true);
+  const { text, booleanValue } = useSelector(
+    (state: RootState) => state.textBoolean
+  );
+  const { text2, booleanValue2 } = useSelector(
+    (state: RootState) => state.textReducer2
+  );
   const curUser = localStorage.getItem("curUser");
 
   useEffect(() => {
@@ -55,6 +64,8 @@ const page = () => {
           <DeleteFav />
           <DeleteMovies />
           <DeleteSeries />
+          {booleanValue && <AlertSuccess purpose={text} />}
+          {booleanValue2 && <AlertError purpose={text2} />}
           <h1 className="text-3xl mb-7 font-bold ">Admin Panel</h1>
           <Profile />
           <Tabs className="mt-5" defaultValue="Data">

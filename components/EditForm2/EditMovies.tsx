@@ -165,7 +165,7 @@ const EditForm2 = ({ ondata, ondata2 }: onDataType) => {
                 <div key={field.id} className="w-full">
                   <div className="mb-2">
                     <input
-                      className="inputs "
+                      className="inputs-edit "
                       type="text"
                       placeholder="Movie"
                       {...register(`dynamicFields.${index}.Name`)}

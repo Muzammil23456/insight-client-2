@@ -8,7 +8,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Chrome, Edge, and Safari */
+  
 }
+
+
+  ::-webkit-scrollbar {
+		width: 10px;
+    height: 10px;
+	}
+  ::-webkit-scrollbar-thumb {
+		border-radius: 8px;
+		background: #932c90;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background:  rgb(179 53 174);
+  }
 
 @layer base {
   :root {

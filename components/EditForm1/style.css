@@ -2,7 +2,7 @@
     @apply flex flex-col gap-1 items-center 
 }
 .inputs-edit{
-    @apply border-solid border-[2px] border-gray-500 p-2 rounded sm:w-[55%] w-full 
+    @apply border-solid border-[2px] border-gray-500 p-2 rounded sm:w-[60%] w-full 
 }
 .EditBtn{
     @apply border-solid border-[3px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 w-full sm:text-base text-sm text-center font-semibold text-white 

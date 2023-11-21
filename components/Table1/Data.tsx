@@ -199,7 +199,7 @@ const Data = ({ ondata, ondata2 }: onDataType) => {
           type={"Filter"}
         />
       </div>
-      <Table>
+      <Table >
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[130px]">ID</TableHead>
