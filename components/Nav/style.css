@@ -2,5 +2,5 @@
     @apply border-solid border-[2px]  border-pink-910 bg-pink-910 hover:bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded w-20 h-[55%] sm:h-auto sm:text-base text-sm text-center font-semibold text-white 
 }
 .btn-signIn{
-    @apply border-solid border-[2px]  border-pink-910  hover:bg-pink-910 hover:border-pink-910 hover:transition-all hover:duration-300 hover:text-white p-[6px] rounded w-20 h-[55%] sm:h-auto sm:text-base text-sm text-center font-semibold text-gray-700 
+    @apply border-solid border-[2px]  border-pink-910  hover:bg-pink-910 hover:border-pink-910 hover:transition-all hover:duration-300 hover:text-white p-[6px] rounded w-20 h-[55%] sm:h-auto sm:text-base text-sm text-center font-semibold 
 }
