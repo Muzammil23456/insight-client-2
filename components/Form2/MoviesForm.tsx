@@ -113,7 +113,7 @@ const Form2 = ({ ondata }: onDataType) => {
           <div key={field.id}>
             <div className="mb-2">
               <input
-                className="inputs "
+                className="input"
                 type="text"
                 placeholder="Movie"
                 {...register(`dynamicFields.${index}.Name`)}
