@@ -57,7 +57,7 @@ const PeopleUMayKnow = () => {
 
   useEffect(() => {
     getuser();
-  }, [auth.currentUser]);
+  }, [data3]);
 
   return (
     <>
