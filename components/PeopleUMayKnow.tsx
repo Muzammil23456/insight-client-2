@@ -24,6 +24,7 @@ import { collection, query, onSnapshot } from "@firebase/firestore";
 import { db } from "@/modules/filebase";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
+import { auth } from "@/modules/fileauth";
 
 type cardData = {
     name: string;
@@ -47,7 +48,7 @@ const PeopleUMayKnow = () => {
           ...doc.data(),
         });
       });
-      setData3(testarr2);
+      setData3(testarr2?.filter((a)=>(a.uid!= auth?.currentUser?.uid)));
     });
     return unsub2;
   };
