@@ -48,7 +48,7 @@ const PeopleUMayKnow = () => {
           ...doc.data(),
         });
       });
-      setData3(testarr2?.filter((a)=>(a.uid!= auth?.currentUser?.uid)));
+      setData3(testarr2?.filter((a: any)=>(a.uid!= auth?.currentUser?.uid)));
     });
     return unsub2;
   };
