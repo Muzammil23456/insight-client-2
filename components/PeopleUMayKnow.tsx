@@ -50,7 +50,7 @@ const PeopleUMayKnow = () => {
           ...doc.data(),
         });
       });
-      setData3(testarr2.filter((a: any) => a.uid != auth.currentUser?.uid);
+      setData3(testarr2.filter((a: any) => (a.uid != auth.currentUser?.uid)))
     });
     return unsub2;
   };
@@ -68,7 +68,7 @@ const PeopleUMayKnow = () => {
               People You May Know
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <ScrollArea className=" sm:h-[13.5rem] h-[11.5rem] p-2 rounded-md border">
+              <ScrollArea type="auto" className=" sm:h-[13.5rem] h-[11.5rem] p-2 rounded-md border">
                 {data3.map((arr: cardData, i) => (
                   <Card key={i} className="m-2 flex justify-between ">
                     <CardHeader className="  p-4 sm:p-6  ">
