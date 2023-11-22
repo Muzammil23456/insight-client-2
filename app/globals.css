@@ -77,7 +77,7 @@
   background-color: #932c90;
 }
 
-:-webkit-scrollbar-button:horizontal:end:increment:hover {
+::-webkit-scrollbar-button:horizontal:end:increment:hover {
   background:
     linear-gradient(210deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
     linear-gradient(330deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
@@ -93,7 +93,7 @@
   background-color: #932c90;
 }
 
-:-webkit-scrollbar-button:horizontal:start:decrement:hover {
+::-webkit-scrollbar-button:horizontal:start:decrement:hover {
   background:
     linear-gradient(30deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
     linear-gradient(150deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
