@@ -35,6 +35,72 @@
   background-clip: content-box;
 }
 
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background:
+    linear-gradient(120deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(240deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(0deg, #c3c2c2 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: #932c90;
+  /* height: 15px; */
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement:hover {
+  background:
+    linear-gradient(120deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(240deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(0deg, #c3c2c2 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: rgb(179 53 174);
+  /* height: 15px; */
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+  background:
+    linear-gradient(300deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(60deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(180deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment:hover {
+  background:
+    linear-gradient(300deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(60deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(180deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(179 53 174);
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background:
+    linear-gradient(210deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(330deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(90deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+:-webkit-scrollbar-button:horizontal:end:increment:hover {
+  background:
+    linear-gradient(210deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(330deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(90deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(0, 0, 0);
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background:
+    linear-gradient(30deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(150deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(270deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+:-webkit-scrollbar-button:horizontal:start:decrement:hover {
+  background:
+    linear-gradient(30deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(150deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(270deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(179 53 174);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
