@@ -11,9 +11,11 @@ import loader from "@/public/loading.png";
 import { auth11 } from "@/modules/fileauth";
 import Providers2 from "./providers";
 import { ModeToggle } from "./ThemeSwitcher";
+import PeopleUMayKnow from "@/components/PeopleUMayKnow";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [firebase, setFirebase] = useState(false);
+  const [open,setOpen] = useState(false)
 
   useEffect(() => {
     if (auth11) {
@@ -42,6 +44,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 )}
                 {firebase && (
                   <>
+                     <PeopleUMayKnow />
                     <ModeToggle />
                     <Nav />
                     <main>{children}</main>

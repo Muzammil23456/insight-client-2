@@ -19,6 +19,7 @@ import EditForm2 from "@/components/EditForm2/EditMovies";
 import SelectFav from "@/components/SelectFav/SelectFav";
 import { DeleteFav } from "@/components/Confirmation3/DeleteFav";
 import EditForm4 from "@/components/EditForm3/EditFav";
+import PeopleUMayKnow from "@/components/PeopleUMayKnow";
 
 const Home = () => {
   // delaration

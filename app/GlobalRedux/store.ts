@@ -8,6 +8,7 @@ import textReducer from './Features/alert/alertSlice'
 import textReducer2 from './Features/alert2/alert2Slice'
 import textReducer3 from './Features/confirm/confirmSlice'
 import registerSlice from './Features/Register/registerSlice';
+import peopleUMayKnowSlice from './Features/PeopleUMayKnow/PeopleUMayKnowSlice'
 
  
 export const store = configureStore({
@@ -18,7 +19,8 @@ export const store = configureStore({
         textBoolean: textReducer,
         textReducer2: textReducer2,
         textReducer3: textReducer3,
-        register: registerSlice
+        register: registerSlice,
+        peopleUMayKnow: peopleUMayKnowSlice
     }
 })
 

@@ -31,20 +31,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { setPeopleUMayKnow } from "@/app/GlobalRedux/Features/PeopleUMayKnow/PeopleUMayKnowSlice";
 
 type user={
   uid:string;
   role:string
 }
 
+
 const Nav = () => {
   const [use, setUse] = useState<object | null>(null);
   const auth = getAuth();
+  const dispatch = useDispatch();
+
   const [role, setRole] = useState("");
   const [avatar, setAvatar] = useState("");
 
   const [re, setRe] = useState(true);
-  const dispatch = useDispatch();
   const [data3, setData3] = useState([]);
   const [verfied, setVerified] = useState(false);
 
@@ -182,6 +185,9 @@ const Nav = () => {
                     Profile
                   </DropdownMenuItem>
                 </Link>
+                <DropdownMenuItem onClick={()=>dispatch(setPeopleUMayKnow(true))}  className="cursor-pointer">
+                    People U May Know
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   className="block cursor-pointer"
                   onClick={signout}
