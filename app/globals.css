@@ -13,8 +13,9 @@
 
 }
 
-:root {
-  scroll-behavior: smooth;
+*, html {
+
+  scroll-behavior: smooth !important;
 }
 
 ::-webkit-scrollbar {
