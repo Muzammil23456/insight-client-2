@@ -35,11 +35,44 @@
   background-clip: content-box;
 }
 
- ::-webkit-scrollbar-button:vertical:start:decrement {
+ 
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+    ::-webkit-scrollbar-button:vertical:start:decrement {
   background:
-    linear-gradient(120deg, transparent 40%, rgba(0, 0, 0, 0) 41%),
-    linear-gradient(240deg, transparent 40%, rgba(0, 0, 0, 0) 41%),
-    linear-gradient(0deg, transarent 30%, rgba(0, 0, 0, 0) 31%);
+    linear-gradient(120deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(240deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(0deg, #c3c2c2 30%, rgba(0, 0, 0, 0) 31%);
   background-color: #932c90;
   height: 15px;
 }
@@ -100,38 +133,6 @@
     linear-gradient(270deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
   background-color: rgb(179 53 174);
 }
- 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
   }
 
   .dark {
@@ -162,6 +163,72 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    
+    ::-webkit-scrollbar-button:vertical:start:decrement {
+  background:
+    linear-gradient(120deg, transparent 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(240deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(0deg, #c3c2c2 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: #932c90;
+  height: 15px;
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement:hover {
+  background:
+    linear-gradient(120deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(240deg, #c3c2c2 40%, rgba(0, 0, 0, 0) 41%),
+    linear-gradient(0deg, #c3c2c2 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: rgb(179 53 174);
+  height: 15px;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+  background:
+    linear-gradient(300deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(60deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(180deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment:hover {
+  background:
+    linear-gradient(300deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(60deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(180deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(179 53 174);
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment {
+  background:
+    linear-gradient(210deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(330deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(90deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+::-webkit-scrollbar-button:horizontal:end:increment:hover {
+  background:
+    linear-gradient(210deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(330deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(90deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(179, 53, 174);
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement {
+  background:
+    linear-gradient(30deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(150deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(270deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: #932c90;
+}
+
+::-webkit-scrollbar-button:horizontal:start:decrement:hover {
+  background:
+    linear-gradient(30deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(150deg, #c3c2c2 40%, rgba(255, 255, 255, 0) 41%),
+    linear-gradient(270deg, #c3c2c2 30%, rgba(255, 255, 255, 0) 31%);
+  background-color: rgb(179 53 174);
+}
   }
 }
 
