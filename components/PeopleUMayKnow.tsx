@@ -101,11 +101,12 @@ const PeopleUMayKnow = () => {
 
   useEffect(() => {
     getuser();
+    getfriends();
     console.log("reRender");
   }, [reRender]);
 
   const requestSend = async (id: string, uid: string, role: string) => {
-    localStorage.setItem("Request", JSON.stringify([uid]));
+    setClicked(uid)
     const uid2 = auth.currentUser?.uid;
     const name = auth.currentUser?.displayName;
     const docRef = doc(db, "user", `${id}`);
