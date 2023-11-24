@@ -101,7 +101,6 @@ const PeopleUMayKnow = () => {
 
   useEffect(() => {
     getuser();
-    getfriends();
     console.log("reRender");
   }, [reRender]);
 

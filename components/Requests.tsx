@@ -58,6 +58,8 @@ type cardData = {
 const Requests = () => {
   const [data3, setData3] = useState([]);
   const [data2, setData2] = useState([]);
+  const [reRender, setReRender] = useState("");
+
   const [clicked, setClicked] = useState("");
   const [request, setRequest] = useState(false);
   const { friendRequests } = useSelector(
@@ -66,9 +68,28 @@ const Requests = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getuser();
-    console.log(data3);
+    onAuthStateChanged(auth, (user: any) => {
+      if (user) {
+        console.log(user.email);
+        setReRender(user?.email);
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        setReRender("");
+
+        console.log("user sign out");
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    getuser();
+    console.log('rerender2');
+  }, [reRender]);
 
   const getuser = () => {
     const q = query(collection(db, "user"));
