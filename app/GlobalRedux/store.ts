@@ -9,7 +9,7 @@ import textReducer2 from './Features/alert2/alert2Slice'
 import textReducer3 from './Features/confirm/confirmSlice'
 import registerSlice from './Features/Register/registerSlice';
 import peopleUMayKnowSlice from './Features/PeopleUMayKnow/PeopleUMayKnowSlice'
-
+import friendRequestsSlice from './Features/FriendRequests/FriendRequestsSlice'
  
 export const store = configureStore({
     reducer: {
@@ -20,7 +20,8 @@ export const store = configureStore({
         textReducer2: textReducer2,
         textReducer3: textReducer3,
         register: registerSlice,
-        peopleUMayKnow: peopleUMayKnowSlice
+        peopleUMayKnow: peopleUMayKnowSlice,
+        friendRequests: friendRequestsSlice
     }
 })
 

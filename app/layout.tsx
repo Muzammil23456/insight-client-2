@@ -12,6 +12,7 @@ import { auth11 } from "@/modules/fileauth";
 import Providers2 from "./providers";
 import { ModeToggle } from "./ThemeSwitcher";
 import PeopleUMayKnow from "@/components/PeopleUMayKnow";
+import Requests from "@/components/Requests";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [firebase, setFirebase] = useState(false);
@@ -44,6 +45,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 )}
                 {firebase && (
                   <>
+                   <Requests/>
                      <PeopleUMayKnow />
                     <ModeToggle />
                     <Nav />

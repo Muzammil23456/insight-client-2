@@ -4,7 +4,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import "./style.css";
 import Link from "next/link";
-import { useDispatch  } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setText,
   setBoolean,
@@ -32,12 +32,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { setPeopleUMayKnow } from "@/app/GlobalRedux/Features/PeopleUMayKnow/PeopleUMayKnowSlice";
+import { setFriendRequests } from "@/app/GlobalRedux/Features/FriendRequests/FriendRequestsSlice";
 
-type user={
-  uid:string;
-  role:string
-}
-
+type user = {
+  uid: string;
+  role: string;
+};
 
 const Nav = () => {
   const [use, setUse] = useState<object | null>(null);
@@ -87,7 +87,7 @@ const Nav = () => {
     return unsub2;
   };
   const ttt = () => {
-    const t = data3.forEach((e:user) => {
+    const t = data3.forEach((e: user) => {
       if (auth11.currentUser?.uid == e?.uid && e?.role == "Admin") {
         localStorage.setItem("curUser", "admin");
         setRole("admin");
@@ -101,14 +101,13 @@ const Nav = () => {
 
   // useEffect
 
-
   useEffect(() => {
     getuser();
     ttt();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const name = auth11.currentUser?.displayName?.substring(0, 3)
-        setAvatar(name as string)
+        const name = auth11.currentUser?.displayName?.substring(0, 3);
+        setAvatar(name as string);
         setUse(user);
         setRole((pre) => pre);
         setVerified(user.emailVerified);
@@ -116,7 +115,7 @@ const Nav = () => {
         setUse(null);
       }
     });
-  }, [use,onAuthStateChanged]);
+  }, [use, onAuthStateChanged]);
 
   // Sign Out
   const signout = () => {
@@ -136,7 +135,6 @@ const Nav = () => {
       });
   };
 
- 
   return (
     <>
       <div className="flex justify-end gap-2 py-3">
@@ -179,14 +177,23 @@ const Nav = () => {
                 </DropdownMenuItem>
                 <Link
                   className="active:text-red-600 block cursor-pointer"
-                  href='/profile'
+                  href="/profile"
                 >
                   <DropdownMenuItem className="cursor-pointer">
                     Profile
                   </DropdownMenuItem>
                 </Link>
-                <DropdownMenuItem onClick={()=>dispatch(setPeopleUMayKnow(true))}  className="cursor-pointer">
-                    People U May Know
+                <DropdownMenuItem
+                  onClick={() => dispatch(setPeopleUMayKnow(true))}
+                  className="cursor-pointer"
+                >
+                  People U May Know
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => dispatch(setFriendRequests(true))}
+                  className="cursor-pointer"
+                >
+                  Requests
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="block cursor-pointer"
