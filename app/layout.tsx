@@ -18,6 +18,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const [firebase, setFirebase] = useState(false);
   const [open,setOpen] = useState(false)
 
+  document.addEventListener("DOMContentLoaded", function(event){
+    alert(event)
+  });
+
   useEffect(() => {
     if (auth11) {
       setTimeout(() => setFirebase(true), 500);
