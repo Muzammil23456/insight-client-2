@@ -44,8 +44,9 @@ type cardData = {
   role: string;
   uid: string;
   id: string;
-  Request?: [{ Name: string; Uid: string; Status: string; Request: string }];
+  Request?: [{ Name: string; Uid: string; Status: string; Request: string; Role: string }];
 };
+
 
 const PeopleUMayKnow = () => {
   const [data3, setData3] = useState([]);
@@ -100,15 +101,17 @@ const PeopleUMayKnow = () => {
     const name = auth.currentUser?.displayName;
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Request: [
+      Request: 
+      arrayUnion(
         {
           Name: name,
           Uid: uid2,
           Role: role,
           Status: "Pending",
           Request: "Received",
-        },
-      ],
+          Sender: data4[0].id
+        }),
+      
     }).then(() => {
       setRequest(true);
     });
@@ -134,6 +137,7 @@ const PeopleUMayKnow = () => {
         Role: role,
         Status: "Pending",
         Request: "Received",
+        Sender: data4[0].id
       }),
     }).then(() => setClicked(""));
   };
@@ -175,20 +179,20 @@ const PeopleUMayKnow = () => {
                       </div>
                     </CardHeader>
                     <div className=" flex px-2 items-center">
-                      {`${data4.map((e) => e.Friends?.map((friend) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}` !== `${arr.uid}` && (
+                      {`${data4.map((e:any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}` !== `${arr.uid}` && (
                         <button
                           onClick={() => (
                             getuser(),
-                            requestSend(arr.id, arr.uid, arr.role),
+                            requestSend(arr.id, arr.uid),
                             friendsAdd(arr.name,arr.uid),
-                            console.log(`${data4.map((e) => e.Friends?.map((friend) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}`),
+                            console.log(`${data4.map((e:any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}`),
                           )}
                           className="border-solid border-[3px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 sm:text-sm text-xs text-center font-semibold text-white "
                         >
                           <p>Add Friend</p>
                         </button>
                       )}
-                      {`${data4.map((e) => e.Friends?.map((friend) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}` === `${arr.uid}` && (
+                      {`${data4.map((e: any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a)=>(a == arr.uid ))}` === `${arr.uid}` && (
                         <button
                           onClick={() => (
                             requestCancel(arr.id, arr.role),

@@ -6,15 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  updateDoc,
-  doc,
-  deleteDoc,
-  arrayRemove,
-  FieldValue,
-  deleteField,
-  where,
-} from "@firebase/firestore";
+import { updateDoc, doc } from "@firebase/firestore";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -23,25 +15,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { RootState } from "@/app/GlobalRedux/store";
 import { setFriendRequests } from "@/app/GlobalRedux/Features/FriendRequests/FriendRequestsSlice";
-import { collection, query, onSnapshot } from "@firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  arrayUnion,
+  arrayRemove,
+} from "@firebase/firestore";
 import { db } from "@/modules/filebase";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { auth } from "@/modules/fileauth";
 import { onAuthStateChanged } from "firebase/auth";
-import { getAuth } from "firebase/auth";
 import confirm from "@/public/confirm.png";
 import cancel from "@/public/cancel.png";
 
@@ -51,7 +46,14 @@ type cardData = {
   uid: string;
   id: string;
   Request?: [
-    { Name: string; Uid: string; Role: string; Status: string; Request: string }
+    {
+      Name: string;
+      Uid: string;
+      Role: string;
+      Status: string;
+      Request: string;
+      Sender: string;
+    }
   ];
 };
 
@@ -96,6 +98,112 @@ const Requests = () => {
     });
     return unsub2;
   };
+
+  const confirmRequest = async (
+    id: string,
+    id2: string,
+    role: string,
+    uid: string,
+    name: string
+  ) => {
+    const docRef = doc(db, "user", `${id}`);
+    await updateDoc(docRef, {
+      Request: arrayRemove({
+        Name: name,
+        Uid: uid,
+        Role: role,
+        Status: "Pending",
+        Request: "Received",
+        Sender: id2,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        Request: arrayUnion({
+          Name: name,
+          Uid: uid,
+          Role: role,
+          Status: "Accepted",
+          Request: "Received",
+          Sender: id2,
+        }),
+      }).then(() => {
+        console.log("accepted");
+      });
+    });
+  };
+
+  const cancelRequest = async (
+    id: string,
+    id2: string,
+    role: string,
+    uid: string,
+    name: string
+  ) => {
+    const docRef = doc(db, "user", `${id}`);
+    await updateDoc(docRef, {
+      Request: arrayRemove({
+        Name: name,
+        Uid: uid,
+        Role: role,
+        Status: "Pending",
+        Request: "Received",
+        Sender: id2,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        Request: arrayUnion({
+          Name: name,
+          Uid: uid,
+          Role: role,
+          Status: "Cancel",
+          Request: "Received",
+          Sender: id2,
+        }),
+      }).then(() => {
+        console.log("accepted");
+      });
+    });
+  };
+  const confirmFriend = async (id: string, uid: string, name: string) => {
+    const docRef = doc(db, "user", `${id}`);
+    await updateDoc(docRef, {
+      Friends: arrayRemove({
+        Name: name,
+        Request: "Sent",
+        Status: "Pending",
+        Uid: uid,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        Friends: arrayUnion({
+          Name: name,
+          Uid: uid,
+          Request: "Sent",
+          Status: "Accepted",
+        }),
+      });
+    });
+  };
+  const cancelFriend = async (id: string, uid: string, name: string) => {
+    const docRef = doc(db, "user", `${id}`);
+    await updateDoc(docRef, {
+      Friends: arrayRemove({
+        Name: name,
+        Request: "Sent",
+        Status: "Pending",
+        Uid: uid,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        Friends: arrayUnion({
+          Name: name,
+          Uid: uid,
+          Request: "Sent",
+          Status: "Cancel",
+        }),
+      });
+    });
+  };
   return (
     <>
       <AlertDialog open={friendRequests} onOpenChange={setFriendRequests}>
@@ -111,60 +219,100 @@ const Requests = () => {
               >
                 {data3.map((arr: cardData, i) => (
                   <>
-                    {
-                      !arr.Request?.length && <>
-                      <p className="text-center">No Requests Found!</p>
-                      </>
-                    }
-                    { arr.Request?.length &&
-                      <Card key={i} className="m-2 flex justify-between ">
-                        <CardHeader className="  p-4 sm:p-6  ">
-                          <div className="flex gap-2">
-                            <Avatar>
-                              <AvatarFallback className="uppercase text-sm">
-                                {arr.Request?.[0].Name.substring(0, 3)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col items-start">
-                              <CardTitle>{arr.Request?.[0].Name}</CardTitle>
-                              <CardDescription>
-                                {arr.Request?.[0].Role}
-                              </CardDescription>
-                            </div>
-                          </div>
-                        </CardHeader>
-                        <div className=" flex gap-2 px-2 items-center">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
-                                <img
-                                  className="w-[22px] sm:w-[25px]  text-center"
-                                  src={confirm.src}
-                                  alt="spinner-frame-8"
-                                />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Confirm</p>
-                            </TooltipContent>
-                          </Tooltip>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
-                                <img
-                                  className=" w-[22px] sm:w-[25px] text-center"
-                                  src={cancel.src}
-                                  alt="spinner-frame-8"
-                                />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Cancel</p>
-                            </TooltipContent>
-                          </Tooltip>
+                    {arr.Request &&
+                      arr.Request.map((a) => (
+                        <div key={a.Uid}>
+                          {a.Status === "Accepted" ? (
+                            <p className="text-center">No Requests Found!</p>
+                          ) : a.Status === "Pending" ? (
+                            <Card className="m-2 flex justify-between ">
+                              <CardHeader className="  p-4 sm:p-6  ">
+                                <div className="flex gap-2">
+                                  <Avatar>
+                                    <AvatarFallback className="uppercase text-sm">
+                                      {arr.Request?.[0].Name.substring(0, 3)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex flex-col items-start">
+                                    <CardTitle>
+                                      {arr.Request?.[0].Name}
+                                    </CardTitle>
+                                    <CardDescription>
+                                      {arr.Request?.[0].Role}
+                                    </CardDescription>
+                                  </div>
+                                </div>
+                              </CardHeader>
+                              <div className=" flex gap-2 px-2 items-center">
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                      onClick={() => {
+                                        confirmRequest(
+                                          arr.id,
+                                          arr.Request?.[0].Sender,
+                                          arr.Request?.[0].Role,
+                                          arr.Request?.[0].Uid,
+                                          arr.Request?.[0].Name
+                                        ),
+                                          confirmFriend(
+                                            arr.Request?.[0].Sender,
+                                            arr.uid,
+                                            arr.name
+                                          );
+                                      }}
+                                      className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
+                                    >
+                                      <img
+                                        className="w-[22px] sm:w-[25px]  text-center"
+                                        src={confirm.src}
+                                        alt="spinner-frame-8"
+                                      />
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Confirm</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                    onClick={() => {
+                                      cancelRequest(
+                                        arr.id,
+                                        arr.Request?.[0].Sender,
+                                        arr.Request?.[0].Role,
+                                        arr.Request?.[0].Uid,
+                                        arr.Request?.[0].Name
+                                      ),
+                                        cancelFriend(
+                                          arr.Request?.[0].Sender,
+                                          arr.uid,
+                                          arr.name
+                                        );
+                                    }}
+                                    className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
+                                      <img
+                                        className=" w-[22px] sm:w-[25px] text-center"
+                                        src={cancel.src}
+                                        alt="spinner-frame-8"
+                                      />
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Cancel</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </div>
+                            </Card>
+                          ) : (
+                            <></>
+                          )}
                         </div>
-                      </Card>
-                    }
+                      ))}
+                    {!arr.Request && (
+                      <p className="text-center">No Requests Found!</p>
+                    )}
                   </>
                 ))}
               </ScrollArea>
