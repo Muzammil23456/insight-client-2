@@ -100,11 +100,11 @@ const Requests = () => {
   };
 
   const confirmRequest = async (
-    id: string,
-    id2: string,
-    role: string,
-    uid: string,
-    name: string
+    id?: string,
+    id2?: string,
+    role?: string,
+    uid?: string,
+    name?: string
   ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
@@ -133,11 +133,11 @@ const Requests = () => {
   };
 
   const cancelRequest = async (
-    id: string,
-    id2: string,
-    role: string,
-    uid: string,
-    name: string
+    id?: string,
+    id2?: string,
+    role?: string,
+    uid?: string,
+    name?: string
   ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
@@ -164,7 +164,7 @@ const Requests = () => {
       });
     });
   };
-  const confirmFriend = async (id: string, uid: string, name: string) => {
+  const confirmFriend = async (id?: string, uid?: string, name?: string) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
       Friends: arrayRemove({
@@ -184,7 +184,7 @@ const Requests = () => {
       });
     });
   };
-  const cancelFriend = async (id: string, uid: string, name: string) => {
+  const cancelFriend = async (id?: string, uid?: string, name?: string) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
       Friends: arrayRemove({
@@ -277,21 +277,21 @@ const Requests = () => {
                                 <Tooltip>
                                   <TooltipTrigger asChild>
                                     <button
-                                    onClick={() => {
-                                      cancelRequest(
-                                        arr.id,
-                                        arr.Request?.[0].Sender,
-                                        arr.Request?.[0].Role,
-                                        arr.Request?.[0].Uid,
-                                        arr.Request?.[0].Name
-                                      ),
-                                        cancelFriend(
+                                      onClick={() => {
+                                        cancelRequest(
+                                          arr.id,
                                           arr.Request?.[0].Sender,
-                                          arr.uid,
-                                          arr.name
-                                        );
-                                    }}
-                                    className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
+                                          arr.Request?.[0].Role,
+                                          arr.Request?.[0].Uid,
+                                          arr.Request?.[0].Name
+                                        ),
+                                          cancelFriend(
+                                            arr.Request?.[0].Sender,
+                                            arr.uid,
+                                            arr.name
+                                          );
+                                      }}
+                                      className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
                                       <img
                                         className=" w-[22px] sm:w-[25px] text-center"
                                         src={cancel.src}
