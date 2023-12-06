@@ -53,6 +53,7 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
   const [verfied, setVerified] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
+  const [data2, setData2] = useState([]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -70,6 +71,23 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
     });
   }, [use, verfied, onAuthStateChanged]);
 
+
+  const getuser = () => {
+    console.log("get user");
+    const q = query(collection(db, "user"));
+    const unsub2: any = onSnapshot(q, (querySnapshot) => {
+      let testarr2: any = [];
+      querySnapshot.forEach((doc) => {
+        testarr2.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setData2(testarr2);
+    });
+    return unsub2
+  };
+
   const getFav = () => {
     const q = query(collection(db, "Favourites"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
@@ -77,13 +95,18 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
       querySnapshot.forEach((doc) => {
         testarr2.push({ id: doc.id, ...doc.data() });
       });
-      setFav(testarr2);
+      console.log(data2)
+      const f1= testarr2.filter((a: any) => a.uid == auth.currentUser?.uid );
+      // const f2 = f1
+      setFav(f1);
+      // setFav(testarr2);
       setLoading(false);
     });
     return unsub2;
   };
 
   useEffect(() => {
+    getuser();
     getFav();
   }, []);
 

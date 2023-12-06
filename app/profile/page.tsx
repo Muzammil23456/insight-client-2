@@ -29,6 +29,7 @@ import EditSeries from "@/components/EditForm4/EditSeries";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/GlobalRedux/store";
 import { AlertSuccess, AlertError } from "@/components/Alert/Alert";
+import Friends from "@/components/Table8/Friends";
 
 const page = () => {
   const [user, setUser] = useState("");
@@ -69,21 +70,24 @@ const page = () => {
           <h1 className="text-3xl mb-7 font-bold ">Admin Panel</h1>
           <Profile />
           <Tabs className="mt-5" defaultValue="Data">
-            <TabsList className="w-full sm:w-[300px] ">
-              <TabsTrigger className="w-[20%] sm:w-1/2" value="User">
+            <TabsList className="w-full">
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[1.5px]" value="User">
                 User
               </TabsTrigger>
-              <TabsTrigger className="w-[20%] sm:w-1/2" value="Data">
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[1.5px]" value="Data">
                 Data
               </TabsTrigger>
-              <TabsTrigger className="w-[20%] sm:w-1/2" value="Fav">
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[1.5px]" value="Fav">
                 Fav
               </TabsTrigger>
-              <TabsTrigger className="w-[20%] sm:w-1/2" value="Movies">
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[3px]" value="Movies">
                 Movies
               </TabsTrigger>
-              <TabsTrigger className="w-[20%] sm:w-1/2" value="Series">
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[3px]" value="Series">
                 Series
+              </TabsTrigger>
+              <TabsTrigger className="w-[20%] sm:w-1/2 px-[3px]" value="Friends">
+                Friends
               </TabsTrigger>
             </TabsList>
             <TabsContent value="Data">
@@ -151,6 +155,9 @@ const page = () => {
                 />
               )}
             </TabsContent>
+            <TabsContent value="Friends">
+              <Friends/>
+            </TabsContent>
           </Tabs>
         </>
       )}
@@ -164,6 +171,7 @@ const page = () => {
             <TabsList>
               <TabsTrigger value="Fav">Fav</TabsTrigger>
               <TabsTrigger value="Data">Data</TabsTrigger>
+              <TabsTrigger value="Friends">Friends</TabsTrigger>
             </TabsList>
             <TabsContent value="Data">
               {form && <Form ondata={(data: boolean) => setForm(data)} />}
@@ -192,6 +200,9 @@ const page = () => {
                   ondata2={(data: boolean) => setEditForm4(data)}
                 />
               )}
+            </TabsContent>
+            <TabsContent value="Friends">
+              <Friends/>
             </TabsContent>
           </Tabs>
         </>

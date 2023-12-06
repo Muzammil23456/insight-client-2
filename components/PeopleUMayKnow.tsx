@@ -6,11 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  updateDoc,
-  doc,
-  arrayRemove,
-} from "@firebase/firestore";
+import { updateDoc, doc, arrayRemove } from "@firebase/firestore";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -36,16 +32,19 @@ type cardData = {
   role: string;
   uid: string;
   id: string;
-  Request?: [{ Name: string; Uid: string; Status: string; Request: string; Role: string }];
+  RequestR?: [
+    { Name: string; Uid: string; Status: string; Request: string; Role: string }
+  ];
 };
 type data = {
   name: string;
   role: string;
   uid: string;
   id: string;
-  Request?: [{ Name: string; Uid: string; Status: string; Request: string; Role: string }];
-}
-
+  RequestR?: [
+    { Name: string; Uid: string; Status: string; Request: string; Role: string }
+  ];
+};
 
 const PeopleUMayKnow = () => {
   const [data3, setData3] = useState<data[]>([]);
@@ -59,7 +58,6 @@ const PeopleUMayKnow = () => {
   );
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     onAuthStateChanged(auth, (user: any) => {
       if (user) {
@@ -71,7 +69,7 @@ const PeopleUMayKnow = () => {
   }, []);
 
   const getuser = () => {
-    console.log("get user")
+    console.log("get user");
     const q = query(collection(db, "user"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
@@ -82,10 +80,10 @@ const PeopleUMayKnow = () => {
         });
       });
       setData2(testarr2);
-      setData3(testarr2.filter((a: any) => a.uid != auth.currentUser?.uid || !a.Request?.map((e: any) => {e.Status == 'Accepted'})));
-      setData4(testarr2.filter((a: any) => a.uid == auth.currentUser?.uid))
-      console.log(testarr2.filter((a: any) => a.uid != auth.currentUser?.uid && a.Request?.map((e: any) => {e.Status != 'Accepted'})));
-
+      const f1 = testarr2.filter((a: any) => a.uid != auth.currentUser?.uid);
+      const f2 = f1.filter((e: any )=> e.RequestR?.[0]?.Status != "Accepted")
+      setData3(f2);
+      setData4(testarr2.filter((a: any) => a.uid == auth.currentUser?.uid));
     });
     return unsub2;
   };
@@ -95,24 +93,21 @@ const PeopleUMayKnow = () => {
   }, [reRender]);
 
   const requestSend = async (id: string, uid: string) => {
-    const role = data4[0].role
-    console.log('sent')
+    const role = data4[0].role;
+    console.log("sent");
     setClicked(uid);
     const uid2 = auth.currentUser?.uid;
     const name = auth.currentUser?.displayName;
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Request:
-        arrayUnion(
-          {
-            Name: name,
-            Uid: uid2,
-            Role: role,
-            Status: "Pending",
-            Request: "Received",
-            Sender: data4[0].id
-          }),
-
+      RequestR: arrayUnion({
+        Name: name,
+        Uid: uid2,
+        Role: role,
+        Status: "Pending",
+        Request: "Received",
+        Sender: data4[0].id,
+      }),
     }).then(() => {
       setRequest(true);
     });
@@ -123,7 +118,12 @@ const PeopleUMayKnow = () => {
     const user = data2.filter((a: any) => a.uid == auth.currentUser?.uid);
     const docRef = doc(db, "user", `${user[0]?.id}`);
     await updateDoc(docRef, {
-      Friends: arrayUnion({ Name: name, Request: "Sent", Status: "Pending", Uid: uid }),
+      RequestS: arrayUnion({
+        Name: name,
+        Request: "Sent",
+        Status: "Pending",
+        Uid: uid,
+      }),
     });
   };
 
@@ -132,13 +132,13 @@ const PeopleUMayKnow = () => {
     const name = auth.currentUser?.displayName;
     const docRef = doc(db, "user", id);
     await updateDoc(docRef, {
-      Request: arrayRemove({
+      RequestR: arrayRemove({
         Name: name,
         Uid: uid2,
         Role: role,
         Status: "Pending",
         Request: "Received",
-        Sender: data4[0].id
+        Sender: data4[0].id,
       }),
     }).then(() => setClicked(""));
   };
@@ -147,7 +147,12 @@ const PeopleUMayKnow = () => {
     const user = data2.filter((a: any) => a.uid == auth.currentUser?.uid);
     const docRef = doc(db, "user", `${user[0]?.id}`);
     await updateDoc(docRef, {
-      Friends: arrayRemove({ Name: name, Request: "Sent", Status: "Pending", Uid: uid }),
+      RequestS: arrayRemove({
+        Name: name,
+        Request: "Sent",
+        Status: "Pending",
+        Uid: uid,
+      }),
     });
   };
 
@@ -174,26 +179,37 @@ const PeopleUMayKnow = () => {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col items-start">
-                          <CardTitle className="text-justify text-[.95rem] sm:text-base">{arr.name}</CardTitle>
+                          <CardTitle className="text-justify text-[.95rem] sm:text-base">
+                            {arr.name}
+                          </CardTitle>
                           <CardDescription>{arr.role}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
                     <div className=" flex px-2 items-center">
-                      {`${data4.map((e: any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a) => (a == arr.uid))}` !== `${arr.uid}` && (
+                      {`${data4
+                        .map((e: any) =>
+                          e.RequestS?.map((friend: any) => friend.Uid)
+                        )
+                        .flat()
+                        .find((a) => a == arr.uid)}` !== `${arr.uid}` && (
                         <button
                           onClick={() => (
                             getuser(),
                             requestSend(arr.id, arr.uid),
-                            friendsAdd(arr.name, arr.uid),
-                            console.log(`${data4.map((e: any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a) => (a == arr.uid))}`)
+                            friendsAdd(arr.name, arr.uid)
                           )}
                           className="border-solid border-[3px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 sm:text-sm text-xs text-center font-semibold text-white "
                         >
                           <p>Add Friend</p>
                         </button>
                       )}
-                      {`${data4.map((e: any) => e.Friends?.map((friend: any) => friend.Uid)).flat().find((a) => (a == arr.uid))}` === `${arr.uid}` && (
+                      {`${data4
+                        .map((e: any) =>
+                          e.RequestS?.map((friend: any) => friend.Uid)
+                        )
+                        .flat()
+                        .find((a) => a == arr.uid)}` === `${arr.uid}` && (
                         <button
                           onClick={() => (
                             requestCancel(arr.id, arr.role),

@@ -45,7 +45,7 @@ type cardData = {
   role: string;
   uid: string;
   id: string;
-  Request?: [
+  RequestR: [
     {
       Name: string;
       Uid: string;
@@ -108,7 +108,7 @@ const Requests = () => {
   ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Request: arrayRemove({
+      RequestR: arrayRemove({
         Name: name,
         Uid: uid,
         Role: role,
@@ -118,7 +118,7 @@ const Requests = () => {
       }),
     }).then(async () => {
       await updateDoc(docRef, {
-        Request: arrayUnion({
+        RequestR: arrayUnion({
           Name: name,
           Uid: uid,
           Role: role,
@@ -126,8 +126,13 @@ const Requests = () => {
           Request: "Received",
           Sender: id2,
         }),
-      }).then(() => {
-        console.log("accepted");
+      }).then(async () => {
+        await updateDoc(docRef, {
+          Friends: arrayUnion({
+            Name: name,
+            Uid: uid,
+          }),
+        });
       });
     });
   };
@@ -141,7 +146,7 @@ const Requests = () => {
   ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Request: arrayRemove({
+      RequestR: arrayRemove({
         Name: name,
         Uid: uid,
         Role: role,
@@ -149,25 +154,13 @@ const Requests = () => {
         Request: "Received",
         Sender: id2,
       }),
-    }).then(async () => {
-      await updateDoc(docRef, {
-        Request: arrayUnion({
-          Name: name,
-          Uid: uid,
-          Role: role,
-          Status: "Cancel",
-          Request: "Received",
-          Sender: id2,
-        }),
-      }).then(() => {
-        console.log("accepted");
-      });
     });
   };
+
   const confirmFriend = async (id?: string, uid?: string, name?: string) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Friends: arrayRemove({
+      RequestS: arrayRemove({
         Name: name,
         Request: "Sent",
         Status: "Pending",
@@ -175,35 +168,35 @@ const Requests = () => {
       }),
     }).then(async () => {
       await updateDoc(docRef, {
-        Friends: arrayUnion({
+        RequestS: arrayUnion({
           Name: name,
           Uid: uid,
           Request: "Sent",
           Status: "Accepted",
         }),
+      }).then(async () => {
+        await updateDoc(docRef, {
+          Friends: arrayUnion({
+            Name: name,
+            Uid: uid,
+          }),
+        });
       });
     });
   };
+
   const cancelFriend = async (id?: string, uid?: string, name?: string) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
-      Friends: arrayRemove({
+      RequestS: arrayRemove({
         Name: name,
         Request: "Sent",
         Status: "Pending",
         Uid: uid,
       }),
-    }).then(async () => {
-      await updateDoc(docRef, {
-        Friends: arrayUnion({
-          Name: name,
-          Uid: uid,
-          Request: "Sent",
-          Status: "Cancel",
-        }),
-      });
     });
   };
+
   return (
     <>
       <AlertDialog open={friendRequests} onOpenChange={setFriendRequests}>
@@ -219,8 +212,8 @@ const Requests = () => {
               >
                 {data3.map((arr: cardData, i) => (
                   <>
-                    {arr.Request &&
-                      arr.Request.map((a) => (
+                    {arr.RequestR &&
+                      arr.RequestR.map((a) => (
                         <div key={a.Uid}>
                           {a.Status === "Accepted" ? (
                             <p className="text-center">No Requests Found!</p>
@@ -230,15 +223,15 @@ const Requests = () => {
                                 <div className="flex gap-2">
                                   <Avatar>
                                     <AvatarFallback className="uppercase text-sm">
-                                      {arr.Request?.[0].Name.substring(0, 3)}
+                                      {arr.RequestR?.[0].Name.substring(0, 3)}
                                     </AvatarFallback>
                                   </Avatar>
                                   <div className="flex flex-col items-start">
                                     <CardTitle>
-                                      {arr.Request?.[0].Name}
+                                      {arr.RequestR?.[0].Name}
                                     </CardTitle>
                                     <CardDescription>
-                                      {arr.Request?.[0].Role}
+                                      {arr.RequestR?.[0].Role}
                                     </CardDescription>
                                   </div>
                                 </div>
@@ -250,13 +243,13 @@ const Requests = () => {
                                       onClick={() => {
                                         confirmRequest(
                                           arr.id,
-                                          arr.Request?.[0].Sender,
-                                          arr.Request?.[0].Role,
-                                          arr.Request?.[0].Uid,
-                                          arr.Request?.[0].Name
+                                          arr.RequestR?.[0].Sender,
+                                          arr.RequestR?.[0].Role,
+                                          arr.RequestR?.[0].Uid,
+                                          arr.RequestR?.[0].Name
                                         ),
                                           confirmFriend(
-                                            arr.Request?.[0].Sender,
+                                            arr.RequestR?.[0].Sender,
                                             arr.uid,
                                             arr.name
                                           );
@@ -280,18 +273,19 @@ const Requests = () => {
                                       onClick={() => {
                                         cancelRequest(
                                           arr.id,
-                                          arr.Request?.[0].Sender,
-                                          arr.Request?.[0].Role,
-                                          arr.Request?.[0].Uid,
-                                          arr.Request?.[0].Name
+                                          arr.RequestR?.[0].Sender,
+                                          arr.RequestR?.[0].Role,
+                                          arr.RequestR?.[0].Uid,
+                                          arr.RequestR?.[0].Name
                                         ),
                                           cancelFriend(
-                                            arr.Request?.[0].Sender,
+                                            arr.RequestR?.[0].Sender,
                                             arr.uid,
                                             arr.name
                                           );
                                       }}
-                                      className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white ">
+                                      className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
+                                    >
                                       <img
                                         className=" w-[22px] sm:w-[25px] text-center"
                                         src={cancel.src}
@@ -310,7 +304,7 @@ const Requests = () => {
                           )}
                         </div>
                       ))}
-                    {!arr.Request && (
+                    {arr.RequestR?.length < 1 || !arr.RequestR && (
                       <p className="text-center">No Requests Found!</p>
                     )}
                   </>

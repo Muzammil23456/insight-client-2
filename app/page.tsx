@@ -35,7 +35,8 @@ const Home = () => {
   const { signIn, signUp } = useSelector((state: RootState) => state.register);
   const [editForm, setEditForm] = useState<boolean>(false);
   const [editForm4, setEditForm4] = useState<boolean>(false);
-
+  const [showFav, setShowFav] = useState(true);
+  
   return (
     <>
       <DataDelete />
@@ -63,10 +64,12 @@ const Home = () => {
         </TabsContent>
         <TabsContent value="Fav">
           {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
-          <Fav
-            ondata={(data: boolean) => setEditForm4(data)}
-            ondata2={(data: boolean) => setForm2(data)}
-          />
+          {showFav && (
+            <Fav
+              ondata={(data: boolean) => setEditForm4(data)}
+              ondata2={(data: boolean) => setForm2(data)}
+            />
+          )}
           {editForm4 && (
             <EditForm4
               ondata={editForm4}
