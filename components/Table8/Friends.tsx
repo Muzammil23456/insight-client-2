@@ -27,7 +27,7 @@ type TableData = {
   role: string;
   uid: string;
   id: string;
-  RequestR?: [
+  RequestR: [
     {
       Name: string;
       Uid: string;
@@ -72,20 +72,61 @@ const Friends = () => {
     return unsub2;
   };
 
-  const unfriend = async (uid: string, name: string, id: string) => {
-    const docRef = doc(db, "user", `${id}`);
-    await updateDoc(docRef, {
+  const unfriend = async (
+    FriendsUid: string,
+    FriendsName: string,
+    SenderId: string,
+    SenderName: string,
+    SenderRole: string,
+    SenderUid: string,
+    RecevierId: string,
+    ReceiverName: string,
+    RecevierUid: string,
+    ReceiverRole: string
+  ) => {
+    console.log(
+      "SenderId:",
+      SenderId,
+      "SenderName:",
+      SenderName,
+      "SenderRole:",
+      SenderRole,
+      "SenderUid:",
+      SenderUid,
+    );
+    const docRef = doc(db, "user", `${SenderId}`);
+    const docRef2 = doc(db, "user", `${RecevierId}`);
+    await updateDoc(docRef2, {
       Friends: arrayRemove({
-        Name: name,
-        Uid: uid,
+        Name: SenderName,
+        Uid: SenderUid,
       }),
     }).then(async () => {
       await updateDoc(docRef, {
-        RequestS: arrayUnion({
-          Name: name,
-          Uid: uid,
-          Request: "Sent",
+        RequestR: arrayRemove({
+          Name: SenderName,
+          Uid: SenderUid,
+          Role: SenderRole,
           Status: "Accepted",
+          Request: "Received",
+          Sender: SenderId,
+        }),
+      });
+    });
+    await updateDoc(docRef, {
+      Friends: arrayRemove({
+        Name: ReceiverName,
+        Uid: RecevierUid,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        RequestS: arrayRemove({
+          Name: ReceiverName,
+          Reciever: RecevierId,
+          Request: "Sent",
+          Role: ReceiverRole,
+          Status: "Accepted",
+          Uid: RecevierUid,
         }),
       });
     });
@@ -135,7 +176,7 @@ const Friends = () => {
             )}
           {!loading &&
             data3[0].Friends?.length > 0 &&
-            data3?.map((arr: TableData) => (
+            data3?.map((arr: TableData, index) => (
               <>
                 {arr.Friends?.map((a: any, i) => (
                   <TableRow key={i}>
@@ -151,7 +192,20 @@ const Friends = () => {
                     </TableCell>
                     <TableCell className="flex justify-end">
                       <button
-                        onClick={() => unfriend(a.Uid, a.Name, arr.id)}
+                        onClick={() => {
+                          unfriend(
+                            a.Uid,
+                            a.Name,
+                            arr.RequestR[0].Sender,
+                            arr.RequestR[0].Name,
+                            arr.RequestR[0].Role,
+                            arr.RequestR[0].Uid,
+                            arr.id,
+                            arr.name,
+                            arr.uid,
+                            arr.role
+                          );
+                        }}
                         className="btn-e"
                       >
                         Un Friend

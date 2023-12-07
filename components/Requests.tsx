@@ -157,7 +157,13 @@ const Requests = () => {
     });
   };
 
-  const confirmFriend = async (id?: string, uid?: string, name?: string) => {
+  const confirmFriend = async (
+    id?: string,
+    uid?: string,
+    name?: string,
+    id2?: string,
+    role?: string,
+  ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
       RequestS: arrayRemove({
@@ -165,6 +171,8 @@ const Requests = () => {
         Request: "Sent",
         Status: "Pending",
         Uid: uid,
+        Reciever: id2,
+        Role: role,
       }),
     }).then(async () => {
       await updateDoc(docRef, {
@@ -173,6 +181,8 @@ const Requests = () => {
           Uid: uid,
           Request: "Sent",
           Status: "Accepted",
+          Reciever: id2,
+          Role: role,
         }),
       }).then(async () => {
         await updateDoc(docRef, {
@@ -185,7 +195,13 @@ const Requests = () => {
     });
   };
 
-  const cancelFriend = async (id?: string, uid?: string, name?: string) => {
+  const cancelFriend = async (
+    id?: string,
+    uid?: string,
+    name?: string,
+    id2?: string,
+    role?: string
+  ) => {
     const docRef = doc(db, "user", `${id}`);
     await updateDoc(docRef, {
       RequestS: arrayRemove({
@@ -193,6 +209,8 @@ const Requests = () => {
         Request: "Sent",
         Status: "Pending",
         Uid: uid,
+        Reciever: id2,
+        Role: role,
       }),
     });
   };
@@ -211,7 +229,7 @@ const Requests = () => {
                 className=" sm:h-[13.5rem] h-[11.5rem] p-2 rounded-md border"
               >
                 {data3.map((arr: cardData, i) => (
-                  <>
+                  <div key={i}>
                     {arr.RequestR &&
                       arr.RequestR.map((a) => (
                         <div key={a.Uid}>
@@ -251,7 +269,9 @@ const Requests = () => {
                                           confirmFriend(
                                             arr.RequestR?.[0].Sender,
                                             arr.uid,
-                                            arr.name
+                                            arr.name,
+                                            arr.id,
+                                            arr.role
                                           );
                                       }}
                                       className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
@@ -281,7 +301,9 @@ const Requests = () => {
                                           cancelFriend(
                                             arr.RequestR?.[0].Sender,
                                             arr.uid,
-                                            arr.name
+                                            arr.name,
+                                            arr.id,
+                                            arr.role
                                           );
                                       }}
                                       className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
@@ -304,10 +326,11 @@ const Requests = () => {
                           )}
                         </div>
                       ))}
-                    {arr.RequestR?.length < 1 || !arr.RequestR && (
-                      <p className="text-center">No Requests Found!</p>
-                    )}
-                  </>
+                    {arr.RequestR?.length < 1 ||
+                      (!arr.RequestR && (
+                        <p className="text-center">No Requests Found!</p>
+                      ))}
+                  </div>
                 ))}
               </ScrollArea>
             </AlertDialogDescription>

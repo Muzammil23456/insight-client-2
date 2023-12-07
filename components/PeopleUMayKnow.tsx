@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { auth } from "@/modules/fileauth";
 import { onAuthStateChanged } from "firebase/auth";
+import { RollerCoaster } from "lucide-react";
 
 type cardData = {
   name: string;
@@ -103,7 +104,7 @@ const PeopleUMayKnow = () => {
       RequestR: arrayUnion({
         Name: name,
         Uid: uid2,
-        Role: role,
+        Role: data4[0].role,
         Status: "Pending",
         Request: "Received",
         Sender: data4[0].id,
@@ -114,7 +115,7 @@ const PeopleUMayKnow = () => {
     // console.log(name,uid,id)
   };
 
-  const friendsAdd = async (name: string, uid: string) => {
+  const friendsAdd = async (name: string, uid: string, role: string, reciever: string) => {
     const user = data2.filter((a: any) => a.uid == auth.currentUser?.uid);
     const docRef = doc(db, "user", `${user[0]?.id}`);
     await updateDoc(docRef, {
@@ -123,6 +124,8 @@ const PeopleUMayKnow = () => {
         Request: "Sent",
         Status: "Pending",
         Uid: uid,
+        Role: role,
+        Reciever: reciever
       }),
     });
   };
@@ -135,7 +138,7 @@ const PeopleUMayKnow = () => {
       RequestR: arrayRemove({
         Name: name,
         Uid: uid2,
-        Role: role,
+        Role: data4[0].role,
         Status: "Pending",
         Request: "Received",
         Sender: data4[0].id,
@@ -143,7 +146,7 @@ const PeopleUMayKnow = () => {
     }).then(() => setClicked(""));
   };
 
-  const friendsRemove = async (name: string, uid: string) => {
+  const friendsRemove = async (name: string, uid: string,role: string, reciever: string) => {
     const user = data2.filter((a: any) => a.uid == auth.currentUser?.uid);
     const docRef = doc(db, "user", `${user[0]?.id}`);
     await updateDoc(docRef, {
@@ -152,6 +155,8 @@ const PeopleUMayKnow = () => {
         Request: "Sent",
         Status: "Pending",
         Uid: uid,
+        Role: role,
+        Reciever: reciever
       }),
     });
   };
@@ -197,7 +202,7 @@ const PeopleUMayKnow = () => {
                           onClick={() => (
                             getuser(),
                             requestSend(arr.id, arr.uid),
-                            friendsAdd(arr.name, arr.uid)
+                            friendsAdd(arr.name, arr.uid, arr.role, arr.id)
                           )}
                           className="border-solid border-[3px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 sm:text-sm text-xs text-center font-semibold text-white "
                         >
@@ -213,7 +218,7 @@ const PeopleUMayKnow = () => {
                         <button
                           onClick={() => (
                             requestCancel(arr.id, arr.role),
-                            friendsRemove(arr.name, arr.uid)
+                            friendsRemove(arr.name, arr.uid,arr.role,arr.id)
                           )}
                           className="border-solid border-[3px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300  sm:p-2 p-1 rounded sm:w-28 sm:text-sm text-xs text-center font-semibold text-white "
                         >
