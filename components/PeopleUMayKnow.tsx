@@ -176,7 +176,7 @@ const PeopleUMayKnow = () => {
               >
                 {data3.map((arr: cardData, i) => (
                   <Card key={i} className="m-2 flex justify-between ">
-                    <CardHeader className="p-[0.65rem] sm:p-6">
+                    <CardHeader className=" p-[0.65rem] sm:p-6">
                       <div className="flex gap-2">
                         <Avatar>
                           <AvatarFallback className="uppercase text-sm">
