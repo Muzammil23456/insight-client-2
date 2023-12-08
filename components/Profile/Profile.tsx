@@ -14,7 +14,7 @@ const Profile = () => {
       setUser(uid);
     }
   });
-
+//
   return (
     <>
       <div className="flex gap-2">

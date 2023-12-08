@@ -34,12 +34,16 @@ const Home = () => {
   const [editForm, setEditForm] = useState<boolean>(false);
   const [editForm4, setEditForm4] = useState<boolean>(false);
 
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(true);
-    }
-  });
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(true);
+      } else {
+        setUser(false);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -49,7 +53,6 @@ const Home = () => {
       {booleanValue2 && <AlertError purpose={text2} />}
       {user && (
         <>
-          <button onClick={()=>alert("text")}>new</button>
           <Tabs defaultValue="Data">
             <TabsList>
               <TabsTrigger value="Fav">Fav</TabsTrigger>
