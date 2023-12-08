@@ -37,6 +37,16 @@ type TableData = {
       Sender: string;
     }
   ];
+  RequestS: [
+    {
+      Name: string;
+      Uid: string;
+      Role: string;
+      Status: string;
+      Request: string;
+      Reciever: string;
+    }
+  ];
   Friends: [
     {
       Name: string;
@@ -82,55 +92,51 @@ const Friends = () => {
     RecevierId: string,
     ReceiverName: string,
     RecevierUid: string,
-    ReceiverRole: string
+    ReceiverRole: string,
+    SenderId2: string,
+    SenderName2: string,
+    SenderRole2: string,
+    SenderUid2: string,
   ) => {
-    console.log(
-      "SenderId:",
-      SenderId,
-      "SenderName:",
-      SenderName,
-      "SenderRole:",
-      SenderRole,
-      "SenderUid:",
-      SenderUid,
-    );
-    const docRef = doc(db, "user", `${SenderId}`);
-    const docRef2 = doc(db, "user", `${RecevierId}`);
-    await updateDoc(docRef2, {
-      Friends: arrayRemove({
-        Name: SenderName,
-        Uid: SenderUid,
-      }),
-    }).then(async () => {
-      await updateDoc(docRef, {
-        RequestR: arrayRemove({
-          Name: SenderName,
-          Uid: SenderUid,
-          Role: SenderRole,
-          Status: "Accepted",
-          Request: "Received",
-          Sender: SenderId,
-        }),
-      });
-    });
-    await updateDoc(docRef, {
-      Friends: arrayRemove({
-        Name: ReceiverName,
-        Uid: RecevierUid,
-      }),
-    }).then(async () => {
-      await updateDoc(docRef, {
-        RequestS: arrayRemove({
-          Name: ReceiverName,
-          Reciever: RecevierId,
-          Request: "Sent",
-          Role: ReceiverRole,
-          Status: "Accepted",
-          Uid: RecevierUid,
-        }),
-      });
-    });
+    // const docRef = doc(db, "user", `${SenderId}`);
+    // const docRef2 = doc(db, "user", `${SenderId2}`);
+
+    // await updateDoc(docRef, {
+    //   Friends: arrayRemove({
+    //     Name: ReceiverName,
+    //     Uid: RecevierUid,
+    //   }),
+    // }).then(async () => {
+    //   await updateDoc(docRef, {
+    //     RequestS: arrayRemove({
+    //       Name: ReceiverName,
+    //       Reciever: RecevierId,
+    //       Request: "Sent",
+    //       Role: ReceiverRole,
+    //       Status: "Accepted",
+    //       Uid: RecevierUid,
+    //     }),
+    //   });
+    // });
+    // await updateDoc(docRef2, {
+    //   Friends: arrayRemove({
+    //     Name: FriendsName,
+    //     Uid: FriendsUid,
+    //   }),
+    // }).then(async () => {
+    //   await updateDoc(docRef2, {
+    //     RequestR: arrayRemove({
+    //       Name: SenderName,
+    //       Request: "Received",
+    //       Role: SenderRole,
+    //       Sender: SenderId,
+    //       Status: "Accepted",
+    //       Uid: SenderUid,
+    //     }),
+    //   });
+    // });
   };
+
   // useEffect
 
   useEffect(() => {
@@ -196,14 +202,18 @@ const Friends = () => {
                           unfriend(
                             a.Uid,
                             a.Name,
-                            arr.RequestR[0].Sender,
-                            arr.RequestR[0].Name,
-                            arr.RequestR[0].Role,
-                            arr.RequestR[0].Uid,
+                            arr.RequestR[0]?.Sender,
+                            arr.RequestR[0]?.Name,
+                            arr.RequestR[0]?.Role,
+                            arr.RequestR[0]?.Uid,
                             arr.id,
                             arr.name,
                             arr.uid,
-                            arr.role
+                            arr.role,
+                            arr.RequestS[0]?.Reciever,
+                            arr.RequestS[0]?.Name,
+                            arr.RequestS[0]?.Role,
+                            arr.RequestS[0]?.Uid,
                           );
                         }}
                         className="btn-e"
