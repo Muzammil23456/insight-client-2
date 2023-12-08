@@ -237,7 +237,7 @@ const Requests = () => {
                             <p className="text-center">No Requests Found!</p>
                           ) : a.Status === "Pending" ? (
                             <Card className="m-2 flex justify-between ">
-                              <CardHeader className="  p-4 sm:p-6  ">
+                              <CardHeader className=" p-[0.65rem] sm:p-6">
                                 <div className="flex gap-2">
                                   <Avatar>
                                     <AvatarFallback className="uppercase text-sm">
@@ -245,7 +245,7 @@ const Requests = () => {
                                     </AvatarFallback>
                                   </Avatar>
                                   <div className="flex flex-col items-start">
-                                    <CardTitle>
+                                    <CardTitle className="text-justify text-[.95rem] sm:text-base">
                                       {arr.RequestR?.[0].Name}
                                     </CardTitle>
                                     <CardDescription>
@@ -277,7 +277,7 @@ const Requests = () => {
                                       className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
                                     >
                                       <img
-                                        className="w-[22px] sm:w-[25px]  text-center"
+                                        className="w-[20px] sm:w-[25px] max-w-none text-center"
                                         src={confirm.src}
                                         alt="spinner-frame-8"
                                       />
@@ -309,7 +309,7 @@ const Requests = () => {
                                       className="border-solid border-[2px] disabled:!bg-pink-920 disabled:opacity-60 disabled:border-pink-920 border-pink-910 !bg-pink-910 hover:!bg-pink-920 hover:border-pink-920 hover:transition-all hover:duration-300 p-[6px] rounded sm:text-base text-sm text-center font-semibold text-white "
                                     >
                                       <img
-                                        className=" w-[22px] sm:w-[25px] text-center"
+                                        className=" w-[20px] sm:w-[25px] max-w-none text-center"
                                         src={cancel.src}
                                         alt="spinner-frame-8"
                                       />
