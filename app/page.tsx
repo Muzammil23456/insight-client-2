@@ -47,40 +47,45 @@ const Home = () => {
       <DeleteFav />
       {booleanValue && <AlertSuccess purpose={text} />}
       {booleanValue2 && <AlertError purpose={text2} />}
-
-      <Tabs defaultValue="Data">
-        <TabsList>
-          <TabsTrigger value="Fav">Fav</TabsTrigger>
-          <TabsTrigger value="Data">Data</TabsTrigger>
-        </TabsList>
-        <TabsContent value="Data">
-          {form && <Form ondata={(data: boolean) => setForm(data)} />}
-          <Data
-            ondata={(data: boolean) => setEditForm(data)}
-            ondata2={(data: boolean) => setForm(data)}
-          />
-          {editForm && (
-            <EditForm
-              ondata={editForm}
-              ondata2={(data: boolean) => setEditForm(data)}
-            />
-          )}
-        </TabsContent>
-        <TabsContent value="Fav">
-          {form2 && <SelectFav ondata={(data: boolean) => setForm2(data)} />}
-          <Fav
-            ondata={(data: boolean) => setEditForm4(data)}
-            ondata2={(data: boolean) => setForm2(data)}
-          />
-          {editForm4 && (
-            <EditForm4
-              ondata={editForm4}
-              ondata2={(data: boolean) => setEditForm4(data)}
-            />
-          )}
-        </TabsContent>
-      </Tabs>
-
+      {user && (
+        <>
+          <button onClick={()=>alert("text")}>new</button>
+          <Tabs defaultValue="Data">
+            <TabsList>
+              <TabsTrigger value="Fav">Fav</TabsTrigger>
+              <TabsTrigger value="Data">Data</TabsTrigger>
+            </TabsList>
+            <TabsContent value="Data">
+              {form && <Form ondata={(data: boolean) => setForm(data)} />}
+              <Data
+                ondata={(data: boolean) => setEditForm(data)}
+                ondata2={(data: boolean) => setForm(data)}
+              />
+              {editForm && (
+                <EditForm
+                  ondata={editForm}
+                  ondata2={(data: boolean) => setEditForm(data)}
+                />
+              )}
+            </TabsContent>
+            <TabsContent value="Fav">
+              {form2 && (
+                <SelectFav ondata={(data: boolean) => setForm2(data)} />
+              )}
+              <Fav
+                ondata={(data: boolean) => setEditForm4(data)}
+                ondata2={(data: boolean) => setForm2(data)}
+              />
+              {editForm4 && (
+                <EditForm4
+                  ondata={editForm4}
+                  ondata2={(data: boolean) => setEditForm4(data)}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
+        </>
+      )}
       {!user && (
         <>
           {form && <Form ondata={(data: boolean) => setForm(data)} />}
