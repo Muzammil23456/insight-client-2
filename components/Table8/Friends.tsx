@@ -96,45 +96,83 @@ const Friends = () => {
     SenderId2: string,
     SenderName2: string,
     SenderRole2: string,
-    SenderUid2: string,
+    SenderUid2: string
   ) => {
-    // const docRef = doc(db, "user", `${SenderId}`);
-    // const docRef2 = doc(db, "user", `${SenderId2}`);
-
-    // await updateDoc(docRef, {
-    //   Friends: arrayRemove({
-    //     Name: ReceiverName,
-    //     Uid: RecevierUid,
-    //   }),
-    // }).then(async () => {
-    //   await updateDoc(docRef, {
-    //     RequestS: arrayRemove({
-    //       Name: ReceiverName,
-    //       Reciever: RecevierId,
-    //       Request: "Sent",
-    //       Role: ReceiverRole,
-    //       Status: "Accepted",
-    //       Uid: RecevierUid,
-    //     }),
-    //   });
-    // });
-    // await updateDoc(docRef2, {
-    //   Friends: arrayRemove({
-    //     Name: FriendsName,
-    //     Uid: FriendsUid,
-    //   }),
-    // }).then(async () => {
-    //   await updateDoc(docRef2, {
-    //     RequestR: arrayRemove({
-    //       Name: SenderName,
-    //       Request: "Received",
-    //       Role: SenderRole,
-    //       Sender: SenderId,
-    //       Status: "Accepted",
-    //       Uid: SenderUid,
-    //     }),
-    //   });
-    // });
+    const docRef = doc(db, "user", `${SenderId}`);
+    const docRef2 = doc(db, "user", `${RecevierId}`);
+    const docRef3 = doc(db, "user", `${RecevierId}`);
+    const docRef4 = doc(db, "user", `${SenderId2}`);
+    if (SenderId == undefined) {
+      await updateDoc(docRef3, {
+        Friends: arrayRemove({
+          Name: SenderName2,
+          Uid: SenderUid2,
+        }),
+      }).then(async () => {
+        await updateDoc(docRef3, {
+          RequestS: arrayRemove({
+            Name: SenderName2,
+            Reciever: SenderId2,
+            Request: "Sent",
+            Role: SenderRole2,
+            Status: "Accepted",
+            Uid: SenderUid2,
+          }),
+        });
+      });
+      await updateDoc(docRef4, {
+        Friends: arrayRemove({
+          Name: ReceiverName,
+          Uid: RecevierUid,
+        }),
+      }).then(async () => {
+        await updateDoc(docRef4, {
+          RequestR: arrayRemove({
+            Name: ReceiverName,
+            Request: "Received",
+            Role: ReceiverRole,
+            Sender: RecevierId,
+            Status: "Accepted",
+            Uid: RecevierUid,
+          }),
+        });
+      });
+    }
+    if(SenderId != undefined)
+    {await updateDoc(docRef, {
+      Friends: arrayRemove({
+        Name: ReceiverName,
+        Uid: RecevierUid,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef, {
+        RequestS: arrayRemove({
+          Name: ReceiverName,
+          Reciever: RecevierId,
+          Request: "Sent",
+          Role: ReceiverRole,
+          Status: "Accepted",
+          Uid: RecevierUid,
+        }),
+      });
+    });
+    await updateDoc(docRef2, {
+      Friends: arrayRemove({
+        Name: FriendsName,
+        Uid: FriendsUid,
+      }),
+    }).then(async () => {
+      await updateDoc(docRef2, {
+        RequestR: arrayRemove({
+          Name: SenderName,
+          Request: "Received",
+          Role: SenderRole,
+          Sender: SenderId,
+          Status: "Accepted",
+          Uid: SenderUid,
+        }),
+      });
+    });}
   };
 
   // useEffect
@@ -213,7 +251,7 @@ const Friends = () => {
                             arr.RequestS[0]?.Reciever,
                             arr.RequestS[0]?.Name,
                             arr.RequestS[0]?.Role,
-                            arr.RequestS[0]?.Uid,
+                            arr.RequestS[0]?.Uid
                           );
                         }}
                         className="btn-e"

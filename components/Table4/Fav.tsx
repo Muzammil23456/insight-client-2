@@ -14,7 +14,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { collection, query, onSnapshot } from "@firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  where,
+  getDocs,
+} from "@firebase/firestore";
 import { db } from "../../modules/filebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
@@ -71,43 +77,46 @@ const Fav = ({ ondata, ondata2 }: onDataType) => {
     });
   }, [use, verfied, onAuthStateChanged]);
 
-
-  const getuser = () => {
-    console.log("get user");
-    const q = query(collection(db, "user"));
-    const unsub2: any = onSnapshot(q, (querySnapshot) => {
-      let testarr2: any = [];
-      querySnapshot.forEach((doc) => {
-        testarr2.push({
-          id: doc.id,
-          ...doc.data(),
-        });
-      });
-      setData2(testarr2);
-    });
-    return unsub2
-  };
-
-  const getFav = () => {
+  const getFav = (arr: any[]) => {
     const q = query(collection(db, "Favourites"));
     const unsub2: any = onSnapshot(q, (querySnapshot) => {
       let testarr2: any = [];
       querySnapshot.forEach((doc) => {
         testarr2.push({ id: doc.id, ...doc.data() });
       });
-      console.log(data2)
-      const f1= testarr2.filter((a: any) => a.uid == auth.currentUser?.uid );
-      // const f2 = f1
+      const f1 = testarr2.filter((a: any) => a.uid == arr?.at(0)?.uid  || a.uid  == arr.at(0)?.Friends.map((e: any)=>e.Uid));
+      console.log( f1);
       setFav(f1);
-      // setFav(testarr2);
       setLoading(false);
     });
     return unsub2;
   };
 
   useEffect(() => {
-    getuser();
-    getFav();
+    if (auth.currentUser) {
+      console.log(" User");
+      let testarr2: any = [];
+      const q = query(
+        collection(db, "user"),
+        where("uid", "==", auth.currentUser.uid)
+      );
+      getDocs(q)
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            testarr2.push({
+              id: doc.id,
+              ...doc.data(),
+            });
+          });
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error);
+        })
+        .finally(() => {
+          console.log(testarr2);
+          getFav(testarr2);
+        });
+    }
   }, []);
 
   return (
