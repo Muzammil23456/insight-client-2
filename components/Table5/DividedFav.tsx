@@ -147,8 +147,7 @@ const DividedFav = ({ ondata, ondata2 }: onDataType) => {
         </button>
       )}
       <Table>
-        {!loading &&
-            data3.every((e) => e.Friends?.length < 1 || !e.Friends) && (<TableCaption>No Record Found!</TableCaption>)}
+        {!loading && Fav.length === 0 && (<TableCaption>No Record Found!</TableCaption>)}
         <TableHeader>
           <TableRow>
           <TableHead className="md:w-[20%]">UID</TableHead>
