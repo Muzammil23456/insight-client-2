@@ -8,6 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption
 } from "@/components/ui/table";
 import {
   Tooltip,
@@ -68,6 +69,8 @@ const Users = ({ ondata }: onDataType) => {
     <div className="my-5 ">
       <div className="flex gap-2"></div>
       <Table>
+        {!loading &&
+            data3.every((e) => e.Friends?.length < 1 || !e.Friends) && (<TableCaption>No Record Found!</TableCaption>)}
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[25%]">U-ID</TableHead>
@@ -89,16 +92,6 @@ const Users = ({ ondata }: onDataType) => {
                   src={loader.src}
                   alt="spinner-frame-1"
                 />
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          )}
-          {!loading && data3.length === 0 && (
-            <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell className="flex justify-start">
-                <p className="font-medium">No Record Found!</p>
               </TableCell>
               <TableCell />
             </TableRow>
