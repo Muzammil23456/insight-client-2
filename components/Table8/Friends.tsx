@@ -7,6 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption
 } from "@/components/ui/table";
 import {
   collection,
@@ -184,6 +185,8 @@ const Friends = () => {
   return (
     <div className="my-5 ">
       <Table>
+        {!loading &&
+            data3.every((e) => e.Friends?.length < 1 || !e.Friends) && (<TableCaption>No Friends Found!</TableCaption>)}
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[25%]">UID</TableHead>
@@ -208,16 +211,7 @@ const Friends = () => {
               <TableCell />
             </TableRow>
           )}
-          {!loading &&
-            data3.every((e) => e.Friends?.length < 1 || !e.Friends) && (
-              <TableRow>
-                <TableCell />
-                <TableCell className="flex justify-start">
-                  <p className="font-medium">No Friends Found!</p>
-                </TableCell>
-                <TableCell />
-              </TableRow>
-            )}
+          
           {!loading &&
             data3[0].Friends?.length > 0 &&
             data3?.map((arr: TableData, index) => (
