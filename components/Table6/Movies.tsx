@@ -7,6 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption
 } from "@/components/ui/table";
 import {
   Tooltip,
@@ -141,6 +142,8 @@ const Movies = ({ ondata, ondata2 }: onDataType) => {
         </button>
       )}
       <Table>
+        {!loading &&
+            data3.every((e) => e.Friends?.length < 1 || !e.Friends) && (<TableCaption>No Record Found!</TableCaption>)}
         <TableHeader>
           <TableRow>
             <TableHead className="md:w-[25%]">ID</TableHead>
@@ -162,16 +165,6 @@ const Movies = ({ ondata, ondata2 }: onDataType) => {
                   src={loader.src}
                   alt="spinner-frame-1"
                 />
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          )}
-          {!loading && Fav.length === 0 && (
-            <TableRow>
-              <TableCell />
-              <TableCell />
-              <TableCell className="flex justify-start">
-                <p className="font-medium">No Record Found!</p>
               </TableCell>
               <TableCell />
             </TableRow>
